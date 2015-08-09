@@ -62,20 +62,24 @@ class ExcelController extends Controller
         $userID = $user['user'];
         $date = $user['date'];
         $attendances = $user['attendance'];
-        $late = 0;
-
-        $employee = Employee::where('employee_id', $userID)->first();
+        $late = null;
+        $undertime = null;
+        $overbeak = null;
 
         $start_time = $this->shift->first()->first()['start_time'];
-
+        $end_time = $this->shift->first()->first()['end_time'];
 
         if($start_time < $attendances->first()){
             $late = date_diff(new DateTime($start_time), new DateTime($attendances->first()));
+            $late = $late->format("%H:%i:%s");
         }
-        $late = $late->format("%H:%i:%s");
-        dd($attendances);
+        if($attendances->last() < $end_time){
+            $undertime = date_diff(new DateTime($attendances->last()), new DateTime($end_time));
+            $undertime = $undertime->format("%H:%i:%s");
+        }
+        // dd($attendances);
 
-        $day = date('D', strtotime($attendances->first()));
+        // $day = date('D', strtotime($attendances->first()));
 
         EmployeeDtr::create([
             'employee_id' => $userID,
@@ -87,7 +91,9 @@ class ExcelController extends Controller
             'second_in' => (empty($attendances[4]) || $this->isLast($attendances, 4) ? null : $date.' '.$attendances[4]),
             'third_out' => (empty($attendances[5]) || $this->isLast($attendances, 5) ? null : $date.' '.$attendances[5]),
             'third_in' => (empty($attendances[6]) || $this->isLast($attendances, 6) ? null : $date.' '.$attendances[6]),
-            'late' => $late
+            'undertime' => $undertime,
+            'late' => $late,
+            'overbreak' => $overbreak
         ]);
     }
 
@@ -135,7 +141,6 @@ class ExcelController extends Controller
         foreach($this->collection as $employees){
             $userID = $employees->first()['user'];
             $employee = Employee::where('employee_id', $userID)->first();
-            $this->getShift($employee);
 
             foreach($employees as $user){
                 $date = $user['date'];
@@ -144,19 +149,10 @@ class ExcelController extends Controller
                 if(empty($employee)){
                     break;
                 }else{
-
+                    $this->getShift($employee);
                     switch(count($attendances)){
-                        case 8:
+                        case 8: case 6: case 4: case 2:
                             $this->store($user);
-                            break;
-                        case 6:
-                            $this->store($user);
-                            break;
-                        case 4:
-                            $this->store($user);
-                            break;
-                        case 2:
-                            $this->store($userID, $date, $attendances);
                             break;
                     }
                 }
@@ -178,13 +174,9 @@ class ExcelController extends Controller
                         'description' => $employee_shift->shift->description,
                         'start_time' => $employee_shift->shift->shift_from,
                         'end_time' => $employee_shift->shift->shift_to,
-                        'days' => value(function(){
-                            $days = collect();
-                            foreach($this->employee_shift->employee_shift_days as $day){
-                                $days->push($day->day);
-                            }
-                            return $days;
-                        })
+                        'date_from' => $employee_shift->date_from,
+                        'date_to' => $employee_shift->date_to,
+                        'days' => $employee_shift->employee_shift_days
                     ]);
                 }
                 return $shifts;
@@ -192,6 +184,7 @@ class ExcelController extends Controller
         ]);
 
         $this->shift = $shift;
+        return $this->shift;
 
     }
 }

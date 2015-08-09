@@ -25,6 +25,9 @@
                         <th>Second break</th>
                         <th>Third break</th>
                         <th>End of duty</th>
+                        <th>Undertime</th>
+                        <th>Late</th>
+                        <th>Overbreak</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,6 +39,9 @@
                         <td>{{ date('H:i:s',strtotime($dtr->second_out)) }} to {{ date('H:i:s',strtotime($dtr->second_in)) }}</td>
                         <td>{{ date('H:i:s',strtotime($dtr->third_out)) }} to {{ date('H:i:s',strtotime($dtr->third_in)) }}</td>
                         <td>{{ date('M d, Y H:i:s',strtotime($dtr->end_of_duty)) }}</td>
+                        <td>{{ (is_null($dtr->undertime) ? 'NULL' : date('H:i:s',strtotime($dtr->undertime))) }}</td>
+                        <td>{{ (is_null($dtr->late) ? 'NULL' : date('H:i:s',strtotime($dtr->late))) }}</td>
+                        <td>{{ (is_null($dtr->overbeak) ? 'NULL' : date('H:i:s',strtotime($dtr->overbreak))) }}</td>
                     </tr>
                     @endforeach
                 </tbody>
