@@ -29,7 +29,7 @@ class ExcelController extends Controller
     public function postImport(Request $request){
         $validator = Validator::make($request->all(), [
             'file' => 'required'  //Excel file validation not yet done for mimes
-        ]);
+            ]);
 
         if($request->hasFile('file') && !$validator->fails() && $request->file('file')->isValid()){
             $file = $request->file('file');
@@ -96,89 +96,87 @@ class ExcelController extends Controller
             'late' => $late,
             'overbreak' => $overbreak
             ]);
-        }
+    }
 
-        protected function getData($filepath){
-            $excelPath = $filepath;
-            $collection = collect();
+    protected function getData($filepath){
+        $excelPath = $filepath;
+        $collection = collect();
 
-            Excel::selectSheets('Sheet1')->load($excelPath, function($reader) use($collection){
-                $reader->noHeading();
-                $reader->formatDates(false);
+        Excel::selectSheets('Sheet1')->load($excelPath, function($reader) use($collection){
+            $reader->noHeading();
+            $reader->formatDates(false);
 
-                $reader->get()->each(function($cell) use($collection){
-                    $datas = collect([
-                        'user' => $cell[0],
-                        'date' => $cell[3],
-                        'attendance' => value(function() use($cell){
-                            $attendance = collect();
-                            for($i = 4; $i<14; $i++){
-                                if(empty($cell[$i])){
-                                    break;
-                                } else{
-                                    $attendance->push($cell[$i]);
-                                }
-                            }
-                            return $attendance;
-                        })
-                        ]);
-
-                        $collection->push($datas);
-                    });
-                });
-
-                $collection = $collection->groupBy('user')->values()->all();
-
-                return $collection;
-            }
-
-            protected function nameFile($filename){
-                $newFileName = strtolower(date('Y-m-d-H-i-s')).$filename;
-                return $newFileName;
-            }
-
-            protected function setLogs($collection){
-                foreach($collection as $employees){
-                    $userID = $employees->first()['user'];
-                    $employee = Employee::where('employee_id', $userID)->first();
-                    foreach($employees as $user){
-                        $date = $user['date'];
-                        $attendances = $user['attendance'];
-
-                        if(empty($employee)){
-                            break;
-                        }else{
-                            if($employee->shifts->count() == 0){
+            $reader->get()->each(function($cell) use($collection){
+                $datas = collect([
+                    'user' => $cell[0],
+                    'date' => $cell[3],
+                    'attendance' => value(function() use($cell){
+                        $attendance = collect();
+                        for($i = 4; $i<14; $i++){
+                            if(empty($cell[$i])){
                                 break;
                             } else{
-                                switch(count($attendances)){
-                                    case 8: case 6: case 4: case 2:
-                                    $this->store($user, $this->getShift($employee));
-                                    break;
-                                }
+                                $attendance->push($cell[$i]);
+                            }
+                        }
+                        return $attendance;
+                    })
+                    ]);
+
+                    $collection->push($datas);
+                });
+            });
+
+            $collection = $collection->groupBy('user')->values()->all();
+
+            return $collection;
+        }
+
+        protected function nameFile($filename){
+            $newFileName = strtolower(date('Y-m-d-H-i-s')).$filename;
+            return $newFileName;
+        }
+
+        protected function setLogs($collection){
+            foreach($collection as $employees){
+                $userID = $employees->first()['user'];
+                $employee = Employee::where('employee_id', $userID)->first();
+                foreach($employees as $user){
+                    $date = $user['date'];
+                    $attendances = $user['attendance'];
+
+                    if(empty($employee)){
+                        break;
+                    }else{
+                        if($employee->shifts->count() == 0){
+                            break;
+                        } else{
+                            if((count($attendances) % 2) == 0){
+                                $this->store($user, $this->getShift($employee));
                             }
                         }
                     }
                 }
             }
+        }
 
-            protected function getShift($employee){
-                $shift = collect([
-                    'shifts' => value(function() use($employee){
-                        $shifts = collect();
-                        foreach($employee->employee_shifts()->orderBy('date_from', 'desc')->get() as $employee_shift){
-                            $shifts->push([
-                                'description' => $employee_shift->shift->description,
-                                'start_time' => $employee_shift->shift->shift_from,
-                                'end_time' => $employee_shift->shift->shift_to,
-                                'date_from' => $employee_shift->date_from,
-                                'date_to' => $employee_shift->date_to,
-                                'days' => $employee_shift->employee_shift_days
-                                ]);
-                            }
-                            return $shifts;
-                        })
-                        ]);
-                        return $shift;
-                    }
+        protected function getShift($employee){
+            $shift = collect([
+                'shifts' => value(function() use($employee){
+                    $shifts = collect();
+                    foreach($employee->employee_shifts()->orderBy('date_from', 'desc')->get() as $employee_shift){
+                        $shifts->push([
+                            'description' => $employee_shift->shift->description,
+                            'start_time' => $employee_shift->shift->shift_from,
+                            'end_time' => $employee_shift->shift->shift_to,
+                            'date_from' => $employee_shift->date_from,
+                            'date_to' => $employee_shift->date_to,
+                            'days' => $employee_shift->employee_shift_days
+                            ]);
+                        }
+                        return $shifts;
+                    })
+                    ]);
+                    return $shift;
                 }
+            }
