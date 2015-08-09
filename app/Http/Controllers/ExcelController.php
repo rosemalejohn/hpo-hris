@@ -58,14 +58,22 @@ class ExcelController extends Controller
         return (count($data)-1) == $index;
     }
 
-    public function store($userID, $date, $attendances){
+    public function store($user){
+        $userID = $user['user'];
+        $date = $user['date'];
+        $attendances = $user['attendance'];
+        $late = 0;
+
+        $employee = Employee::where('employee_id', $userID)->first();
+
         $start_time = $this->shift->first()->first()['start_time'];
 
-        $late = 0;
+
         if($start_time < $attendances->first()){
             $late = date_diff(new DateTime($start_time), new DateTime($attendances->first()));
         }
-        dd($late);
+        $late = $late->format("%H:%i:%s");
+        dd($attendances);
 
         $day = date('D', strtotime($attendances->first()));
 
@@ -79,7 +87,7 @@ class ExcelController extends Controller
             'second_in' => (empty($attendances[4]) || $this->isLast($attendances, 4) ? null : $date.' '.$attendances[4]),
             'third_out' => (empty($attendances[5]) || $this->isLast($attendances, 5) ? null : $date.' '.$attendances[5]),
             'third_in' => (empty($attendances[6]) || $this->isLast($attendances, 6) ? null : $date.' '.$attendances[6]),
-            'late' => ''
+            'late' => $late
         ]);
     }
 
@@ -139,13 +147,13 @@ class ExcelController extends Controller
 
                     switch(count($attendances)){
                         case 8:
-                            $this->store($userID, $date, $attendances);
+                            $this->store($user);
                             break;
                         case 6:
-                            $this->store($userID, $date, $attendances);
+                            $this->store($user);
                             break;
                         case 4:
-                            $this->store($userID, $date, $attendances);
+                            $this->store($user);
                             break;
                         case 2:
                             $this->store($userID, $date, $attendances);
