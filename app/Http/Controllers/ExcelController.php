@@ -163,8 +163,6 @@ class ExcelController extends Controller
             }
 
             protected function getShift($employee){
-                // $employee = Employee::with('shifts')->get();
-                // dd($employee);
                 $shift = collect([
                     'shifts' => value(function() use($employee){
                         $shifts = collect();
