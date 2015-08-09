@@ -141,7 +141,6 @@ class ExcelController extends Controller
                 foreach($collection as $employees){
                     $userID = $employees->first()['user'];
                     $employee = Employee::where('employee_id', $userID)->first();
-
                     foreach($employees as $user){
                         $date = $user['date'];
                         $attendances = $user['attendance'];
@@ -149,10 +148,14 @@ class ExcelController extends Controller
                         if(empty($employee)){
                             break;
                         }else{
-                            switch(count($attendances)){
-                                case 8: case 6: case 4: case 2:
-                                $this->store($user, $this->getShift($employee));
+                            if($employee->shifts->count() == 0){
                                 break;
+                            } else{
+                                switch(count($attendances)){
+                                    case 8: case 6: case 4: case 2:
+                                    $this->store($user, $this->getShift($employee));
+                                    break;
+                                }
                             }
                         }
                     }
