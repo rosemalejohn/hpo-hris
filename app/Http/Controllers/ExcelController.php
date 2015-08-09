@@ -16,13 +16,6 @@ use App\EmployeeDtr;
 class ExcelController extends Controller
 {
 
-    protected $collection;
-    protected $cell;
-    protected $employee;
-    protected $employee_shift;
-
-    protected $shift;
-
     public function getImport(){
         $page_title = 'Facetime import';
         return view('dtr.import')->with(compact('page_title'));
@@ -43,8 +36,8 @@ class ExcelController extends Controller
             $filename = $this->nameFile($file->getClientOriginalName());
             $file->move(storage_path('files'), $filename);
 
-            $this->getData(storage_path('files'.'/'.$filename));
-            $this->setLogs();
+
+            $this->setLogs($this->getData(storage_path('files'.'/'.$filename)));
 
             flash()->success('Import was successful. Employee logs saved to database.');
             return redirect()->back();
@@ -58,16 +51,18 @@ class ExcelController extends Controller
         return (count($data)-1) == $index;
     }
 
-    public function store($user){
+    public function store($user, $shifts){
         $userID = $user['user'];
         $date = $user['date'];
         $attendances = $user['attendance'];
         $late = null;
         $undertime = null;
-        $overbeak = null;
+        $overbreak = null;
 
-        $start_time = $this->shift->first()->first()['start_time'];
-        $end_time = $this->shift->first()->first()['end_time'];
+        dd($shifts);
+
+        $start_time = $shifts->first()->first()['start_time'];
+        $end_time = $shifts->first()->first()['end_time'];
 
         if($start_time < $attendances->first()){
             $late = date_diff(new DateTime($start_time), new DateTime($attendances->first()));
@@ -99,37 +94,36 @@ class ExcelController extends Controller
 
     protected function getData($filepath){
         $excelPath = $filepath;
-        $this->collection = collect();
+        $collection = collect();
 
-        Excel::selectSheets('Sheet1')->load($excelPath, function($reader){
+        Excel::selectSheets('Sheet1')->load($excelPath, function($reader) use($collection){
             $reader->noHeading();
             $reader->formatDates(false);
 
-            $reader->get()->each(function($cell){
-                $this->cell = $cell;
-                $datas = [
+            $reader->get()->each(function($cell) use($collection){
+                $datas = collect([
                     'user' => $cell[0],
                     'date' => $cell[3],
-                    'attendance' => value(function(){
+                    'attendance' => value(function() use($cell){
                         $attendance = collect();
                         for($i = 4; $i<14; $i++){
-                            if(empty($this->cell[$i])){
+                            if(empty($cell[$i])){
                                 break;
                             } else{
-                                $attendance->push($this->cell[$i]);
+                                $attendance->push($cell[$i]);
                             }
                         }
                         return $attendance;
                     })
-                ];
+                ]);
 
-                $this->collection->push($datas);
+                $collection->push($datas);
             });
         });
 
-        $this->collection = $this->collection->groupBy('user')->values()->all();
+        $collection = $collection->groupBy('user')->values()->all();
 
-        return $this->collection;
+        return $collection;
     }
 
     protected function nameFile($filename){
@@ -137,8 +131,8 @@ class ExcelController extends Controller
         return $newFileName;
     }
 
-    protected function setLogs(){
-        foreach($this->collection as $employees){
+    protected function setLogs($collection){
+        foreach($collection as $employees){
             $userID = $employees->first()['user'];
             $employee = Employee::where('employee_id', $userID)->first();
 
@@ -149,10 +143,9 @@ class ExcelController extends Controller
                 if(empty($employee)){
                     break;
                 }else{
-                    $this->getShift($employee);
                     switch(count($attendances)){
                         case 8: case 6: case 4: case 2:
-                            $this->store($user);
+                            $this->store($user, $this->getShift($employee));
                             break;
                     }
                 }
@@ -163,13 +156,10 @@ class ExcelController extends Controller
     protected function getShift($employee){
         // $employee = Employee::with('shifts')->get();
         // dd($employee);
-
-        $this->employee = $employee;
         $shift = collect([
-            'shifts' => value(function(){
+            'shifts' => value(function() use($employee){
                 $shifts = collect();
-                foreach($this->employee->employee_shifts()->orderBy('date_from', 'desc')->get() as $employee_shift){
-                    $this->employee_shift = $employee_shift;
+                foreach($employee->employee_shifts()->orderBy('date_from', 'desc')->get() as $employee_shift){
                     $shifts->push([
                         'description' => $employee_shift->shift->description,
                         'start_time' => $employee_shift->shift->shift_from,
@@ -182,9 +172,6 @@ class ExcelController extends Controller
                 return $shifts;
             })
         ]);
-
-        $this->shift = $shift;
-        return $this->shift;
-
+        return $shift;
     }
 }
