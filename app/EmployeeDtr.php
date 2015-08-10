@@ -13,6 +13,6 @@ class EmployeeDtr extends Model
     public $timestamps = false;
 
     public function employee(){
-        return $this->belongsTo('App\Employee', 'employee_id', 'employee_id');
+        return $this->belongsTo(Employee::class, 'employee_id', 'employee_id');
     }
 }
