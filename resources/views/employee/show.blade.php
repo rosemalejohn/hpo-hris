@@ -12,6 +12,13 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         Shifts
+        <div class="pull-right">
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary btn-xs">
+                    <i class="fa fa-plus"></i> Add shift
+                </button>
+            </div>
+        </div>
     </div>
     <!-- /.panel-heading -->
     <div class="panel-body">

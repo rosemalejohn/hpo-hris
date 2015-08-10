@@ -20,7 +20,7 @@ class ExcelController extends Controller
         $page_title = 'Facetime import';
         return view('dtr.import')->with(compact('page_title'));
     }
-
+    
     public function getAll(){
         $page_title = 'Employee Logs';
         return view('dtr.all')->with(compact('page_title'));
@@ -58,8 +58,6 @@ class ExcelController extends Controller
         $undertime = null;
         $overbreak = null;
 
-        $employee_shift = null;
-
         foreach($shifts->first() as $shift){
             if(($date >= $shift['date_from']) && ($date <= $shift['date_to'])){
                 foreach($shift['days'] as $value => $day){
@@ -67,9 +65,8 @@ class ExcelController extends Controller
                         break;
                     }
                 }
-                $employee_shift = $shift;
-                $start_time = $employee_shift['start_time'];
-                $end_time = $employee_shift['end_time'];
+                $start_time = $shift['start_time'];
+                $end_time = $shift['end_time'];
 
                 if($start_time < $attendances->first()){
                     $late = date_diff(new DateTime($start_time), new DateTime($attendances->first()));
