@@ -27,7 +27,7 @@
                         <th>End of duty</th>
                         <th>Undertime</th>
                         <th>Late</th>
-                        <th>Overbreak</th>
+                        <th>Total Overbreak</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -59,56 +59,52 @@ class ExcelController extends Controller
         $overbreak = null;
 
         foreach($shifts->first() as $shift){
+
             if(($date >= $shift['date_from']) && ($date <= $shift['date_to'])){
                 foreach($shift['days'] as $value => $day){
-                    if($day->day == date('D', strtotime($date))){
+                    if($day->day == strtolower(date('D', strtotime($date)))){
+                        $data = [
+                            'employee_id' => $userID,
+                            'start_of_duty' => $date.' '.$attendances->first(),
+                            'end_of_duty' => $date.' '.$attendances->last(),
+                            'first_out' => (empty($attendances[1]) || $this->isLast($attendances, 1) ? null : $date.' '.$attendances[1]),
+                            'first_in' => (empty($attendances[2]) || $this->isLast($attendances, 2) ? null : $date.' '.$attendances[2]),
+                            'second_out' => (empty($attendances[3]) || $this->isLast($attendances, 3) ? null : $date.' '.$attendances[3]),
+                            'second_in' => (empty($attendances[4]) || $this->isLast($attendances, 4) ? null : $date.' '.$attendances[4]),
+                            'third_out' => (empty($attendances[5]) || $this->isLast($attendances, 5) ? null : $date.' '.$attendances[5]),
+                            'third_in' => (empty($attendances[6]) || $this->isLast($attendances, 6) ? null : $date.' '.$attendances[6])
+                        ];
+
+                        $start_time = $shift['start_time'];
+                        $end_time = $shift['end_time'];
+
+                        if($start_time < $attendances->first()){
+                            $late = $this->computeTimeInterval($start_time, $attendances->first());
+                        }
+                        if($attendances->last() < $end_time){
+                            $undertime = $this->computeTimeInterval($attendances->last(), $end_time);
+                        }
+
+                        if($shift['working_hours'] == '08:00:00'){
+                            $overbreak = $this->computeBreaks($data['first_out'], $data['first_in'], '00:30:00');
+                        } elseif($shift['working_hours'] == '09:00:00'){
+                            $overbreak = $this->computeBreaks($data['first_out'], $data['first_in'], '00:15:00');
+                            $overbreak = strtotime($overbreak) + strtotime($this->computeBreaks($data['second_out'], $data['second_in'], '01:00:00'));
+                            $overbreak = strtotime($overbreak) + strtotime($this->computeBreaks($data['third_out'], $data['third_in'], '00:15:00'));
+                            $overbreak = date('H:i:s', $overbreak);
+                        }
+                        $data = array_add($data, 'late', $late);
+                        $data = array_add($data, 'undertime', $undertime);
+                        $data = array_add($data, 'overbreak', $overbreak);
+                        // dd($overbreak);
+                        EmployeeDtr::create($data);
                         break;
                     }
-                }
-                $start_time = $shift['start_time'];
-                $end_time = $shift['end_time'];
-
-                if($start_time < $attendances->first()){
-                    $late = $this->computeTimeInterval($start_time, $attendances->first());
-                }
-                if($attendances->last() < $end_time){
-                    $undertime = $this->computeTimeInterval($attendances->last(), $end_time);
                 }
             }
         }
 
-        $data = [
-            'employee_id' => $userID,
-            'start_of_duty' => $date.' '.$attendances->first(),
-            'end_of_duty' => $date.' '.$attendances->last(),
-            'first_out' => (empty($attendances[1]) || $this->isLast($attendances, 1) ? null : $date.' '.$attendances[1]),
-            'first_in' => (empty($attendances[2]) || $this->isLast($attendances, 2) ? null : $date.' '.$attendances[2]),
-            'second_out' => (empty($attendances[3]) || $this->isLast($attendances, 3) ? null : $date.' '.$attendances[3]),
-            'second_in' => (empty($attendances[4]) || $this->isLast($attendances, 4) ? null : $date.' '.$attendances[4]),
-            'third_out' => (empty($attendances[5]) || $this->isLast($attendances, 5) ? null : $date.' '.$attendances[5]),
-            'third_in' => (empty($attendances[6]) || $this->isLast($attendances, 6) ? null : $date.' '.$attendances[6]),
-            'undertime' => $undertime,
-            'late' => $late
-            // 'overbreak' => $overbreak
-        ];
-
-        // switch($shift['working_hours']){
-        //     case '08:00:00':
-        //         break;
-        //     case '09:00:00':
-        //         break;
-        // }
-
-        if($shift['working_hours'] == '08:00:00'){
-            $overbreak = $this->computeBreaks($data['first_out'], $data['first_in'], '00:30:00');
-        } elseif($shift['working_hours'] == '09:00:00'){
-            $overbreak = $this->computeBreaks($data['first_out'], $data['first_in'], '00:15:00');
-            $overbreak = $this->computeBreaks($data['second_out'], $data['second_in'], '01:00:00');
-            $overbreak = $this->computeBreaks($data['third_out'], $data['third_in'], '00:15:00');
-        }
-        $data = array_add($data, 'overbreak', $overbreak);
-
-        EmployeeDtr::create($data);
+        
     }
 
     protected function computeTimeInterval($out, $in){
