@@ -69,17 +69,15 @@ class ExcelController extends Controller
                 $end_time = $shift['end_time'];
 
                 if($start_time < $attendances->first()){
-                    $late = date_diff(new DateTime($start_time), new DateTime($attendances->first()));
-                    $late = $late->format("%H:%i:%s");
+                    $late = $this->computeTimeInterval($start_time, $attendances->first());
                 }
                 if($attendances->last() < $end_time){
-                    $undertime = date_diff(new DateTime($attendances->last()), new DateTime($end_time));
-                    $undertime = $undertime->format("%H:%i:%s");
+                    $undertime = $this->computeTimeInterval($attendances->last(), $end_time);
                 }
             }
         }
 
-        EmployeeDtr::create([
+        $data = [
             'employee_id' => $userID,
             'start_of_duty' => $date.' '.$attendances->first(),
             'end_of_duty' => $date.' '.$attendances->last(),
@@ -90,9 +88,41 @@ class ExcelController extends Controller
             'third_out' => (empty($attendances[5]) || $this->isLast($attendances, 5) ? null : $date.' '.$attendances[5]),
             'third_in' => (empty($attendances[6]) || $this->isLast($attendances, 6) ? null : $date.' '.$attendances[6]),
             'undertime' => $undertime,
-            'late' => $late,
-            'overbreak' => $overbreak
-        ]);
+            'late' => $late
+            // 'overbreak' => $overbreak
+        ];
+
+        // switch($shift['working_hours']){
+        //     case '08:00:00':
+        //         break;
+        //     case '09:00:00':
+        //         break;
+        // }
+
+        if($shift['working_hours'] == '08:00:00'){
+            $overbreak = $this->computeBreaks($data['first_out'], $data['first_in'], '00:30:00');
+        } elseif($shift['working_hours'] == '09:00:00'){
+            $overbreak = $this->computeBreaks($data['first_out'], $data['first_in'], '00:15:00');
+            $overbreak = $this->computeBreaks($data['second_out'], $data['second_in'], '01:00:00');
+            $overbreak = $this->computeBreaks($data['third_out'], $data['third_in'], '00:15:00');
+        }
+        $data = array_add($data, 'overbreak', $overbreak);
+
+        EmployeeDtr::create($data);
+    }
+
+    protected function computeTimeInterval($out, $in){
+        $interval = date_diff(new DateTime($in), new DateTime($out));
+        return $interval->format("%H:%i:%s");
+    }
+
+    protected function computeBreaks($out, $in, $required_break){
+        $overbreak = 0;
+        $time_difference = $this->computeTimeInterval($out, $in);
+        if($time_difference > $required_break){
+            $overbreak = $this->computeTimeInterval($time_difference, $required_break);
+        }
+        return $overbreak;
     }
 
     protected function getData($filepath){
@@ -166,6 +196,8 @@ class ExcelController extends Controller
                         'description' => $employee_shift->shift->description,
                         'start_time' => $employee_shift->shift->shift_from,
                         'end_time' => $employee_shift->shift->shift_to,
+                        'break' => $employee_shift->shift->break,
+                        'working_hours' => $employee_shift->shift->working_hours,
                         'date_from' => $employee_shift->date_from,
                         'date_to' => $employee_shift->date_to,
                         'days' => $employee_shift->employee_shift_days
