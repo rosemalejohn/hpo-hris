@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use Excel;
 use Date;
 use DateTime;
-use DateInterval;
 use App\Employee;
 use App\EmployeeDtr;
 
@@ -69,17 +68,11 @@ class DtrController extends Controller
                         $hrs_worked->add(computeTimeInterval($dtr->end_of_duty, $dtr->start_of_duty));
                     }
 
-                    $late = computeTimeInterval($late->format('Y-m-d h:i:s'), '00:00:00')->format("%d %H:%I:%S");
-                    $undertime = computeTimeInterval($undertime->format('Y-m-d h:i:s'), '00:00:00')->format("%d %H:%I:%S");
-                    $overbreak = computeTimeInterval($overbreak->format('Y-m-d h:i:s'), '00:00:00')->format("%d %H:%I:%S");
-                    $hrs_worked = computeTimeInterval($hrs_worked->format('Y-m-d h:i:s'), '00:00:00')->format("%d %H:%I:%S");
-
-                    // dd($late);
                     return [
-                        'late' => $late,
-                        'undertime' => $undertime,
-                        'overbreak' => $overbreak,
-                        'hrs_worked' => $hrs_worked
+                        'late' => computeTimeInterval($late->format('Y-m-d h:i:s'), '00:00:00')->format("%d %H:%I:%S"),
+                        'undertime' => computeTimeInterval($undertime->format('Y-m-d h:i:s'), '00:00:00')->format("%d %H:%I:%S"),
+                        'overbreak' => computeTimeInterval($overbreak->format('Y-m-d h:i:s'), '00:00:00')->format("%d %H:%I:%S"),
+                        'hrs_worked' => computeTimeInterval($hrs_worked->format('Y-m-d h:i:s'), '00:00:00')->format("%d %H:%I:%S")
                     ];
                 });
 
