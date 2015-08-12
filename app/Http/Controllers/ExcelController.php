@@ -61,7 +61,9 @@ class ExcelController extends Controller
         foreach($shifts->first() as $shift){
 
             if(($date >= $shift['date_from']) && ($date <= $shift['date_to'])){
-                foreach($shift['days'] as $value => $day){
+                $start_time = $shift['start_time'];
+                $end_time = $shift['end_time'];
+                foreach($shift['days'] as $day){
                     if($day->day == strtolower(date('D', strtotime($date)))){
                         $data = [
                             'employee_id' => $userID,
@@ -75,12 +77,10 @@ class ExcelController extends Controller
                             'third_in' => (empty($attendances[6]) || $this->isLast($attendances, 6) ? null : $date.' '.$attendances[6])
                         ];
 
-                        $start_time = $shift['start_time'];
-                        $end_time = $shift['end_time'];
-
                         if($start_time < $attendances->first()){
                             $late = $this->computeTimeInterval($start_time, $attendances->first());
                         }
+
                         if($attendances->last() < $end_time){
                             $undertime = $this->computeTimeInterval($attendances->last(), $end_time);
                         }
@@ -88,28 +88,28 @@ class ExcelController extends Controller
                         if($shift['working_hours'] == '08:00:00'){
                             $overbreak = $this->computeBreaks($data['first_out'], $data['first_in'], '00:30:00');
                         } elseif($shift['working_hours'] == '09:00:00'){
-                            $overbreak = $this->computeBreaks($data['first_out'], $data['first_in'], '00:15:00');
-                            $overbreak = strtotime($overbreak) + strtotime($this->computeBreaks($data['second_out'], $data['second_in'], '01:00:00'));
-                            $overbreak = strtotime($overbreak) + strtotime($this->computeBreaks($data['third_out'], $data['third_in'], '00:15:00'));
-                            $overbreak = date('H:i:s', $overbreak);
+                            $overbreak = strtotime($this->computeBreaks($data['first_out'], $data['first_in'], '00:15:00'));
+
+                            $overbreak = $overbreak + strtotime($this->computeBreaks($data['second_out'], $data['second_in'], '01:00:00'));
+
+                            $overbreak = $overbreak + strtotime($this->computeBreaks($data['third_out'], $data['third_in'], '00:15:00'));
+
+                            $overbreak = date('H:i:s',$overbreak);
                         }
                         $data = array_add($data, 'late', $late);
                         $data = array_add($data, 'undertime', $undertime);
                         $data = array_add($data, 'overbreak', $overbreak);
-                        // dd($overbreak);
                         EmployeeDtr::create($data);
                         break;
                     }
                 }
             }
         }
-
-        
     }
 
     protected function computeTimeInterval($out, $in){
         $interval = date_diff(new DateTime($in), new DateTime($out));
-        return $interval->format("%H:%i:%s");
+        return $interval->format("%H:%I:%S");
     }
 
     protected function computeBreaks($out, $in, $required_break){
@@ -144,16 +144,16 @@ class ExcelController extends Controller
                         }
                         return $attendance;
                     })
-                    ]);
+                ]);
 
-                    $collection->push($datas);
-                });
+                $collection->push($datas);
             });
+        });
 
-            $collection = $collection->groupBy('user')->values()->all();
+        $collection = $collection->groupBy('user')->values()->all();
 
-            return $collection;
-        }
+        return $collection;
+    }
 
     protected function nameFile($filename){
         $newFileName = strtolower(date('Y-m-d-H-i-s')).$filename;
@@ -197,10 +197,10 @@ class ExcelController extends Controller
                         'date_from' => $employee_shift->date_from,
                         'date_to' => $employee_shift->date_to,
                         'days' => $employee_shift->employee_shift_days
-                        ]);
-                    }
-                    return $shifts;
-                })
+                    ]);
+                }
+                return $shifts;
+            })
         ]);
         return $shift;
     }

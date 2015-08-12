@@ -78,7 +78,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY', 'UtsPMwy0bbAdoF9SApI9ddYhHOIxerFZ'),
+    'key' => env('APP_KEY'),
 
     'cipher' => 'AES-256-CBC',
 
@@ -139,6 +139,7 @@ return [
 
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
+        Jenssegers\Date\DateServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -196,6 +197,7 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
         'Excel'     => Maatwebsite\Excel\Facades\Excel::class,
         'Flash'     => Laracasts\Flash\Flash::class,
+        'Date'      => Jenssegers\Date\DateServiceProvider::class,
 
     ],
 

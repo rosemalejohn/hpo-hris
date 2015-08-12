@@ -28,6 +28,7 @@
                     <tr>
                         <th>Shift description</th>
                         <th>Time</th>
+                        <th>Working hours</th>
                         <th>Days</th>
                         <th>Effective</th>
                     </tr>
@@ -37,6 +38,7 @@
                     <tr>
                         <td><a href="/shifts/{{ $employee_shift->shift->id }}">{{ $employee_shift->shift->description }}</a></td>
                         <td>{{ $employee_shift->shift->shift_from.' to '.$employee_shift->shift->shift_to }}</td>
+                        <td>{{ $employee_shift->shift->working_hours }}</td>
                         <td>
                             @foreach($employee_shift->employee_shift_days as $day)
                             <span>{{ strtoupper($day->day).' ' }}</span>
