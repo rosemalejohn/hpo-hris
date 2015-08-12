@@ -73,22 +73,22 @@ class DtrController extends Controller
                     $undertime = computeTimeInterval($undertime->format('Y-m-d h:i:s'), '00:00:00')->format("%d %H:%I:%S");
                     $overbreak = computeTimeInterval($overbreak->format('Y-m-d h:i:s'), '00:00:00')->format("%d %H:%I:%S");
                     $hrs_worked = computeTimeInterval($hrs_worked->format('Y-m-d h:i:s'), '00:00:00')->format("%d %H:%I:%S");
-                    
-                    dd($hrs_worked);
+
+                    // dd($late);
                     return [
                         'late' => $late,
                         'undertime' => $undertime,
-                        'overbreak' => $overbreak
+                        'overbreak' => $overbreak,
+                        'hrs_worked' => $hrs_worked
                     ];
                 });
 
                 //add a new row and put all the gathered datas
                 $row = $sheet->appendRow($index, [
-                    $staffcode, $staffname, $computations['late'], $computations['undertime'], '', $total_hours_worked
+                    $staffcode, $staffname, $computations['late'], $computations['undertime'], '', $computations['hrs_worked']
                 ]);
                 ++$index; //increment the index to know what row are we
             }
-            dd();
         })->export('xlsx');
     }
 
