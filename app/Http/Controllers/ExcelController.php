@@ -51,6 +51,7 @@ class ExcelController extends Controller
     }
 
     public function store($user, $shifts){
+        //Declare variables
         $userID = $user['user'];
         $date = $user['date'];
         $attendances = $user['attendance'];
@@ -60,15 +61,19 @@ class ExcelController extends Controller
 
         foreach($shifts->first() as $shift){
 
-            if(($date >= $shift['date_from']) && ($date <= $shift['date_to'])){
-                $start_time = $shift['start_time'];
-                $end_time = $shift['end_time'];
-                foreach($shift['days'] as $day){
-                    if($day->day == strtolower(date('D', strtotime($date)))){
+            if(($date >= $shift['date_from']) && ($date <= $shift['date_to'])){ //check if the date is between the date_from where the shift started and shift ended
+
+                $start_time = $shift['start_time']; //get the shift start time
+                $end_time = $shift['end_time']; //get the shift end time
+
+                foreach($shift['days'] as $day){ //loop through days in the shift
+                    if($day->day == strtolower(date('D', strtotime($date)))){ //check if the date day is equal to the shift day
                         $data = [
-                            'employee_id' => $userID,
-                            'start_of_duty' => $date.' '.$attendances->first(),
-                            'end_of_duty' => $date.' '.$attendances->last(),
+                            'employee_id' => $userID, //employee biometric id
+                            'start_of_duty' => $date.' '.$attendances->first(), //start of duty in one day
+                            'end_of_duty' => $date.' '.$attendances->last(), //end of duty
+
+                            //employee breaks in a day
                             'first_out' => (empty($attendances[1]) || $this->isLast($attendances, 1) ? null : $date.' '.$attendances[1]),
                             'first_in' => (empty($attendances[2]) || $this->isLast($attendances, 2) ? null : $date.' '.$attendances[2]),
                             'second_out' => (empty($attendances[3]) || $this->isLast($attendances, 3) ? null : $date.' '.$attendances[3]),
@@ -77,28 +82,34 @@ class ExcelController extends Controller
                             'third_in' => (empty($attendances[6]) || $this->isLast($attendances, 6) ? null : $date.' '.$attendances[6])
                         ];
 
-                        if($start_time < $attendances->first()){
+                        if($start_time < $attendances->first()){ //check if the employee is late
                             $late = $this->computeTimeInterval($start_time, $attendances->first());
                         }
 
-                        if($attendances->last() < $end_time){
+                        if($attendances->last() < $end_time){ //check if the employee has undertime
                             $undertime = $this->computeTimeInterval($attendances->last(), $end_time);
                         }
 
-                        if($shift['working_hours'] == '08:00:00'){
+                        if($shift['working_hours'] == '08:00:00'){ //check if the employee_shift working hrs is 8 hrs
+                            //compute the overbreak
+                            //if the employee working hrs is 8hrs then the break is only 30minutes
                             $overbreak = $this->computeBreaks($data['first_out'], $data['first_in'], '00:30:00');
-                        } elseif($shift['working_hours'] == '09:00:00'){
+                        } elseif($shift['working_hours'] == '09:00:00'){ //check if the employee_shift working hrs is 8 hrs
+                            //if the employee working hrs is 9hrs, then the break is 15min-1hr-15min
+                            //get the overbreak in the first break
                             $overbreak = strtotime($this->computeBreaks($data['first_out'], $data['first_in'], '00:15:00'));
-
+                            //get the overbreak in the second break
                             $overbreak = $overbreak + strtotime($this->computeBreaks($data['second_out'], $data['second_in'], '01:00:00'));
-
+                            //get the overbreak in the third break
                             $overbreak = $overbreak + strtotime($this->computeBreaks($data['third_out'], $data['third_in'], '00:15:00'));
-
+                            //convert the overbreak to readable time
                             $overbreak = date('H:i:s',$overbreak);
                         }
+                        //add the late, undertime and overbreak into the data array
                         $data = array_add($data, 'late', $late);
                         $data = array_add($data, 'undertime', $undertime);
                         $data = array_add($data, 'overbreak', $overbreak);
+                        //insert the data array into the create method and save to the database
                         EmployeeDtr::create($data);
                         break;
                     }
@@ -171,10 +182,10 @@ class ExcelController extends Controller
                 if(empty($employee)){
                     break;
                 }else{
-                    if($employee->shifts->count() == 0){
+                    if($employee->shifts->count() == 0){ //check if the employee has available shifts
                         break;
                     } else{
-                        if((count($attendances) % 2) == 0){
+                        if((count($attendances) % 2) == 0){ //check if attendance count is even
                             $this->store($user, $this->getShift($employee));
                         }
                     }
@@ -183,7 +194,7 @@ class ExcelController extends Controller
         }
     }
 
-    protected function getShift($employee){
+    protected function getShift($employee){ //collect all the data required to compute the employee logs
         $shift = collect([
             'shifts' => value(function() use($employee){
                 $shifts = collect();

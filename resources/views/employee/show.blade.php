@@ -48,7 +48,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="4"><div class="alert alert-success">No shift yet.</div></td>
+                        <td colspan="5"><div class="alert alert-success">No shift yet.</div></td>
                     </tr>
                     @endforelse
                 </tbody>

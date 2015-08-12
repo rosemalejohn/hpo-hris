@@ -12,6 +12,15 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         Employee Daily Time Record
+        <div class="pull-right">
+            <div class="btn-group">
+                <a href="/dtr/export">
+                    <button type="button" class="btn btn-primary btn-xs">
+                        <i class="fa fa-file"></i> Export DTR Report
+                    </button>
+                </a>
+            </div>
+        </div>
     </div>
     <!-- /.panel-heading -->
     <div class="panel-body">

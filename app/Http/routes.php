@@ -35,6 +35,10 @@ Route::group(['middleware' => 'auth'], function(){
 
     Route::post('/excel', 'ExcelController@postImport');
 
+    Route::get('/dtr/export', 'DtrController@dtrToExcel');
+
+    Route::get('/dtr/export-summary', 'DtrController@dtrSummaryToExcel');
+
     Route::resource('employees', 'EmployeeController');
 
     Route::resource('departments', 'DepartmentController');
