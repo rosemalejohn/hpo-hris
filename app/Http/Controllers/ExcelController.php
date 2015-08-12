@@ -55,9 +55,10 @@ class ExcelController extends Controller
         $userID = $user['user'];
         $date = $user['date'];
         $attendances = $user['attendance'];
-        $late = null;
-        $undertime = null;
-        $overbreak = null;
+        $late = 0;
+        $undertime = 0;
+        $overbreak = 0;
+        $total_overbreaks = new DateTime('00:00:00');
 
         foreach($shifts->first() as $shift){
 
@@ -83,53 +84,36 @@ class ExcelController extends Controller
                         ];
 
                         if($start_time < $attendances->first()){ //check if the employee is late
-                            $late = $this->computeTimeInterval($start_time, $attendances->first());
+                            $late = computeTimeInterval($start_time, $attendances->first())->format("%H:%I:%S");
                         }
 
                         if($attendances->last() < $end_time){ //check if the employee has undertime
-                            $undertime = $this->computeTimeInterval($attendances->last(), $end_time);
+                            $undertime = computeTimeInterval($attendances->last(), $end_time)->format("%H:%I:%S");
                         }
 
                         if($shift['working_hours'] == '08:00:00'){ //check if the employee_shift working hrs is 8 hrs
                             //compute the overbreak
                             //if the employee working hrs is 8hrs then the break is only 30minutes
-                            $overbreak = $this->computeBreaks($data['first_out'], $data['first_in'], '00:30:00');
+                            $total_overbreaks->add(computeBreaks($data['first_out'], $data['first_in'], '00:30:00'));
+                            $total_overbreaks->add(computeTimeInterval($data['second_out'], $data['second_in']));
+                            $total_overbreaks->add(computeTimeInterval($data['third_out'], $data['third_in']));
+
                         } elseif($shift['working_hours'] == '09:00:00'){ //check if the employee_shift working hrs is 8 hrs
-                            //if the employee working hrs is 9hrs, then the break is 15min-1hr-15min
-                            //get the overbreak in the first break
-                            $overbreak = strtotime($this->computeBreaks($data['first_out'], $data['first_in'], '00:15:00'));
-                            //get the overbreak in the second break
-                            $overbreak = $overbreak + strtotime($this->computeBreaks($data['second_out'], $data['second_in'], '01:00:00'));
-                            //get the overbreak in the third break
-                            $overbreak = $overbreak + strtotime($this->computeBreaks($data['third_out'], $data['third_in'], '00:15:00'));
-                            //convert the overbreak to readable time
-                            $overbreak = date('H:i:s',$overbreak);
+                            $total_overbreaks->add(computeBreaks($data['first_out'], $data['first_in'], '00:15:00'));
+                            $total_overbreaks->add(computeBreaks($data['second_out'], $data['second_in'], '01:00:00'));
+                            $total_overbreaks->add(computeBreaks($data['third_out'], $data['third_in'], '00:15:00'));
                         }
                         //add the late, undertime and overbreak into the data array
                         $data = array_add($data, 'late', $late);
                         $data = array_add($data, 'undertime', $undertime);
-                        $data = array_add($data, 'overbreak', $overbreak);
-                        //insert the data array into the create method and save to the database
+                        $data = array_add($data, 'overbreak', $total_overbreaks->format('H:i:s'));
+                        // insert the data array into the create method and save to the database
                         EmployeeDtr::create($data);
                         break;
                     }
                 }
             }
         }
-    }
-
-    protected function computeTimeInterval($out, $in){
-        $interval = date_diff(new DateTime($in), new DateTime($out));
-        return $interval->format("%H:%I:%S");
-    }
-
-    protected function computeBreaks($out, $in, $required_break){
-        $overbreak = 0;
-        $time_difference = $this->computeTimeInterval($out, $in);
-        if($time_difference > $required_break){
-            $overbreak = $this->computeTimeInterval($time_difference, $required_break);
-        }
-        return $overbreak;
     }
 
     protected function getData($filepath){

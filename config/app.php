@@ -147,6 +147,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
+        App\Providers\HelperServiceProvider::class,
 
     ],
 
@@ -197,7 +198,7 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
         'Excel'     => Maatwebsite\Excel\Facades\Excel::class,
         'Flash'     => Laracasts\Flash\Flash::class,
-        'Date'      => Jenssegers\Date\DateServiceProvider::class,
+        'Date'      => Jenssegers\Date\Date::class,
 
     ],
 

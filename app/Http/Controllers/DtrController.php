@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Excel;
+use Date;
 use DateTime;
+use DateInterval;
 use App\Employee;
 use App\EmployeeDtr;
 
@@ -51,39 +53,43 @@ class DtrController extends Controller
             $sheet = $reader->sheet('summary');
             $index = 3;
 
-            foreach(Employee::all() as $employee){
+            foreach(Employee::with('employee_dtrs')->get() as $employee){
                 $staffcode = $employee->employee_id;
                 $staffname = $employee->name;
-                $total_lates = value(function() use($employee){
-                    $lates = 0;
+                $computations = value(function() use($employee){
+                    $late = new DateTime('00:00:00');
+                    $undertime = new DateTime('00:00:00');
+                    $overbreak = new DateTime('00:00:00');
+                    $hrs_worked = new DateTime('00:00:00');
+
                     foreach($employee->employee_dtrs as $dtr){
-                        $lates = $lates + strtotime($dtr->late);
+                        $late->add(computeTimeInterval($dtr->late, '00:00:00'));
+                        $undertime->add(computeTimeInterval($dtr->undertime, '00:00:00'));
+                        $overbreak->add(computeTimeInterval($dtr->overbreak, '00:00:00'));
+                        $hrs_worked->add(computeTimeInterval($dtr->end_of_duty, $dtr->start_of_duty));
                     }
-                    return date('H:i:s', $lates);
-                });
-                $total_undertime = value(function() use($employee){ //'use' function is used to access the variables outside the closure
-                    $undertimes = 0;
-                    foreach($employee->employee_dtrs as $dtr){
-                        $undertimes = $undertimes + strtotime($dtr->undertime);
-                    }
-                    return date('H:i:s', $undertimes);
-                });
-                $total_hours_worked = value(function() use($employee){
-                    $hrs_worked = 0;
-                    foreach($employee->employee_dtrs as $dtr){
-                        $worked = date_diff(new DateTime($dtr->start_of_duty), new DateTime($dtr->end_of_duty));
-                        $worked = $worked->format("%H:%I:%S");
-                        $hrs_worked = $hrs_worked + strtotime($worked);
-                    }
-                    return date('H:i:s', $hrs_worked);
+
+                    $late = computeTimeInterval($late->format('Y-m-d h:i:s'), '00:00:00')->format("%d %H:%I:%S");
+                    $undertime = computeTimeInterval($undertime->format('Y-m-d h:i:s'), '00:00:00')->format("%d %H:%I:%S");
+                    $overbreak = computeTimeInterval($overbreak->format('Y-m-d h:i:s'), '00:00:00')->format("%d %H:%I:%S");
+                    $hrs_worked = computeTimeInterval($hrs_worked->format('Y-m-d h:i:s'), '00:00:00')->format("%d %H:%I:%S");
+                    
+                    dd($hrs_worked);
+                    return [
+                        'late' => $late,
+                        'undertime' => $undertime,
+                        'overbreak' => $overbreak
+                    ];
                 });
 
                 //add a new row and put all the gathered datas
                 $row = $sheet->appendRow($index, [
-                    $staffcode, $staffname, $total_lates, $total_undertime, '', $total_hours_worked
+                    $staffcode, $staffname, $computations['late'], $computations['undertime'], '', $total_hours_worked
                 ]);
                 ++$index; //increment the index to know what row are we
             }
+            dd();
         })->export('xlsx');
     }
+
 }

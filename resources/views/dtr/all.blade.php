@@ -14,7 +14,7 @@
         Employee Daily Time Record
         <div class="pull-right">
             <div class="btn-group">
-                <a href="/dtr/export">
+                <a href="/dtr/export-summary">
                     <button type="button" class="btn btn-primary btn-xs">
                         <i class="fa fa-file"></i> Export DTR Report
                     </button>
