@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Employee extends Model
 {
 
-    protected $fillable = ['employee_id' ,'name', 'department_id', 'status'];
+    protected $fillable = ['employee_id' ,'first_name', 'middle_name', 'last_name', 'department_id', 'status'];
 
     public function department(){
         return $this->belongsTo('App\Department');

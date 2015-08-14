@@ -50,4 +50,6 @@ Route::group(['middleware' => 'auth'], function(){
 
     Route::resource('shifts', 'ShiftController');
 
+    Route::get('/import-employees', 'EmployeeController@importEmployees');
+
 });

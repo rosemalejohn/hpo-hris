@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Validator;
 use App\Employee;
+use Excel;
 
 class EmployeeController extends Controller
 {
@@ -75,7 +76,13 @@ class EmployeeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $employee = Employee::where('employee_id', $id)->first();
+        if(empty($employee)){
+            flash()->error('Employee not found!');
+            return redirect()->back();
+        }
+        $page_title = $employee->name.' - Edit';
+        return view('employee.edit')->with(compact('page_title', 'employee'));
     }
 
     /**
@@ -107,5 +114,25 @@ class EmployeeController extends Controller
                 'name' => 'required|min:6|max:75',
                 'department_id' => 'required'
             ]);
+    }
+
+    public function importEmployees(){
+        $path = storage_path('files/employees.xls');
+
+        Excel::selectSheets('Sheet1')->load($path, function($reader){
+            $rows = $reader->all();
+
+            foreach($rows as $row){
+
+                Employee::create([
+                    'employee_id' => $row->facetime,
+                    'first_name' => $row->firstname,
+                    'middle_name' => $row->middlename,
+                    'last_name' => $row->lastname,
+                    'department_id' => 1
+                ]);
+
+            }
+        });
     }
 }

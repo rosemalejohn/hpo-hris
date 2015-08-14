@@ -29,10 +29,15 @@
                     @foreach(App\Employee::all() as $employee)
                     <tr class="odd gradeX">
                         <td><a href="/employees/{{ $employee->employee_id }}">{{ $employee->employee_id }}</a></td>
-                        <td>{{ $employee->name }}</td>
+                        <td>{{ $employee->first_name.' '.$employee->middle_name.' '.$employee->last_name }}</td>
                         <td>{{ $employee->department->name }}</td>
                         <td>
-                            
+                            <a href="/employees/{{ $employee->employee_id }}/edit">
+                                <button class="btn btn-xs btn-warning"><i class="fa fa-edit"></i> Update</button>
+                            </a>
+                            <a href="/employees/{{ $employee->employee_id }}">
+                                <button class="btn btn-xs btn-info"><i class="fa fa-search"></i> View Info</button>
+                            </a>
                         </td>
                     </tr>
                     @endforeach
