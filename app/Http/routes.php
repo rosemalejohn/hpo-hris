@@ -20,7 +20,6 @@ Route::group(['middleware' => 'guest'], function(){
     Route::get('auth/register', 'Auth\AuthController@getRegister');
 
     Route::post('auth/register', 'Auth\AuthController@postRegister');
-
 });
 
 Route::group(['middleware' => 'auth'], function(){
@@ -29,21 +28,25 @@ Route::group(['middleware' => 'auth'], function(){
 
     Route::get('/', 'BaseController@dashboard');
 
-    Route::get('/excel', 'ExcelController@getImport');
+    //Daily Time Record Resource
 
-    Route::get('/excel/view-all', 'ExcelController@getAll');
+    Route::get('/dtr/import', 'DtrController@getImport');
 
-    Route::post('/excel', 'ExcelController@postImport');
+    Route::get('/dtr', 'DtrController@index');
 
-    Route::get('/dtr/export', 'DtrController@dtrToExcel');
+    Route::post('/dtr', 'DtrController@postImport');
 
-    Route::get('/dtr/export', 'DtrController@dtrToExcel');
+    Route::get('/dtr/export', 'DtrController@exportToExcel');
 
-    Route::get('/dtr/export-summary', 'DtrController@dtrSummaryToExcel');
+    //EmployeeController resource
 
     Route::resource('employees', 'EmployeeController');
 
+     //DepartmentController resource
+
     Route::resource('departments', 'DepartmentController');
+
+     //ShiftController resource
 
     Route::resource('shifts', 'ShiftController');
 

@@ -22,6 +22,7 @@
                         <th>Biometric ID</th>
                         <th>Name</th>
                         <th>Department</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,6 +31,9 @@
                         <td><a href="/employees/{{ $employee->employee_id }}">{{ $employee->employee_id }}</a></td>
                         <td>{{ $employee->name }}</td>
                         <td>{{ $employee->department->name }}</td>
+                        <td>
+                            
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>

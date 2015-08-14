@@ -8,7 +8,7 @@
     <div class="panel-body">
         <div class="row">
             <div class="col-lg-6">
-                <form role="form" action="/excel" method="POST" enctype="multipart/form-data">
+                <form role="form" action="/dtr" method="POST" enctype="multipart/form-data">
                     {!! csrf_field() !!}
                     <div class="form-group">
                         <label>Choose excel file to get started</label>

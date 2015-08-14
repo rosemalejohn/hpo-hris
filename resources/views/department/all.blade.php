@@ -23,6 +23,7 @@
                         <th>Name</th>
                         <th>Description</th>
                         <th>No. of employees</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -32,6 +33,14 @@
                         <td>{{ $department->name }}</td>
                         <td>{{ $department->description }}</td>
                         <td>{{ $department->employees->count() }}</td>
+                        <td>
+                            <a href="/departments/{{ $department->department_code }}/edit">
+                                <button class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i> Edit</button>
+                            </a>
+                            <a href="/departments/{{ $department->department_code }}">
+                                <button class="btn btn-info btn-xs"><i class="fa fa-search"></i> View</button>
+                            </a>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>

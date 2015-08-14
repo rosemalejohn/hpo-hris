@@ -12,6 +12,15 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         Department employees
+        <div class="pull-right">
+            <div class="btn-group">
+                <a href="/departments/{{ $department->department_code }}/edit">
+                    <button type="button" class="btn btn-primary btn-xs">
+                        <i class="fa fa-edit"></i> Update department
+                    </button>
+                </a>
+            </div>
+        </div>
     </div>
     <!-- /.panel-heading -->
     <div class="panel-body">

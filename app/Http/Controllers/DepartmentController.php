@@ -77,7 +77,13 @@ class DepartmentController extends Controller
      */
     public function edit($id)
     {
-        //
+        $department = Department::where('department_code', $id)->first();
+        if(empty($department)){
+            flash()->error("Department not found");
+            return redirect()->back();
+        }
+        $page_title = 'Edit - '.$department->name;
+        return view('department.edit')->with(compact('page_title', 'department'));
     }
 
     /**
@@ -89,7 +95,18 @@ class DepartmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $department = Department::where('department_code', $id)->first();
+        $department->department_code = $request->input('department_code');
+        $department->name = $request->input('name');
+        $department->description = $request->input('description');
+
+        if($department->save()){
+            flash()->success($request->name.' has been successfully updated!');
+            return redirect()->to('/departments');
+        }
+
+        flash()->error('Sorry. We encountered an error. Please review the fields');
+        return redirect()->back();
     }
 
     /**
