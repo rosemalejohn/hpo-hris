@@ -111,28 +111,32 @@ class EmployeeController extends Controller
     protected function validator($data){
         return Validator::make($data, [
                 'employee_id' => 'required',
-                'name' => 'required|min:6|max:75',
+                'first_name' => 'required|min:6|max:45',
+                'middle_name' => 'required|min:6|max:45',
                 'department_id' => 'required'
             ]);
     }
 
-    public function importEmployees(){
-        $path = storage_path('files/employees.xls');
+    //Getting datas from list of employees
+    // public function importEmployees(){
+    //     $path = storage_path('files/sample.xlsx');
 
-        Excel::selectSheets('Sheet1')->load($path, function($reader){
-            $rows = $reader->all();
+    //     Excel::selectSheets('Sheet1')->load($path, function($reader){
+    //         $rows = $reader->all();
 
-            foreach($rows as $row){
+    //         // dd($rows);
 
-                Employee::create([
-                    'employee_id' => $row->facetime,
-                    'first_name' => $row->firstname,
-                    'middle_name' => $row->middlename,
-                    'last_name' => $row->lastname,
-                    'department_id' => 1
-                ]);
+    //         foreach($rows as $row){
 
-            }
-        });
-    }
+    //             Employee::create([
+    //                 'employee_id' => $row->facetime,
+    //                 'first_name' => $row->firstname,
+    //                 'middle_name' => $row->middlename,
+    //                 'last_name' => $row->lastname,
+    //                 'department_id' => 1
+    //             ]);
+
+    //         }
+    //     });
+    // }
 }
