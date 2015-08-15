@@ -17,11 +17,12 @@ trait AuthenticatesUsers
      */
     public function getLogin()
     {
+        $page_title = 'Login to your account';
         if (view()->exists('auth.authenticate')) {
             return view('auth.authenticate');
         }
 
-        return view('auth.login');
+        return view('auth.login')->with(compact('page_title'));
     }
 
     /**

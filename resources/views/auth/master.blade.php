@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Login</title>
+    <title>{{ $page_title or 'HPO HRIS' }}</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -29,6 +29,8 @@
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    @yield('stylesheet')
 
 </head>
 
@@ -55,6 +57,8 @@
         var $btn = $(this).button('loading')
     });
     </script>
+
+    @yield('script')
 
 </body>
 

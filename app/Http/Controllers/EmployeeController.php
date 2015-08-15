@@ -81,7 +81,7 @@ class EmployeeController extends Controller
             flash()->error('Employee not found!');
             return redirect()->back();
         }
-        $page_title = $employee->name.' - Edit';
+        $page_title = $employee->first_name.' '.$employee->last_name.' - Edit';
         return view('employee.edit')->with(compact('page_title', 'employee'));
     }
 
@@ -94,7 +94,27 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if($this->validator($request->all())->fails()){
+            flash()->error('You have missing fields');
+        }
+
+        $employee = Employee::where('employee_id', $id)->first();
+        if(empty($employee)){
+            flash()->error('Employee not found!');
+            return redirect()->to('/employees');
+        }
+        $employee->employee_id = $request->input('employee_id');
+        $employee->first_name = $request->input('first_name');
+        $employee->middle_name = $request->input('middle_name');
+        $employee->last_name = $request->input('last_name');
+        $employee->department_id = $request->input('department_id');
+
+        if($employee->save()){
+            flash()->success('Employee successfully updated!');
+            return redirect()->to('/employees');
+        }
+        return redirect()->back();
+
     }
 
     /**
@@ -117,17 +137,17 @@ class EmployeeController extends Controller
             ]);
     }
 
-    //Getting datas from list of employees
+    // Getting datas from list of employees
     // public function importEmployees(){
     //     $path = storage_path('files/sample.xlsx');
-
+    //
     //     Excel::selectSheets('Sheet1')->load($path, function($reader){
     //         $rows = $reader->all();
-
+    //
     //         // dd($rows);
-
+    //
     //         foreach($rows as $row){
-
+    //
     //             Employee::create([
     //                 'employee_id' => $row->facetime,
     //                 'first_name' => $row->firstname,
@@ -135,7 +155,7 @@ class EmployeeController extends Controller
     //                 'last_name' => $row->lastname,
     //                 'department_id' => 1
     //             ]);
-
+    //
     //         }
     //     });
     // }

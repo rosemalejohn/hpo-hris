@@ -1,5 +1,9 @@
 @extends('layouts.master')
 
+@section('stylesheet')
+<link href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+@stop
+
 @section('content')
 <div class="panel panel-default">
     <div class="panel-heading">
@@ -12,7 +16,23 @@
                     {!! csrf_field() !!}
                     <div class="form-group">
                         <label>Description</label>
-                        <input class="form-control" name="employee_id" placeholder="ex. Graveyard Shift" value="{{ old('employee_id') }}">
+                        <input class="form-control" name="description" placeholder="ex. Graveyard Shift">
+                    </div>
+                    <div class="form-group">
+                        <label>Shift from</label>
+                        <input type="text" class="form-control" id="startTime" name="shift_from" placeholder="Start time"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Shift to</label>
+                        <input type="text" class="form-control" id="endTime" name="shift_to" placeholder="End time"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Working hours</label>
+                        <input type="text" class="form-control" id="workingHours" name="working_hours" placeholder="End time"/>
+                    </div>
+                    <div class="form-group">
+                        <label>Break</label>
+                        <input type="text" class="form-control" id="break" name="break" placeholder="End time"/>
                     </div>
                     <hr>
                     <button type="submit" class="btn btn-primary"><i class="fa fa-clock-o"></i> Add shift</button>
@@ -26,4 +46,27 @@
     <!-- /.panel-body -->
 </div>
 
+@stop
+
+@section('script')
+<script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
+<script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
+<script type="text/javascript">
+$(function () {
+    $('#startTime').datetimepicker({
+        format: 'HH:mm'
+    });
+    $('#endTime').datetimepicker({
+        format: 'HH:mm'
+    });
+
+    $('#workingHours').datetimepicker({
+        format: 'HH:mm'
+    });
+
+    $('#break').datetimepicker({
+        format: 'HH:mm'
+    });
+});
+</script>
 @stop

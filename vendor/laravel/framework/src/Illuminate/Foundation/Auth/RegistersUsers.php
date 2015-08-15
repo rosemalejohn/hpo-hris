@@ -16,7 +16,8 @@ trait RegistersUsers
      */
     public function getRegister()
     {
-        return view('auth.register');
+        $page_title = 'Create new account';
+        return view('auth.register')->with(compact('page_title'));
     }
 
     /**
@@ -34,9 +35,9 @@ trait RegistersUsers
                 $request, $validator
             );
         }
-
-        Auth::login($this->create($request->all()));
-
+        $user = $this->create($request->all());
+        Auth::login($user);
+        flash()->success("Welcome ".$user->username."! You just created your account. Thank you for using the system.");
         return redirect($this->redirectPath());
     }
 }

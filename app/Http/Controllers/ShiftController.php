@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Shift;
+use Validator;
 
 class ShiftController extends Controller
 {
@@ -40,7 +41,22 @@ class ShiftController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(), [
+                'description' => 'required',
+                'shift_from' => 'required',
+                'shift_to' => 'required',
+                'working_hours' => 'required',
+                'break' => 'required'
+        ]);
+
+        if($validator->fails()){
+            flash()->error("You've got an error!");
+            return redirect()->back();
+        } else{
+            $shift = Shift::create($request->all());
+            flash()->success($shift->description.' successfully added');
+            return redirect()->to('/shifts');
+        }
     }
 
     /**

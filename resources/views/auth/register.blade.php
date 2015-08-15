@@ -16,8 +16,13 @@
                     </div>
 
                     <div class="form-group">
+                        <label>Username</label>
+                        <input class="form-control" placeholder="ex. john_smith" name="username" value="{{ old('username') }}">
+                    </div>
+
+                    <div class="form-group">
                         <label>Email</label>
-                        <input class="form-control" placeholder="ex. john_smith@example.com" name="email" value="{{ old('email') }}">
+                        <input type="email" class="form-control" placeholder="ex. john_smith@example.com" name="email" value="{{ old('email') }}">
                     </div>
 
                     <div class="form-group">

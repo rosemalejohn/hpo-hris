@@ -36,7 +36,7 @@
                     @foreach($department->employees as $employee)
                     <tr class="odd gradeX">
                         <td><a href="/employees/{{ $employee->employee_id }}">{{ $employee->employee_id }}</a></td>
-                        <td>{{ $employee->name }}</td>
+                        <td>{{ $employee->first_name.' '.$employee->middle_name.' '.$employee->last_name }}</td>
                     </tr>
                     @endforeach
                 </tbody>
