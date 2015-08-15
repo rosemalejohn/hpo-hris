@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.2.11
+-- version 4.4.12
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 15, 2015 at 10:22 AM
--- Server version: 5.6.21
--- PHP Version: 5.6.3
+-- Generation Time: Aug 15, 2015 at 02:47 PM
+-- Server version: 5.6.25
+-- PHP Version: 5.6.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Database: `hpo-hris`
@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `departments` (
-`id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL,
   `department_code` varchar(10) NOT NULL,
   `name` varchar(100) NOT NULL,
   `description` varchar(255) NOT NULL,
@@ -57,7 +57,7 @@ INSERT INTO `departments` (`id`, `department_code`, `name`, `description`, `crea
 --
 
 CREATE TABLE IF NOT EXISTS `employees` (
-`id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL,
   `employee_id` int(11) unsigned NOT NULL,
   `first_name` varchar(45) NOT NULL,
   `middle_name` varchar(45) NOT NULL,
@@ -133,7 +133,7 @@ INSERT INTO `employees` (`id`, `employee_id`, `first_name`, `middle_name`, `last
 --
 
 CREATE TABLE IF NOT EXISTS `employee_dtr` (
-`id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL,
   `employee_id` int(10) unsigned NOT NULL,
   `start_of_duty` datetime DEFAULT NULL,
   `first_out` datetime DEFAULT NULL,
@@ -155,14 +155,64 @@ CREATE TABLE IF NOT EXISTS `employee_dtr` (
 --
 
 CREATE TABLE IF NOT EXISTS `employee_shifts` (
-`id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL,
   `employee_id` int(11) unsigned NOT NULL,
   `shift_id` int(11) unsigned NOT NULL,
-  `date_from` date NOT NULL,
+  `date_from` date DEFAULT NULL,
   `date_to` date DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `employee_shifts`
+--
+
+INSERT INTO `employee_shifts` (`id`, `employee_id`, `shift_id`, `date_from`, `date_to`, `created_at`, `updated_at`) VALUES
+(1, 1, 7, '2015-07-01', '2015-12-31', '2015-08-15 11:29:46', '0000-00-00 00:00:00'),
+(2, 3, 9, '2015-07-01', '2015-12-31', '2015-08-15 11:31:25', '0000-00-00 00:00:00'),
+(3, 4, 21, NULL, NULL, '2015-08-15 11:33:13', '0000-00-00 00:00:00'),
+(4, 5, 9, NULL, NULL, '2015-08-15 11:34:30', '0000-00-00 00:00:00'),
+(5, 6, 9, NULL, NULL, '2015-08-15 11:36:17', '0000-00-00 00:00:00'),
+(6, 7, 4, NULL, NULL, '2015-08-15 11:38:25', '0000-00-00 00:00:00'),
+(7, 8, 8, NULL, NULL, '2015-08-15 11:39:50', '0000-00-00 00:00:00'),
+(8, 9, 3, NULL, NULL, '2015-08-15 11:41:49', '0000-00-00 00:00:00'),
+(9, 10, 3, NULL, NULL, '2015-08-15 11:43:59', '0000-00-00 00:00:00'),
+(10, 11, 9, NULL, NULL, '2015-08-15 11:45:05', '0000-00-00 00:00:00'),
+(11, 12, 3, NULL, NULL, '2015-08-15 11:48:22', '0000-00-00 00:00:00'),
+(12, 13, 4, NULL, NULL, '2015-08-15 11:49:48', '0000-00-00 00:00:00'),
+(13, 20, 4, NULL, NULL, '2015-08-15 11:51:12', '0000-00-00 00:00:00'),
+(14, 21, 19, NULL, NULL, '2015-08-15 11:52:04', '0000-00-00 00:00:00'),
+(15, 22, 3, NULL, NULL, '2015-08-15 11:52:53', '0000-00-00 00:00:00'),
+(16, 23, 4, NULL, NULL, '2015-08-15 11:54:37', '0000-00-00 00:00:00'),
+(17, 24, 4, NULL, NULL, '2015-08-15 11:55:27', '0000-00-00 00:00:00'),
+(18, 25, 3, NULL, NULL, '2015-08-15 11:57:40', '0000-00-00 00:00:00'),
+(19, 26, 3, NULL, NULL, '2015-08-15 12:01:15', '0000-00-00 00:00:00'),
+(20, 27, 15, NULL, NULL, '2015-08-15 12:03:55', '0000-00-00 00:00:00'),
+(21, 28, 14, NULL, NULL, '2015-08-15 12:05:09', '0000-00-00 00:00:00'),
+(22, 29, 4, NULL, NULL, '2015-08-15 12:06:01', '0000-00-00 00:00:00'),
+(23, 30, 8, NULL, NULL, '2015-08-15 12:07:19', '0000-00-00 00:00:00'),
+(24, 31, 4, NULL, NULL, '2015-08-15 12:08:11', '0000-00-00 00:00:00'),
+(25, 32, 9, NULL, NULL, '2015-08-15 12:10:04', '0000-00-00 00:00:00'),
+(26, 33, 4, NULL, NULL, '2015-08-15 12:12:18', '0000-00-00 00:00:00'),
+(27, 34, 4, NULL, NULL, '2015-08-15 12:13:30', '0000-00-00 00:00:00'),
+(28, 35, 4, NULL, NULL, '2015-08-15 12:17:00', '0000-00-00 00:00:00'),
+(29, 36, 18, NULL, NULL, '2015-08-15 12:18:40', '0000-00-00 00:00:00'),
+(30, 37, 4, NULL, NULL, '2015-08-15 12:20:33', '0000-00-00 00:00:00'),
+(31, 38, 4, NULL, NULL, '2015-08-15 12:23:00', '0000-00-00 00:00:00'),
+(32, 39, 4, NULL, NULL, '2015-08-15 12:24:38', '0000-00-00 00:00:00'),
+(33, 40, 21, NULL, NULL, '2015-08-15 12:27:04', '0000-00-00 00:00:00'),
+(34, 41, 4, NULL, NULL, '2015-08-15 12:27:37', '0000-00-00 00:00:00'),
+(35, 42, 4, NULL, NULL, '2015-08-15 12:28:05', '0000-00-00 00:00:00'),
+(36, 43, 4, NULL, NULL, '2015-08-15 12:28:33', '0000-00-00 00:00:00'),
+(37, 44, 4, NULL, NULL, '2015-08-15 12:29:17', '0000-00-00 00:00:00'),
+(38, 45, 4, NULL, NULL, '2015-08-15 12:29:42', '0000-00-00 00:00:00'),
+(39, 46, 9, NULL, NULL, '2015-08-15 12:33:00', '0000-00-00 00:00:00'),
+(40, 47, 18, NULL, NULL, '2015-08-15 12:33:50', '0000-00-00 00:00:00'),
+(41, 48, 4, NULL, NULL, '2015-08-15 12:34:21', '0000-00-00 00:00:00'),
+(42, 49, 21, NULL, NULL, '2015-08-15 12:34:57', '0000-00-00 00:00:00'),
+(43, 51, 8, NULL, NULL, '2015-08-15 12:36:53', '0000-00-00 00:00:00'),
+(44, 52, 10, NULL, NULL, '2015-08-15 12:39:43', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -171,7 +221,7 @@ CREATE TABLE IF NOT EXISTS `employee_shifts` (
 --
 
 CREATE TABLE IF NOT EXISTS `employee_shift_days` (
-`id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL,
   `employee_shift_id` int(10) unsigned NOT NULL,
   `day` enum('mon','tue','wed','thu','fri','sat','sun') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -214,7 +264,7 @@ CREATE TABLE IF NOT EXISTS `password_resets` (
 --
 
 CREATE TABLE IF NOT EXISTS `shifts` (
-`id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL,
   `description` varchar(255) NOT NULL,
   `shift_from` time NOT NULL,
   `shift_to` time NOT NULL,
@@ -248,7 +298,7 @@ INSERT INTO `shifts` (`id`, `description`, `shift_from`, `shift_to`, `working_ho
 (20, 'Shift 17', '07:00:00', '17:00:00', '09:00:00', '01:30:00', '2015-08-15 04:23:20', '0000-00-00 00:00:00'),
 (21, 'Shift 18', '11:00:00', '19:00:00', '08:00:00', '00:30:00', '2015-08-15 04:24:04', '0000-00-00 00:00:00'),
 (22, 'Shift 19', '10:00:00', '19:00:00', '08:00:00', '00:30:00', '2015-08-15 04:24:50', '0000-00-00 00:00:00'),
-(23, '', '07:00:00', '16:00:00', '09:00:00', '01:30:00', '2015-08-15 04:25:17', '0000-00-00 00:00:00');
+(23, 'Shift 20', '07:00:00', '16:00:00', '09:00:00', '01:30:00', '2015-08-15 11:04:58', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -257,7 +307,7 @@ INSERT INTO `shifts` (`id`, `description`, `shift_from`, `shift_to`, `working_ho
 --
 
 CREATE TABLE IF NOT EXISTS `users` (
-`id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `username` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
@@ -273,7 +323,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `username`, `password`, `user_type`, `remember_token`, `created_at`, `updated_at`) VALUES
-(7, 'Rosemale-John II C. Villacorta', 'rosemalejohn@gmail.com', 'rosemalejohn', '$2y$10$FuqYG4eDr6kTW00RwvWVJ.EHPPkVrOO273CQ7mRROIRYSBVZ9NrPG', 'admin', NULL, '2015-08-14 23:34:32', '2015-08-14 23:34:32');
+(7, 'Rosemale-John II C. Villacorta', 'rosemalejohn@gmail.com', 'rosemalejohn', '$2y$10$FuqYG4eDr6kTW00RwvWVJ.EHPPkVrOO273CQ7mRROIRYSBVZ9NrPG', 'admin', '4iI1tE0lwcqDKH45Q48v7EPiI0QHwfOMwPMJOSACPqRp5sAdsXgRquH3sROP', '2015-08-14 23:34:32', '2015-08-15 04:38:59');
 
 --
 -- Indexes for dumped tables
@@ -283,49 +333,58 @@ INSERT INTO `users` (`id`, `name`, `email`, `username`, `password`, `user_type`,
 -- Indexes for table `departments`
 --
 ALTER TABLE `departments`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `employees`
 --
 ALTER TABLE `employees`
- ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `employee_id` (`employee_id`), ADD KEY `department_id` (`department_id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `employee_id` (`employee_id`),
+  ADD KEY `department_id` (`department_id`);
 
 --
 -- Indexes for table `employee_dtr`
 --
 ALTER TABLE `employee_dtr`
- ADD PRIMARY KEY (`id`), ADD KEY `employee_id` (`employee_id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `employee_id` (`employee_id`);
 
 --
 -- Indexes for table `employee_shifts`
 --
 ALTER TABLE `employee_shifts`
- ADD PRIMARY KEY (`id`), ADD KEY `employee_id` (`employee_id`), ADD KEY `shift_id` (`shift_id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `employee_id` (`employee_id`),
+  ADD KEY `shift_id` (`shift_id`);
 
 --
 -- Indexes for table `employee_shift_days`
 --
 ALTER TABLE `employee_shift_days`
- ADD PRIMARY KEY (`id`), ADD KEY `employee_shift_id` (`employee_shift_id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `employee_shift_id` (`employee_shift_id`);
 
 --
 -- Indexes for table `password_resets`
 --
 ALTER TABLE `password_resets`
- ADD KEY `password_resets_email_index` (`email`), ADD KEY `password_resets_token_index` (`token`);
+  ADD KEY `password_resets_email_index` (`email`),
+  ADD KEY `password_resets_token_index` (`token`);
 
 --
 -- Indexes for table `shifts`
 --
 ALTER TABLE `shifts`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
- ADD PRIMARY KEY (`id`), ADD UNIQUE KEY `users_email_unique` (`email`), ADD UNIQUE KEY `username` (`username`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `users_email_unique` (`email`),
+  ADD UNIQUE KEY `username` (`username`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -335,37 +394,37 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=53;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=53;
 --
 -- AUTO_INCREMENT for table `employee_dtr`
 --
 ALTER TABLE `employee_dtr`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `employee_shifts`
 --
 ALTER TABLE `employee_shifts`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=45;
 --
 -- AUTO_INCREMENT for table `employee_shift_days`
 --
 ALTER TABLE `employee_shift_days`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `shifts`
 --
 ALTER TABLE `shifts`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=24;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=24;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
 --
 -- Constraints for dumped tables
 --
@@ -374,26 +433,26 @@ MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
 -- Constraints for table `employees`
 --
 ALTER TABLE `employees`
-ADD CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `employee_dtr`
 --
 ALTER TABLE `employee_dtr`
-ADD CONSTRAINT `employee_dtr_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`employee_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `employee_dtr_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`employee_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `employee_shifts`
 --
 ALTER TABLE `employee_shifts`
-ADD CONSTRAINT `employee_shifts_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-ADD CONSTRAINT `employee_shifts_ibfk_2` FOREIGN KEY (`shift_id`) REFERENCES `shifts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `employee_shifts_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `employee_shifts_ibfk_2` FOREIGN KEY (`shift_id`) REFERENCES `shifts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `employee_shift_days`
 --
 ALTER TABLE `employee_shift_days`
-ADD CONSTRAINT `employee_shift_days_ibfk_1` FOREIGN KEY (`employee_shift_id`) REFERENCES `employee_shifts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `employee_shift_days_ibfk_1` FOREIGN KEY (`employee_shift_id`) REFERENCES `employee_shifts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
