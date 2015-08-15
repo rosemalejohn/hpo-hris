@@ -22,7 +22,7 @@
                             @foreach($shift->employees as $employee)
                             <tr>
                                 <td>{{ $employee->employee_id }}</td>
-                                <td><a href="/employees/{{ $employee->employee_id }}">{{ $employee->name }}</a></td>
+                                <td><a href="/employees/{{ $employee->employee_id }}">{{ $employee->first_name.' '.$employee->middle_name.' '.$employee->last_name }}</a></td>
                                 <td><a href="/departments/{{ $employee->department->department_code }}">{{ $employee->department->name }}</a></td>
                             </tr>
                             @endforeach

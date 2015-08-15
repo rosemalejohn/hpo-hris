@@ -139,7 +139,7 @@ class EmployeeController extends Controller
 
     // Getting datas from list of employees
     // public function importEmployees(){
-    //     $path = storage_path('files/sample.xlsx');
+    //     $path = storage_path('files/DTRTemplates/List of Employees.xlsx');
     //
     //     Excel::selectSheets('Sheet1')->load($path, function($reader){
     //         $rows = $reader->all();

@@ -42,7 +42,7 @@
                 <tbody>
                     @foreach(App\EmployeeDtr::groupBy('start_of_duty')->get() as $dtr)
                     <tr class="odd gradeX">
-                        <td><a href="/employees/{{ $dtr->employee->employee_id }}">{{ $dtr->employee->name }}</a></td>
+                        <td><a href="/employees/{{ $dtr->employee->employee_id }}">{{ $dtr->employee->first_name.' '.$dtr->employee->middle_name.' '.$dtr->employee->last_name }}</a></td>
                         <td>{{ date('M d, Y H:i:s',strtotime($dtr->start_of_duty)) }}</td>
                         <td>{{ date('H:i:s',strtotime($dtr->first_out)) }} to {{ date('H:i:s',strtotime($dtr->first_in)) }}</td>
                         <td>{{ date('H:i:s',strtotime($dtr->second_out)) }} to {{ date('H:i:s',strtotime($dtr->second_in)) }}</td>

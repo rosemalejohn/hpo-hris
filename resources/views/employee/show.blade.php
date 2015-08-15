@@ -29,7 +29,13 @@
                         <th>Shift description</th>
                         <th>Time</th>
                         <th>Working hours</th>
-                        <th>Days</th>
+                        <th>Mon</th>
+                        <th>Tue</th>
+                        <th>Wed</th>
+                        <th>Thu</th>
+                        <th>Fri</th>
+                        <th>Sat</th>
+                        <th>Sun</th>
                         <th>Effective</th>
                     </tr>
                 </thead>
@@ -39,16 +45,18 @@
                         <td><a href="/shifts/{{ $employee_shift->shift->id }}">{{ $employee_shift->shift->description }}</a></td>
                         <td>{{ $employee_shift->shift->shift_from.' to '.$employee_shift->shift->shift_to }}</td>
                         <td>{{ $employee_shift->shift->working_hours }}</td>
-                        <td>
-                            @foreach($employee_shift->employee_shift_days as $day)
-                            <span>{{ strtoupper($day->day).' ' }}</span>
-                            @endforeach
-                        </td>
+                        <td>@if($employee_shift->monday == 1)<i class="fa fa-check"></i>@endif</td>
+                        <td>@if($employee_shift->tuesday == 1)<i class="fa fa-check"></i>@endif</td>
+                        <td>@if($employee_shift->wednesday == 1)<i class="fa fa-check"></i>@endif</td>
+                        <td>@if($employee_shift->thursday == 1)<i class="fa fa-check"></i>@endif</td>
+                        <td>@if($employee_shift->friday == 1)<i class="fa fa-check"></i>@endif</td>
+                        <td>@if($employee_shift->saturday == 1)<i class="fa fa-check"></i>@endif</td>
+                        <td>@if($employee_shift->sunday == 1)<i class="fa fa-check"></i>@endif</td>
                         <td>{{ date('M d Y', strtotime($employee_shift->date_from)).' to '.date('M d Y', strtotime($employee_shift->date_to)) }}</td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5"><div class="alert alert-success">No shift yet.</div></td>
+                        <td colspan="11"><div class="alert alert-success">No shift yet.</div></td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -80,7 +88,7 @@
                 <tbody>
                     @foreach($employee->employee_dtrs as $dtr)
                     <tr class="odd gradeX">
-                        <td>{{ $dtr->employee->name }}</td>
+                        <td>{{ $dtr->employee->first_name.' '.$dtr->employee->middle_name.' '.$dtr->employee->last_name }}</td>
                         <td>{{ date('M d, Y H:i:s',strtotime($dtr->start_of_duty)) }}</td>
                         <td>{{ date('H:i:s',strtotime($dtr->first_out)) }} to {{ date('H:i:s',strtotime($dtr->first_in)) }}</td>
                         <td>{{ date('H:i:s',strtotime($dtr->second_out)) }} to {{ date('H:i:s',strtotime($dtr->second_in)) }}</td>

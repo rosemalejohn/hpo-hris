@@ -63,8 +63,8 @@ class DtrController extends Controller
                 $start_time = $shift['start_time']; //get the shift start time
                 $end_time = $shift['end_time']; //get the shift end time
 
-                foreach($shift['days'] as $day){ //loop through days in the shift
-                    if($day->day == strtolower(date('D', strtotime($date)))){ //check if the date day is equal to the shift day
+                //foreach($shift['days'] as $day){ //loop through days in the shift
+                //    if($day->day == strtolower(date('D', strtotime($date)))){ //check if the date day is equal to the shift day
                         $data = [
                             'employee_id' => $userID, //employee biometric id
                             'start_of_duty' => $date.' '.$attendances->first(), //start of duty in one day
@@ -106,8 +106,8 @@ class DtrController extends Controller
                         // insert the data array into the create method and save to the database
                         EmployeeDtr::create($data);
                         break;
-                    }
-                }
+                //    }
+                //}
             }
         }
     }
@@ -202,7 +202,7 @@ class DtrController extends Controller
 
     public function exportToExcel(){
 
-        $path = storage_path('files/DTRTemplates/summary.xlsx'); //Path of the excel template to be loaded
+        $path = storage_path('files/DTRTemplates/DTRSummaryReport.xlsx'); //Path of the excel template to be loaded
 
         Excel::load($path, function($reader){ //load the excel file
             $raw_sheet = $reader->sheet('raw'); //select the raw sheet of the excel file
@@ -218,7 +218,7 @@ class DtrController extends Controller
                     $rawSheetIndex = $rawSheetIndex + 2;
                 }
                 //assign the data to the variables
-                $staffname = $employee_dtr->employee->name;
+                $staffname = $employee_dtr->employee->first_name.' '.$employee_dtr->employee->middle_name.' '.$employee_dtr->employee->last_name;
                 $date = date('Y-m-d', strtotime($employee_dtr->start_of_duty));
                 $login = date('H:i:s', strtotime($employee_dtr->start_of_duty));
                 $logout = date('H:i:s', strtotime($employee_dtr->end_of_duty));
@@ -234,7 +234,7 @@ class DtrController extends Controller
 
             foreach(Employee::with('employee_dtrs')->get() as $employee){
                 $staffcode = $employee->employee_id;
-                $staffname = $employee->name;
+                $staffname = $employee->first_name.' '.$employee->middle_name.' '.$employee->last_name;
                 $computations = value(function() use($employee){
                     $late = new DateTime('00:00:00');
                     $undertime = new DateTime('00:00:00');
