@@ -263,7 +263,7 @@ class DtrController extends Controller
                 ]);
                 ++$summarySheetIndex; //increment the index to know what row are we
             }
-        })->export('xlsx'); //download the excel file
+        })->download('xlsx'); //download the excel file
     }
 
 }

@@ -59,6 +59,7 @@ trait AuthenticatesUsers
             $this->incrementLoginAttempts($request);
         }
 
+        flash()->success('Welcome, '.auth()->user()->username.'! Thanks for logging in.');
         return redirect($this->loginPath())
             ->withInput($request->only($this->loginUsername(), 'remember'))
             ->withErrors([
@@ -117,7 +118,7 @@ trait AuthenticatesUsers
     public function getLogout()
     {
         Auth::logout();
-
+        flash()->success('You have just been logout.');
         return redirect(property_exists($this, 'redirectAfterLogout') ? $this->redirectAfterLogout : '/');
     }
 
