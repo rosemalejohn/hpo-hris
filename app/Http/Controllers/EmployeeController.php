@@ -64,7 +64,7 @@ class EmployeeController extends Controller
             flash()->error("Employee not found on database.");
             return redirect()->back();
         }
-        $page_title = $employee->name;
+        $page_title = $employee->first_name.' '.$employee->last_name;
         return view('employee.show')->with(compact('page_title', 'employee'));
     }
 
@@ -127,6 +127,24 @@ class EmployeeController extends Controller
         //
     }
 
+    public function addShift(Request $request, $id){
+        $validator = Validator::make($request->all(), [
+            'shift' => 'required',
+            'date_from' => 'required'
+        ]);
+        if($validator->fails()){
+            flash()->error('Input field error.');
+        } else{
+            $employee = Employee::where('employee_id', $id)->first();
+            $employee_shift = $employee->shifts()->attach($request->shift, [
+                'date_from' => $request->date_from, 
+                'date_to' => $request->date_to
+            ]);
+            flash()->success('Shift successfully added');
+        }
+        return redirect()->back();
+    }
+
     protected function validator($data){
         return Validator::make($data, [
                 'employee_id' => 'required',
@@ -137,25 +155,25 @@ class EmployeeController extends Controller
     }
 
     // Getting datas from list of employees
-    public function importEmployees(){
-        $path = storage_path('files/DTRTemplates/walanainput.xlsx');
+    // public function importEmployees(){
+    //     $path = storage_path('files/DTRTemplates/walanainput.xlsx');
     
-        Excel::selectSheets('Sheet1')->load($path, function($reader){
-            $rows = $reader->all();
+    //     Excel::selectSheets('Sheet1')->load($path, function($reader){
+    //         $rows = $reader->all();
     
-            // dd($rows);
+    //         // dd($rows);
     
-            foreach($rows as $row){
+    //         foreach($rows as $row){
     
-                Employee::create([
-                    'employee_id' => $row->facetime,
-                    'first_name' => $row->first_name,
-                    'middle_name' => $row->middle_name,
-                    'last_name' => $row->last_name,
-                    'department_id' => 1
-                ]);
+    //             Employee::create([
+    //                 'employee_id' => $row->facetime,
+    //                 'first_name' => $row->first_name,
+    //                 'middle_name' => $row->middle_name,
+    //                 'last_name' => $row->last_name,
+    //                 'department_id' => 1
+    //             ]);
     
-            }
-        });
-    }
+    //         }
+    //     });
+    // }
 }

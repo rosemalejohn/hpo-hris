@@ -6,6 +6,9 @@
 
 <!-- DataTables Responsive CSS -->
 <link href="/bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
+
+<link href="/bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
+
 @stop
 
 @section('content')
@@ -14,7 +17,7 @@
         Shifts
         <div class="pull-right">
             <div class="btn-group">
-                <button type="button" class="btn btn-primary btn-xs">
+                <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addShift">
                     <i class="fa fa-plus"></i> Add shift
                 </button>
             </div>
@@ -103,15 +106,27 @@
     <!-- /.panel-body -->
 </div>
 <!-- /.panel -->
+@include('employee.partials.add_shift')
+
 @stop
 
 @section('script')
 <!-- DataTables JavaScript -->
 <script src="/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
 <script src="/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="/bower_components/moment/min/moment.min.js"></script>
+<script type="text/javascript" src="/bower_components/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript">
 $('#employees-table').DataTable({
     responsive: true
+});
+
+$('#dateFrom').datetimepicker({
+    format: 'YYYY-MM-DD'
+});
+
+$('#dateTo').datetimepicker({
+    format: 'YYYY-MM-DD'
 });
 </script>
 @stop

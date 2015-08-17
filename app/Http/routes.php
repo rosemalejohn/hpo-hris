@@ -43,6 +43,8 @@ Route::group(['middleware' => 'auth'], function(){
 
     Route::resource('employees', 'EmployeeController');
 
+    Route::post('/employees/add-shift/{id}', 'EmployeeController@addShift');
+
      //DepartmentController resource
 
     Route::resource('departments', 'DepartmentController');
@@ -52,4 +54,5 @@ Route::group(['middleware' => 'auth'], function(){
     Route::resource('shifts', 'ShiftController');
 
     Route::get('/import-employees', 'EmployeeController@importEmployees');
+
 });
