@@ -72,7 +72,7 @@ class ShiftController extends Controller
             flash()->error('No available shift for that');
             return redirect()->back();
         }
-        $page_title = $shift->description;
+        $page_title = $shift->description.' - '.$shift->shift_from.' to '.$shift->shift_to;
         return view('shift.show')->with(compact('page_title', 'shift'));
     }
 

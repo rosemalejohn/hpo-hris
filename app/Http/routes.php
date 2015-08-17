@@ -37,7 +37,8 @@ Route::group(['middleware' => 'auth'], function(){
 
     Route::post('/dtr', 'DtrController@postImport');
 
-    Route::get('/dtr/export', 'DtrController@exportToExcel');
+    // Route::get('/dtr/export', 'DtrController@exportToExcel');
+    Route::get('/dtr/export', 'ExportExcelController@export');
 
     //EmployeeController resource
 
@@ -52,5 +53,4 @@ Route::group(['middleware' => 'auth'], function(){
     Route::resource('shifts', 'ShiftController');
 
     Route::get('/import-employees', 'EmployeeController@importEmployees');
-
 });

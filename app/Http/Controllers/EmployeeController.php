@@ -136,27 +136,4 @@ class EmployeeController extends Controller
                 'department_id' => 'required'
             ]);
     }
-
-    // Getting datas from list of employees
-    // public function importEmployees(){
-    //     $path = storage_path('files/DTRTemplates/List of Employees.xlsx');
-    //
-    //     Excel::selectSheets('Sheet1')->load($path, function($reader){
-    //         $rows = $reader->all();
-    //
-    //         // dd($rows);
-    //
-    //         foreach($rows as $row){
-    //
-    //             Employee::create([
-    //                 'employee_id' => $row->facetime,
-    //                 'first_name' => $row->firstname,
-    //                 'middle_name' => $row->middlename,
-    //                 'last_name' => $row->lastname,
-    //                 'department_id' => 1
-    //             ]);
-    //
-    //         }
-    //     });
-    // }
 }

@@ -22,5 +22,4 @@ class EmployeeShift extends Model
     public function employee_shift_days(){
         return $this->hasMany('App\EmployeeShiftDay');
     }
-
 }

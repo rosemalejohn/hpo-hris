@@ -202,7 +202,7 @@ class DtrController extends Controller
 
     public function exportToExcel(){
 
-        $path = storage_path('files/DTRTemplates/DTRSummaryReport.xlsx'); //Path of the excel template to be loaded
+        $path = storage_path('files/DTRTemplates/dtrsummary.xlsx'); //Path of the excel template to be loaded
 
         Excel::load($path, function($reader){ //load the excel file
             $raw_sheet = $reader->sheet('raw'); //select the raw sheet of the excel file

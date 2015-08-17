@@ -16,9 +16,4 @@ class EmployeeDtr extends Model
     public function employee(){
         return $this->belongsTo(Employee::class, 'employee_id', 'employee_id');
     }
-
-    public function filterByDate($date_from, $date_to){
-    	$dtrs = DB::table($table)->whereBetween('start_of_duty', [$date_from, $date_to])->get();
-    	return $dtrs;
-    }
 }

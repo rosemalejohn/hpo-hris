@@ -40,7 +40,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach(App\EmployeeDtr::groupBy('start_of_duty')->get() as $dtr)
+                    @foreach(App\EmployeeDtr::with('employee')->groupBy('start_of_duty')->get() as $dtr)
                     <tr class="odd gradeX">
                         <td><a href="/employees/{{ $dtr->employee->employee_id }}">{{ $dtr->employee->first_name.' '.$dtr->employee->middle_name.' '.$dtr->employee->last_name }}</a></td>
                         <td>{{ date('M d, Y H:i:s',strtotime($dtr->start_of_duty)) }}</td>
