@@ -114,7 +114,6 @@ class EmployeeController extends Controller
             return redirect()->to('/employees');
         }
         return redirect()->back();
-
     }
 
     /**

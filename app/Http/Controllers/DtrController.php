@@ -201,20 +201,17 @@ class DtrController extends Controller
     }
 
     public function exportToExcel(){
-
         $path = storage_path('files/DTRTemplates/dtrsummary.xlsx'); //Path of the excel template to be loaded
 
         Excel::load($path, function($reader){ //load the excel file
             $raw_sheet = $reader->sheet('raw'); //select the raw sheet of the excel file
-            $summary_sheet = $reader->sheet('summary'); //select the summary sheet of the excel file
+            
             $rawSheetIndex = 1;
-            $summarySheetIndex = 3;
 
-            $rawSheetIndex = 1;
             $staffname = null;
 
             foreach(EmployeeDtr::all() as $employee_dtr){ //get the employee logs within the provided days
-                if($staffname != $employee_dtr->employee->name){
+                if($staffname != $employee_dtr->employee->first_name.' '.$employee_dtr->employee->middle_name.' '.$employee_dtr->employee->last_name){
                     $rawSheetIndex = $rawSheetIndex + 2;
                 }
                 //assign the data to the variables
@@ -231,6 +228,9 @@ class DtrController extends Controller
                 ]);
                 ++$rawSheetIndex; //increment the index to know what row are we
             }
+
+            $summarySheetIndex = 3;
+            $summary_sheet = $reader->sheet('summary'); //select the summary sheet of the excel file
 
             foreach(Employee::with('employee_dtrs')->get() as $employee){
                 $staffcode = $employee->employee_id;

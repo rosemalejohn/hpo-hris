@@ -1,4 +1,3 @@
-
 <?php
 
 /*
@@ -37,8 +36,8 @@ Route::group(['middleware' => 'auth'], function(){
 
     Route::post('/dtr', 'DtrController@postImport');
 
-    // Route::get('/dtr/export', 'DtrController@exportToExcel');
-    Route::get('/dtr/export', 'ExportExcelController@export');
+    Route::get('/dtr/export', 'DtrController@exportToExcel');
+    // Route::get('/dtr/export', 'ExportExcelController@export');
 
     //EmployeeController resource
 
