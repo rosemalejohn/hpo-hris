@@ -35,7 +35,7 @@ class DtrController extends Controller
             $file = $request->file('file');
             $filename = $this->nameFile($file->getClientOriginalName());
             $file->move(storage_path('files'), $filename);
-
+            
             $this->setLogs($this->getData(storage_path('files'.'/'.$filename)));
 
             flash()->success('Import was successful. Employee logs saved to database.');

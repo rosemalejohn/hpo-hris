@@ -129,6 +129,7 @@ class EmployeeController extends Controller
     }
 
     public function addShift(Request $request, $id){
+        
         $validator = Validator::make($request->all(), [
             'shift' => 'required',
             'date_from' => 'required'
@@ -137,10 +138,18 @@ class EmployeeController extends Controller
             flash()->error('Input field error.');
         } else{
             $employee = Employee::where('employee_id', $id)->first();
+
+            //for pivot table, need deep concentration in coding hahaha lol xD
+            // $employee_shifts = $employee->shifts->first();
+            // dd($employee_shifts->pivot->employee_shift_days()->get());
+
             $employee_shift = $employee->shifts()->attach($request->shift, [
                 'date_from' => $request->date_from, 
                 'date_to' => $request->date_to
             ]);
+            $employee_shift_id = EmployeeShift::where('shift_id', $request->shift)->orderBy('created_at','desc')->first()->id;
+            dd($employee_shift_id);
+            //solve ugma nasad ni.
             flash()->success('Shift successfully added');
         }
         return redirect()->back();

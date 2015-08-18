@@ -25,4 +25,13 @@ class Employee extends Model
         return $this->hasMany('App\EmployeeDtr', 'employee_id', 'employee_id');
     }
 
+    public function newPivot(Model $parent, array $attributes, $table, $exists)
+    {
+        if ($parent instanceof Shift) {
+            return new EmployeeShiftPivot($parent, $attributes, $table, $exists);
+        }
+     
+        return parent::newPivot($parent, $attributes, $table, $exists);
+    }
+
 }

@@ -22,4 +22,13 @@ class Shift extends Model
         return $this->hasManyThrough('App\EmployeeShiftDay', 'App\EmployeeShift');
     }
 
+    public function newPivot(Model $parent, array $attributes, $table, $exists)
+    {
+        if ($parent instanceof Employee) {
+            return new EmployeeShiftPivot($parent, $attributes, $table, $exists);
+        }
+     
+        return parent::newPivot($parent, $attributes, $table, $exists);
+    }
+
 }
