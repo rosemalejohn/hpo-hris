@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Validator;
 use App\Employee;
 use Excel;
+use App\EmployeeShift;
 
 class EmployeeController extends Controller
 {
@@ -143,6 +144,28 @@ class EmployeeController extends Controller
             flash()->success('Shift successfully added');
         }
         return redirect()->back();
+    }
+
+    public function editShift($shift){
+        $page_title = 'Edit shift';
+        $employee_shift = EmployeeShift::findOrFail($shift);
+        // dd($shift);
+        return view('employee.edit_shift')->with(compact('page_title', 'employee_shift'));
+    }
+
+    public function updateShift(Request $request, $shift){
+        $employee_shift = EmployeeShift::findOrFail($shift);
+        $employee_shift->update($request->all());
+        if($employee_shift){
+            flash()->success('Shift successfully updated');
+        } else{
+            flash()->error('Something went wrong');
+        }
+        return redirect()->back();
+    }
+
+    public function viewShift(){
+        return $employee;
     }
 
     protected function validator($data){

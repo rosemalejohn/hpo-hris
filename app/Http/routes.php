@@ -37,13 +37,16 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('/dtr', 'DtrController@postImport');
 
     Route::get('/dtr/export', 'DtrController@exportToExcel');
-    // Route::get('/dtr/export', 'ExportExcelController@export');
 
     //EmployeeController resource
 
     Route::resource('employees', 'EmployeeController');
 
     Route::post('/employees/add-shift/{id}', 'EmployeeController@addShift');
+
+    Route::get('/employees/shift/{shift}/edit', 'EmployeeController@editShift');
+
+    Route::put('/employees/shift/{shift}', 'EmployeeController@updateShift');
 
      //DepartmentController resource
 
@@ -54,5 +57,11 @@ Route::group(['middleware' => 'auth'], function(){
     Route::resource('shifts', 'ShiftController');
 
     Route::get('/import-employees', 'EmployeeController@importEmployees');
+
+    Route::group(['prefix' => 'api'], function(){
+
+        Route::get('/employees/view-shift', 'EmployeeController@viewShift');
+
+    });
 
 });

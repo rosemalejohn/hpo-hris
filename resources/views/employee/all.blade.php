@@ -35,7 +35,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach(App\Employee::all() as $employee)
+                    @foreach(App\Employee::with('department', 'shifts')->get() as $employee)
                     <tr class="odd gradeX">
                         <td><a href="/employees/{{ $employee->employee_id }}">{{ $employee->employee_id }}</a></td>
                         <td>{{ $employee->first_name.' '.$employee->middle_name.' '.$employee->last_name }}</td>
@@ -44,9 +44,7 @@
                             <a href="/employees/{{ $employee->employee_id }}/edit">
                                 <button class="btn btn-xs btn-warning"><i class="fa fa-edit"></i> Update</button>
                             </a>
-                            <a href="/employees/{{ $employee->employee_id }}">
-                                <button class="btn btn-xs btn-info"><i class="fa fa-search"></i> View Info</button>
-                            </a>
+                            <button class="btn btn-xs btn-info" onclick="viewShift({{ $employee }})"><i class="fa fa-search"></i> View Shifts</button>
                         </td>
                     </tr>
                     @endforeach
@@ -56,6 +54,7 @@
     </div>
     <!-- /.panel-body -->
 </div>
+@include('employee.partials.view_shift')
 <!-- /.panel -->
 @stop
 
@@ -63,9 +62,16 @@
 <!-- DataTables JavaScript -->
 <script src="/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
 <script src="/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+<script src="/bower_components/bootbox/bootbox.js"></script>
+
 <script type="text/javascript">
 $('#employees-table').DataTable({
     responsive: true
 });
+
+function viewShift(employee){
+    
+}
+
 </script>
 @stop

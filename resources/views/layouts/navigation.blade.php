@@ -33,7 +33,7 @@
             <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
         </a>
         <ul class="dropdown-menu dropdown-user">
-			<li><a href="#"><i class="fa fa-user fa-fw"></i> Logged in as {{ auth()->user()->name }}</a>
+			<li><a href="#"><i class="fa fa-user fa-fw"></i> Logged in as <strong>{{ auth()->user()->username }}</strong></a>
             </li>
             <li><a href="#"><i class="fa fa-gear fa-fw"></i> Account Settings</a>
             </li>

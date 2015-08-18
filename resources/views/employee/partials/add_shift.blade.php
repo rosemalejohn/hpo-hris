@@ -11,7 +11,7 @@
                     <div class="form-group">
                         <label>Shifts</label>
                         <select class="form-control" name="shift">
-                            @foreach(App\Shift::all() as $shift)
+                            @foreach(App\Shift::orderBy('shift_from')->get() as $shift)
                             <option value="{{ $shift->id }}">{{ $shift->description.' - '.$shift->shift_from.' to '.$shift->shift_to }}</option>
                             @endforeach
                         </select>

@@ -14,7 +14,7 @@ class Employee extends Model
     }
 
     public function shifts(){
-        return $this->belongsToMany('App\Shift', 'employee_shifts')->withPivot('date_from', 'date_to');
+        return $this->belongsToMany('App\Shift', 'employee_shifts')->withPivot('id' ,'date_from', 'date_to');
     }
 
     public function employee_shifts(){

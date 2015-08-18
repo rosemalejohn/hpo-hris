@@ -11,7 +11,7 @@ class Shift extends Model
     protected $fillable = ['description', 'shift_from', 'shift_to', 'working hours', 'break'];
 
     public function employees(){
-        return $this->belongsToMany('App\Employee', 'employee_shifts')->withPivot('date_from', 'date_to');
+        return $this->belongsToMany('App\Employee', 'employee_shifts')->withPivot('id', 'date_from', 'date_to');
     }
 
     public function employee_shifts(){

@@ -32,30 +32,36 @@
                         <th>Shift description</th>
                         <th>Time</th>
                         <th>Working hours</th>
-                        <th>Mon</th>
+                        <!-- <th>Mon</th>
                         <th>Tue</th>
                         <th>Wed</th>
                         <th>Thu</th>
                         <th>Fri</th>
                         <th>Sat</th>
-                        <th>Sun</th>
+                        <th>Sun</th> -->
                         <th>Effective</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($employee->employee_shifts()->orderBy('date_from', 'desc')->get() as $employee_shift)
+                    @forelse($employee->shifts as $employee_shift)
                     <tr>
-                        <td><a href="/shifts/{{ $employee_shift->shift->id }}">{{ $employee_shift->shift->description }}</a></td>
-                        <td>{{ $employee_shift->shift->shift_from.' to '.$employee_shift->shift->shift_to }}</td>
-                        <td>{{ $employee_shift->shift->working_hours }}</td>
-                        <td>@if($employee_shift->monday == 1)<i class="fa fa-check"></i>@endif</td>
+                        <td><a href="/shifts/{{ $employee_shift->id }}">{{ $employee_shift->description }}</a></td>
+                        <td>{{ $employee_shift->shift_from.' to '.$employee_shift->shift_to }}</td>
+                        <td>{{ $employee_shift->working_hours }}</td>
+                        <!-- <td>@if($employee_shift->monday == 1)<i class="fa fa-check"></i>@endif</td>
                         <td>@if($employee_shift->tuesday == 1)<i class="fa fa-check"></i>@endif</td>
                         <td>@if($employee_shift->wednesday == 1)<i class="fa fa-check"></i>@endif</td>
                         <td>@if($employee_shift->thursday == 1)<i class="fa fa-check"></i>@endif</td>
                         <td>@if($employee_shift->friday == 1)<i class="fa fa-check"></i>@endif</td>
                         <td>@if($employee_shift->saturday == 1)<i class="fa fa-check"></i>@endif</td>
-                        <td>@if($employee_shift->sunday == 1)<i class="fa fa-check"></i>@endif</td>
-                        <td>{{ date('M d Y', strtotime($employee_shift->date_from)).' to '.date('M d Y', strtotime($employee_shift->date_to)) }}</td>
+                        <td>@if($employee_shift->sunday == 1)<i class="fa fa-check"></i>@endif</td> -->
+                        <td>{{ date('M d Y', strtotime($employee_shift->pivot->date_from)).' to '.date('M d Y', strtotime($employee_shift->pivot->date_to)) }}</td>
+                        <td>
+                            <a href="/employees/shift/{{ $employee_shift->pivot->id }}/edit">
+                                <button class="btn btn-xs btn-warning">Update</button>
+                            </a>
+                        </td>
                     </tr>
                     @empty
                     <tr>

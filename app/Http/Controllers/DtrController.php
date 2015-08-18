@@ -28,7 +28,7 @@ class DtrController extends Controller
 
     public function postImport(Request $request){
         $validator = Validator::make($request->all(), [
-            'file' => 'required'  //Excel file validation not yet done for mimes
+            'file' => 'required|mimes:xls,xlsx'  //Excel file validation not yet done for mimes
         ]);
 
         if($request->hasFile('file') && !$validator->fails() && $request->file('file')->isValid()){
@@ -41,7 +41,7 @@ class DtrController extends Controller
             flash()->success('Import was successful. Employee logs saved to database.');
             return redirect()->back();
         } else{
-            flash()->error('Oopss! There is something wrong with your files.');
+            flash()->error('Oopss! Your file type is unknown. Please upload excel file only!');
             return redirect()->back()->withErrors($validator)->withInput();
         }
     }
