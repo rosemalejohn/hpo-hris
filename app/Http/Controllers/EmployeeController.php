@@ -10,6 +10,7 @@ use Validator;
 use App\Employee;
 use Excel;
 use App\EmployeeShift;
+use App\EmployeeShiftDay;
 
 class EmployeeController extends Controller
 {
@@ -129,7 +130,7 @@ class EmployeeController extends Controller
     }
 
     public function addShift(Request $request, $id){
-        
+
         $validator = Validator::make($request->all(), [
             'shift' => 'required',
             'date_from' => 'required'
@@ -148,24 +149,43 @@ class EmployeeController extends Controller
                 'date_to' => $request->date_to
             ]);
             $employee_shift_id = EmployeeShift::where('shift_id', $request->shift)->orderBy('created_at','desc')->first()->id;
-            dd($employee_shift_id);
-            //solve ugma nasad ni.
-            flash()->success('Shift successfully added');
+            
+            if($this->addEmployeeShiftDay($request->days, $employee_shift_id)){
+                flash()->success('Shift successfully added');
+            }
         }
         return redirect()->back();
     }
 
     public function editShift($shift){
-        $page_title = 'Edit shift';
+        
         $employee_shift = EmployeeShift::findOrFail($shift);
-        // dd($shift);
-        return view('employee.edit_shift')->with(compact('page_title', 'employee_shift'));
+        $employee = $employee_shift->employee;
+        $page_title = 'Edit shift - '.$employee->first_name.' '.$employee->last_name;
+        $employee_shift_days = $employee_shift->employee_shift_days;
+
+        return view('employee.edit_shift')->with(compact('page_title', 'employee_shift', 'employee_shift_days'));
     }
 
     public function updateShift(Request $request, $shift){
         $employee_shift = EmployeeShift::findOrFail($shift);
+        // dd($employee_shift->employee_shift_days);
         $employee_shift->update($request->all());
         if($employee_shift){
+            $employee_shift_days = $employee_shift->employee_shift_days;
+            if($employee_shift_days->count() == 0){
+                $this->addEmployeeShiftDay($employee_shift->id, $request->days);
+            } else{
+                foreach($request->days as $day){
+                    // Not yet fully working, doesnt check uncheck boxes in days field
+                    if(!$employee_shift_days->contains('day', $day)){
+                        $employee_shift_day = new EmployeeShiftDay;
+                        $employee_shift_day->employee_shift_id = $employee_shift->id; 
+                        $employee_shift_day->day = $day;
+                        $employee_shift_day->save();
+                    }
+                }
+            }
             flash()->success('Shift successfully updated');
         } else{
             flash()->error('Something went wrong');
@@ -179,33 +199,21 @@ class EmployeeController extends Controller
 
     protected function validator($data){
         return Validator::make($data, [
-                'employee_id' => 'required',
-                'first_name' => 'required|min:6|max:45',
-                'middle_name' => 'required|min:6|max:45',
-                'department_id' => 'required'
-            ]);
+            'employee_id' => 'required',
+            'first_name' => 'required|min:6|max:45',
+            'middle_name' => 'required|min:6|max:45',
+            'department_id' => 'required'
+        ]);
     }
 
-    // Getting datas from list of employees
-    // public function importEmployees(){
-    //     $path = storage_path('files/DTRTemplates/walanainput.xlsx');
-    
-    //     Excel::selectSheets('Sheet1')->load($path, function($reader){
-    //         $rows = $reader->all();
-    
-    //         // dd($rows);
-    
-    //         foreach($rows as $row){
-    
-    //             Employee::create([
-    //                 'employee_id' => $row->facetime,
-    //                 'first_name' => $row->first_name,
-    //                 'middle_name' => $row->middle_name,
-    //                 'last_name' => $row->last_name,
-    //                 'department_id' => 1
-    //             ]);
-    
-    //         }
-    //     });
-    // }
+    protected function addEmployeeShiftDay($employee_shift_id, $days){
+        foreach($days as $day){
+            $employee_shift_day = new EmployeeShiftDay;
+            $employee_shift_day->employee_shift_id = $employee_shift_id; 
+            $employee_shift_day->day = $day;
+            $employee_shift_day->save();
+        }
+        return true;
+    }
+
 }

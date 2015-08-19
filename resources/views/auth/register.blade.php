@@ -12,17 +12,17 @@
                     {!! csrf_field() !!}
                     <div class="form-group">
                         <label>Name</label>
-                        <input class="form-control" placeholder="ex. John Smith" name="name" value="{{ old('name') }}">
+                        <input class="form-control" placeholder="ex. Rosemale-John II C. Villacorta" name="name" value="{{ old('name') }}">
                     </div>
 
                     <div class="form-group">
                         <label>Username</label>
-                        <input class="form-control" placeholder="ex. john_smith" name="username" value="{{ old('username') }}">
+                        <input class="form-control" placeholder="ex. rosemalejohn" name="username" value="{{ old('username') }}">
                     </div>
 
                     <div class="form-group">
                         <label>Email</label>
-                        <input type="email" class="form-control" placeholder="ex. john_smith@example.com" name="email" value="{{ old('email') }}">
+                        <input type="email" class="form-control" placeholder="ex. rosemalejohn@gmail.com" name="email" value="{{ old('email') }}">
                     </div>
 
                     <div class="form-group">

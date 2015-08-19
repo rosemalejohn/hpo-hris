@@ -63,8 +63,8 @@ class DtrController extends Controller
                 $start_time = $shift['start_time']; //get the shift start time
                 $end_time = $shift['end_time']; //get the shift end time
 
-                //foreach($shift['days'] as $day){ //loop through days in the shift
-                //    if($day->day == strtolower(date('D', strtotime($date)))){ //check if the date day is equal to the shift day
+                foreach($shift['days'] as $day){ //loop through days in the shift
+                   if($day->day == strtolower(date('D', strtotime($date)))){ //check if the date day is equal to the shift day
                         $data = [
                             'employee_id' => $userID, //employee biometric id
                             'start_of_duty' => $date.' '.$attendances->first(), //start of duty in one day
@@ -106,8 +106,8 @@ class DtrController extends Controller
                         // insert the data array into the create method and save to the database
                         EmployeeDtr::create($data);
                         break;
-                //    }
-                //}
+                   }
+                }
             }
         }
     }
@@ -211,11 +211,11 @@ class DtrController extends Controller
             $staffname = null;
 
             foreach(EmployeeDtr::all() as $employee_dtr){ //get the employee logs within the provided days
-                if($staffname != $employee_dtr->employee->first_name.' '.$employee_dtr->employee->middle_name.' '.$employee_dtr->employee->last_name){
+                if($staffname != strtoupper($employee_dtr->employee->last_name).', '.$employee_dtr->employee->first_name.' '.$employee_dtr->employee->middle_name){
                     $rawSheetIndex = $rawSheetIndex + 2;
                 }
                 //assign the data to the variables
-                $staffname = $employee_dtr->employee->first_name.' '.$employee_dtr->employee->middle_name.' '.$employee_dtr->employee->last_name;
+                $staffname = strtoupper($employee_dtr->employee->last_name).', '.$employee_dtr->employee->first_name.' '.$employee_dtr->employee->middle_name;
                 $date = date('Y-m-d', strtotime($employee_dtr->start_of_duty));
                 $login = date('H:i:s', strtotime($employee_dtr->start_of_duty));
                 $logout = date('H:i:s', strtotime($employee_dtr->end_of_duty));
@@ -232,9 +232,9 @@ class DtrController extends Controller
             $summarySheetIndex = 3;
             $summary_sheet = $reader->sheet('summary'); //select the summary sheet of the excel file
 
-            foreach(Employee::with('employee_dtrs')->get() as $employee){
+            foreach(Employee::with('employee_dtrs')->orderBy('last_name')->get() as $employee){
                 $staffcode = $employee->employee_id;
-                $staffname = $employee->first_name.' '.$employee->middle_name.' '.$employee->last_name;
+                $staffname = strtoupper($employee->last_name).', '.$employee->first_name.' '.$employee->middle_name;
                 $computations = value(function() use($employee){
                     $late = new DateTime('00:00:00');
                     $undertime = new DateTime('00:00:00');
@@ -250,10 +250,10 @@ class DtrController extends Controller
 
                     //return an array with employee late, undertime, overbreak and hrs_worked value
                     return [
-                        'late' => date_diff($late, new DateTime('00:00:00'))->format("%d days %h hrs, %i min, %s sec"),
-                        'undertime' => date_diff($undertime, new DateTime('00:00:00'))->format("%d days %h hrs, %i min, %s sec"),
-                        'overbreak' => date_diff($overbreak, new DateTime('00:00:00'))->format("%d days %h hrs, %i min, %s sec"),
-                        'hrs_worked' => date_diff($hrs_worked, new DateTime('00:00:00'))->format("%d days %h hrs, %i min, %s sec")
+                        'late' => toHour(date_diff($late, new DateTime('00:00:00'))),
+                        'undertime' => toHour(date_diff($undertime, new DateTime('00:00:00'))),
+                        'overbreak' => toHour(date_diff($overbreak, new DateTime('00:00:00'))),
+                        'hrs_worked' => toHour(date_diff($hrs_worked, new DateTime('00:00:00')))
                     ];
                 });
 
@@ -264,6 +264,14 @@ class DtrController extends Controller
                 ++$summarySheetIndex; //increment the index to know what row are we
             }
         })->download('xlsx'); //download the excel file
+    }
+
+    public function deleteAll(){
+        foreach(EmployeeDtr::all() as $employee_dtr){
+            $employee_dtr->delete();
+        }
+        flash()->success('DTR Logs all cleared!');
+        return redirect()->back();
     }
 
 }

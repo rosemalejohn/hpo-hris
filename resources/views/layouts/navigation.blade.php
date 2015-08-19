@@ -35,7 +35,7 @@
         <ul class="dropdown-menu dropdown-user">
 			<li><a href="#"><i class="fa fa-user fa-fw"></i> Logged in as <strong>{{ auth()->user()->username }}</strong></a>
             </li>
-            <li><a href="#"><i class="fa fa-gear fa-fw"></i> Account Settings</a>
+            <li><a href="/user/settings"><i class="fa fa-gear fa-fw"></i> Account Settings</a>
             </li>
             <li class="divider"></li>
             <li><a href="/auth/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>

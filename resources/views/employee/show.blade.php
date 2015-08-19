@@ -32,6 +32,7 @@
                         <th>Shift description</th>
                         <th>Time</th>
                         <th>Working hours</th>
+                        <th>Days</th>
                         <!-- <th>Mon</th>
                         <th>Tue</th>
                         <th>Wed</th>
@@ -49,6 +50,13 @@
                         <td><a href="/shifts/{{ $employee_shift->id }}">{{ $employee_shift->description }}</a></td>
                         <td>{{ $employee_shift->shift_from.' to '.$employee_shift->shift_to }}</td>
                         <td>{{ $employee_shift->working_hours }}</td>
+                        <td>
+                            @forelse($employee_shift->employee_shift_days as $day)
+                                <span>{{ strtoupper($day->day) }} </span>
+                            @empty
+                            <div class="alert alert-danger">No days available!</div>
+                            @endforelse
+                        </td>
                         <!-- <td>@if($employee_shift->monday == 1)<i class="fa fa-check"></i>@endif</td>
                         <td>@if($employee_shift->tuesday == 1)<i class="fa fa-check"></i>@endif</td>
                         <td>@if($employee_shift->wednesday == 1)<i class="fa fa-check"></i>@endif</td>

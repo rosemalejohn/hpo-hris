@@ -9,6 +9,12 @@
 @stop
 
 @section('content')
+<form action="/dtr/delete-all" method="POST">
+    <input type="hidden" name="_method" value="DELETE"/>
+    {!! csrf_field() !!}
+    <button type="submit" id="loadingButton" data-loading-text="Clearing logs..." class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Clear logs</button>
+</form>
+<hr>
 <div class="panel panel-default">
     <div class="panel-heading">
         Employee Daily Time Record

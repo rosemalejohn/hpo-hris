@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\User;
 
 class UserController extends Controller
 {
@@ -59,7 +60,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        
     }
 
     /**
@@ -71,7 +72,7 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
     }
 
     /**
@@ -80,8 +81,16 @@ class UserController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy($user)
     {
-        //
+        $user = User::find($user);
+        $user->delete();
+        return redirect()->to('/auth/login');
+    }
+
+    public function settings(){
+        $page_title = '';
+        $user = auth()->user();
+        return view('user.settings')->with(compact('page_title', 'user'));
     }
 }

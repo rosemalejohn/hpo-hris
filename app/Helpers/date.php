@@ -16,3 +16,15 @@ function computeBreaks($out, $in, $required_break){
     } 
     return $overbreak;
 }
+
+function toHour($date){
+    $totalHours = 0;
+
+    $days = (int)$date->format("%d");
+    $hours = (int)$date->format("%h");
+	$minute = (int)$date->format("%i");
+
+    $totalHours = ($days * 24) + $hours + ($minute / 60);
+
+    return round($totalHours, 2); 
+}

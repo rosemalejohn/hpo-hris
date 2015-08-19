@@ -20,6 +20,7 @@ Route::group(['middleware' => 'guest'], function(){
     Route::get('auth/register', 'Auth\AuthController@getRegister');
 
     Route::post('auth/register', 'Auth\AuthController@postRegister');
+    
 });
 
 Route::group(['middleware' => 'auth'], function(){
@@ -27,6 +28,14 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('auth/logout', 'Auth\AuthController@getLogout');
 
     Route::get('/', 'BaseController@dashboard');
+
+    //User resource
+
+    Route::get('/user/settings', 'UserController@settings');
+
+    Route::put('/user/{user}', 'UserController@update');
+
+    Route::delete('/user/{user}', 'UserController@destroy');
 
     //Daily Time Record Resource
 
@@ -37,6 +46,8 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('/dtr', 'DtrController@postImport');
 
     Route::get('/dtr/export', 'DtrController@exportToExcel');
+
+    Route::delete('/dtr/delete-all', 'DtrController@deleteAll');
 
     //EmployeeController resource
 
@@ -61,6 +72,12 @@ Route::group(['middleware' => 'auth'], function(){
     Route::group(['prefix' => 'api'], function(){
 
         Route::get('/employees/view-shift', 'EmployeeController@viewShift');
+
+    });
+
+    Route::get('sample', function(){
+
+        dd(toHour(new DateInterval('P2Y4DT6H8M')));
 
     });
 
