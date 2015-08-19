@@ -13,8 +13,8 @@
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <fieldset>
                         <div class="form-group">
-                            <label>Email</label>
-                            <input class="form-control" placeholder="E-mail" name="email" type="email" value="{{ old('email') }}" autofocus>
+                            <label>Username</label>
+                            <input class="form-control" placeholder="Email address" name="email" type="email" value="{{ old('email') }}" autofocus>
                         </div>
                         <div class="form-group">
                             <label>Password</label>

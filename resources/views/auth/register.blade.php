@@ -33,6 +33,7 @@
                     <div class="form-group">
                         <input class="form-control" type="password" placeholder="Re-type your password" name="password_confirmation">
                     </div>
+                    <div class="g-recaptcha" data-sitekey="6LcXgAsTAAAAAICAHP0Dy7l4OzpeHbiefBGairZ7"></div>
                     <hr>
                     <button type="submit" class="btn btn-default">Create account</button>
                     <span class="pull-right"> or <a href="/auth/login">Login to your account</a></span>
@@ -41,4 +42,8 @@
         </div>
     </div>
 </div>
+@stop
+
+@section('script')
+<script src='https://www.google.com/recaptcha/api.js'></script>
 @stop
