@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 19, 2015 at 07:12 AM
+-- Generation Time: Aug 19, 2015 at 09:07 AM
 -- Server version: 5.6.20
 -- PHP Version: 5.5.15
 
@@ -157,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `employee_dtr` (
   `undertime` time NOT NULL DEFAULT '00:00:00',
   `late` time NOT NULL DEFAULT '00:00:00',
   `overbreak` time NOT NULL DEFAULT '00:00:00'
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3475 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3761 ;
 
 -- --------------------------------------------------------
 
@@ -242,7 +242,7 @@ INSERT INTO `employee_shifts` (`id`, `employee_id`, `shift_id`, `date_from`, `da
 (60, 18, 19, '2015-07-01', '2015-12-31', '2015-08-18 04:42:08', '0000-00-00 00:00:00'),
 (61, 19, 4, '2015-07-01', '2015-12-31', '2015-08-18 04:43:04', '0000-00-00 00:00:00'),
 (62, 50, 25, '2015-07-01', '2015-12-31', '2015-08-18 06:10:25', '0000-00-00 00:00:00'),
-(73, 47, 19, '2015-08-19', '2015-08-21', '2015-08-19 05:04:55', '0000-00-00 00:00:00');
+(73, 47, 17, '2015-07-01', '2015-12-31', '2015-08-19 06:37:27', '2015-08-18 22:37:27');
 
 -- --------------------------------------------------------
 
@@ -254,7 +254,7 @@ CREATE TABLE IF NOT EXISTS `employee_shift_days` (
 `id` int(10) unsigned NOT NULL,
   `employee_shift_id` int(10) unsigned NOT NULL,
   `day` enum('mon','tue','wed','thu','fri','sat','sun') NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=180 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=210 ;
 
 --
 -- Dumping data for table `employee_shift_days`
@@ -280,15 +280,21 @@ INSERT INTO `employee_shift_days` (`id`, `employee_shift_id`, `day`) VALUES
 (63, 59, 'thu'),
 (64, 59, 'fri'),
 (65, 59, 'sat'),
-(171, 73, 'mon'),
-(172, 73, 'tue'),
-(173, 73, 'wed'),
-(174, 73, 'thu'),
-(175, 40, 'mon'),
-(176, 40, 'tue'),
-(177, 40, 'wed'),
-(178, 40, 'thu'),
-(179, 40, 'fri');
+(187, 43, 'mon'),
+(188, 43, 'tue'),
+(189, 43, 'wed'),
+(190, 43, 'thu'),
+(191, 43, 'fri'),
+(192, 44, 'mon'),
+(193, 44, 'tue'),
+(194, 44, 'wed'),
+(195, 44, 'thu'),
+(196, 44, 'fri'),
+(197, 40, 'mon'),
+(198, 40, 'wed'),
+(199, 40, 'fri'),
+(208, 73, 'tue'),
+(209, 73, 'thu');
 
 -- --------------------------------------------------------
 
@@ -389,7 +395,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `username`, `password`, `user_type`, `remember_token`, `created_at`, `updated_at`) VALUES
-(7, 'Rosemale-John II C. Villacorta', 'rosemalejohn@gmail.com', 'rosemalejohn', '$2y$10$FuqYG4eDr6kTW00RwvWVJ.EHPPkVrOO273CQ7mRROIRYSBVZ9NrPG', 'admin', 'qfVu9Ih5biwFm3bOwo6vZsptgqML8U1fVvLVjjr0EeIQ0K2gbPriCHwD5y4u', '2015-08-14 23:34:32', '2015-08-18 20:50:34'),
+(7, 'Rosemale-John II C. Villacorta', 'rosemalejohn@gmail.com', 'rosemalejohn', '$2y$10$FuqYG4eDr6kTW00RwvWVJ.EHPPkVrOO273CQ7mRROIRYSBVZ9NrPG', 'admin', 'qkppBeWx7umkr3rNVDyiSj3d9OBbDhk67UP84CyOBxQfakQk6I6qpT8BzhXd', '2015-08-14 23:34:32', '2015-08-18 23:04:54'),
 (8, 'Nepthaly Talavera', 'nepthaly.talavera@hpoutsourcinginc.com', 'ntalavera', '$2y$10$SLQ2sCBXWHB6MKzhsHMBxOj5glIkOrSMjCRPAM1EbR9.jLfXmDe1m', 'admin', NULL, '2015-08-17 17:56:03', '2015-08-17 17:56:03');
 
 --
@@ -462,7 +468,7 @@ MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=77;
 -- AUTO_INCREMENT for table `employee_dtr`
 --
 ALTER TABLE `employee_dtr`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3475;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3761;
 --
 -- AUTO_INCREMENT for table `employee_shifts`
 --
@@ -472,7 +478,7 @@ MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=74;
 -- AUTO_INCREMENT for table `employee_shift_days`
 --
 ALTER TABLE `employee_shift_days`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=180;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=210;
 --
 -- AUTO_INCREMENT for table `shifts`
 --
