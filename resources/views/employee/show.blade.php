@@ -51,19 +51,12 @@
                         <td>{{ $employee_shift->shift_from.' to '.$employee_shift->shift_to }}</td>
                         <td>{{ $employee_shift->working_hours }}</td>
                         <td>
-                            @forelse($employee_shift->employee_shift_days as $day)
+                            @forelse($employee_shift->pivot->employee_shift_days as $day)
                                 <span>{{ strtoupper($day->day) }} </span>
                             @empty
                             <div class="alert alert-danger">No days available!</div>
                             @endforelse
                         </td>
-                        <!-- <td>@if($employee_shift->monday == 1)<i class="fa fa-check"></i>@endif</td>
-                        <td>@if($employee_shift->tuesday == 1)<i class="fa fa-check"></i>@endif</td>
-                        <td>@if($employee_shift->wednesday == 1)<i class="fa fa-check"></i>@endif</td>
-                        <td>@if($employee_shift->thursday == 1)<i class="fa fa-check"></i>@endif</td>
-                        <td>@if($employee_shift->friday == 1)<i class="fa fa-check"></i>@endif</td>
-                        <td>@if($employee_shift->saturday == 1)<i class="fa fa-check"></i>@endif</td>
-                        <td>@if($employee_shift->sunday == 1)<i class="fa fa-check"></i>@endif</td> -->
                         <td>{{ date('M d Y', strtotime($employee_shift->pivot->date_from)).' to '.date('M d Y', strtotime($employee_shift->pivot->date_to)) }}</td>
                         <td>
                             <a href="/employees/shift/{{ $employee_shift->pivot->id }}/edit">

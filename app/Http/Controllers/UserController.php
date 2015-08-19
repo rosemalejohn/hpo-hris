@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\User;
+use Validator;
 
 class UserController extends Controller
 {
@@ -72,9 +73,33 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if($this->validator($request->all())->fails()){
+            flash()->error('You have error in your inputs');
+            return redirect()->back();
+        }
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->username = $request->username;
         
+        if($user->save()){
+            flash()->success('User settings successfully saved.');
+            return redirect()->to('/');
+        } else{
+            flash()->success('User settings NOT saved.');
+            return redirect()->back();
+        }
     }
 
+    protected function validator($data){
+
+        return Validator::make($data, [
+            'name' => 'required',
+            'email' => 'required|email',
+            'username' => 'required'
+        ]);
+
+    }
     /**
      * Remove the specified resource from storage.
      *
@@ -92,5 +117,12 @@ class UserController extends Controller
         $page_title = '';
         $user = auth()->user();
         return view('user.settings')->with(compact('page_title', 'user'));
+    }
+
+    public function profile(){
+        $user = auth()->user();
+        $page_title = $user->name;
+
+        return view('user.profile')->with(compact('page_title', 'user'));
     }
 }

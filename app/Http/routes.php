@@ -35,6 +35,8 @@ Route::group(['middleware' => 'auth'], function(){
 
     Route::put('/user/{user}', 'UserController@update');
 
+    Route::get('/user/my-account', 'UserController@profile');
+
     Route::delete('/user/{user}', 'UserController@destroy');
 
     //Daily Time Record Resource

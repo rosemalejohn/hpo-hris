@@ -268,10 +268,14 @@ class DtrController extends Controller
     }
 
     public function deleteAll(){
-        foreach(EmployeeDtr::all() as $employee_dtr){
-            $employee_dtr->delete();
+        if(EmployeeDtr::count() == 0){
+            flash()->success('DTR Logs already empty!');
+        } else{
+            foreach(EmployeeDtr::all() as $employee_dtr){
+                $employee_dtr->delete();
+            }
+            flash()->success('DTR Logs all cleared!');
         }
-        flash()->success('DTR Logs all cleared!');
         return redirect()->back();
     }
 

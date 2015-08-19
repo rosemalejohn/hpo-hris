@@ -9,7 +9,7 @@
     <div class="panel-body">
         <div class="row">
             <div class="col-lg-6">
-                <form role="form" action="" method="POST">
+                <form role="form" action="/user/{{ $user->id }}" method="POST">
                     {!! csrf_field() !!}
                     <input type="hidden" name="_method" value="PUT"/>
 
