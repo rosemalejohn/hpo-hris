@@ -11,6 +11,8 @@
 
     <title>{{ $page_title or 'HPO HRIS' }}</title>
 
+    <link rel="icon" href="/img/logo.png"/>
+
     <!-- Bootstrap Core CSS -->
     <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 

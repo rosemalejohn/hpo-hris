@@ -67,7 +67,10 @@
                         <td>{{ date('M d Y', strtotime($employee_shift->pivot->date_from)).' to '.date('M d Y', strtotime($employee_shift->pivot->date_to)) }}</td>
                         <td>
                             <a href="/employees/shift/{{ $employee_shift->pivot->id }}/edit">
-                                <button class="btn btn-xs btn-warning">Update</button>
+                                <button class="btn btn-xs btn-warning"><i class="fa fa-edit"></i></button>
+                            </a>
+                            <a href="/employees/shift/{{ $employee_shift->pivot->id }}">
+                                <button class="btn btn-xs btn-danger"><i class="fa fa-remove"></i></button>
                             </a>
                         </td>
                     </tr>

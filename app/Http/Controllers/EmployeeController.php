@@ -130,7 +130,6 @@ class EmployeeController extends Controller
     }
 
     public function addShift(Request $request, $id){
-
         $validator = Validator::make($request->all(), [
             'shift' => 'required',
             'date_from' => 'required'
@@ -150,8 +149,10 @@ class EmployeeController extends Controller
             ]);
             $employee_shift_id = EmployeeShift::where('shift_id', $request->shift)->orderBy('created_at','desc')->first()->id;
             
-            if($this->addEmployeeShiftDay($request->days, $employee_shift_id)){
-                flash()->success('Shift successfully added');
+            if(!empty($request->days)){
+                if($this->addEmployeeShiftDay($request->days, $employee_shift_id)){
+                    flash()->success('Shift successfully added');
+                }
             }
         }
         return redirect()->back();
@@ -168,24 +169,17 @@ class EmployeeController extends Controller
     }
 
     public function updateShift(Request $request, $shift){
-        $employee_shift = EmployeeShift::findOrFail($shift);
-        // dd($employee_shift->employee_shift_days);
-        $employee_shift->update($request->all());
-        if($employee_shift){
-            $employee_shift_days = $employee_shift->employee_shift_days;
-            if($employee_shift_days->count() == 0){
-                $this->addEmployeeShiftDay($employee_shift->id, $request->days);
-            } else{
-                foreach($request->days as $day){
-                    // Not yet fully working, doesnt check uncheck boxes in days field
-                    if(!$employee_shift_days->contains('day', $day)){
-                        $employee_shift_day = new EmployeeShiftDay;
-                        $employee_shift_day->employee_shift_id = $employee_shift->id; 
-                        $employee_shift_day->day = $day;
-                        $employee_shift_day->save();
-                    }
-                }
+        $employee_shift = EmployeeShift::findOrFail($shift); //get employee shift by ID
+        $employee_shift->date_from = $request->date_from;
+        $employee_shift->date_to = $request->date_to;
+        $employee_shift->save(); //update employee shift
+
+        if($employee_shift){ //if employee shift was updated successfully
+            $employee_shift_days = $employee_shift->employee_shift_days; //get the days of employee shift
+            if($employee_shift_days->count() != 0){ //check if the employee shift has days
+                $employee_shift->employee_shift_days()->delete(); //delete all the days
             }
+            $this->addEmployeeShiftDay($employee_shift->id, $request->days); //add the days to the employee shift
             flash()->success('Shift successfully updated');
         } else{
             flash()->error('Something went wrong');

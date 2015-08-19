@@ -57,6 +57,7 @@ class DtrController extends Controller
         $total_overbreaks = new DateTime('00:00:00');
 
         foreach($shifts->first() as $shift){
+            // dd($shift);
 
             if(($date >= $shift['date_from']) && ($date <= $shift['date_to'])){ //check if the date is between the date_from where the shift started and shift ended
 
