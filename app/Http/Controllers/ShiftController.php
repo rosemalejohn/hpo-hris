@@ -18,8 +18,9 @@ class ShiftController extends Controller
      */
     public function index()
     {
-        $page_title = 'List of shifts';
-        return view('shift.all')->with(compact('page_title'));
+        $page_title = 'shifts';
+        $data = 'Available Shifts';
+        return view('shift.all')->with(compact('page_title', 'data'));
     }
 
     /**
@@ -29,8 +30,9 @@ class ShiftController extends Controller
      */
     public function create()
     {
-        $page_title = 'Add new shift';
-        return view('shift.create')->with(compact('page_title'));
+        $page_title = 'shift-create';
+        $data = 'Add new shift';
+        return view('shift.create')->with(compact('page_title', 'data'));
     }
 
     /**
@@ -72,8 +74,9 @@ class ShiftController extends Controller
             flash()->error('No available shift for that');
             return redirect()->back();
         }
-        $page_title = $shift->description.' - '.$shift->shift_from.' to '.$shift->shift_to;
-        return view('shift.show')->with(compact('page_title', 'shift'));
+        $page_title = 'shift';
+        $data = $shift;
+        return view('shift.show')->with(compact('page_title', 'shift', 'data'));
     }
 
     /**

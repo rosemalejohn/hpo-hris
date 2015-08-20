@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>{{ $page_title or 'HPO Human Resource Information System' }}</title>
+    <title>HPO Human Resource Information System</title>
 
     <link rel="icon" href="/img/logo.png"/>
     <!-- Bootstrap Core CSS -->
@@ -50,10 +50,12 @@
                 <div class="row">
                     <div class="col-lg-12">
                         @unless(empty($page_title))
-                        <h1 class="page-header">{{ $page_title }}</h1>
+                        <h2 class="page-header">{{ $page_title }}</h2>
                         @else
                         <br>
                         @endunless
+
+                        {!! Breadcrumbs::render($page_title, $data) !!}
 
                         @include('flash::message')
                         @yield('content')

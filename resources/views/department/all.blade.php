@@ -12,6 +12,15 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         HPO Departments
+        <div class="pull-right">
+            <div class="btn-group">
+                <a href="/departments/create">
+                    <button type="button" class="btn btn-primary btn-xs">
+                        <i class="fa fa-plus"></i> New department
+                    </button>
+                </a>
+            </div>
+        </div>
     </div>
     <!-- /.panel-heading -->
     <div class="panel-body">

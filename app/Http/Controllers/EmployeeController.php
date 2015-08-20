@@ -21,8 +21,9 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $page_title = 'Employees';
-        return view('employee.all')->with(compact('page_title'));
+        $page_title = 'employees';
+        $data = 'List of employees';
+        return view('employee.all')->with(compact('page_title', 'data'));
     }
 
     /**
@@ -32,8 +33,9 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        $page_title = 'New employee';
-        return view('employee.create')->with(compact('page_title'));
+        $page_title = 'employee-create';
+        $data = 'Add new employee';
+        return view('employee.create')->with(compact('page_title', 'data'));
     }
 
     /**
@@ -66,8 +68,9 @@ class EmployeeController extends Controller
             flash()->error("Employee not found on database.");
             return redirect()->back();
         }
-        $page_title = $employee->first_name.' '.$employee->last_name;
-        return view('employee.show')->with(compact('page_title', 'employee'));
+        $page_title = 'employee';
+        $data = $employee;
+        return view('employee.show')->with(compact('page_title', 'employee', 'data'));
     }
 
     /**
@@ -83,8 +86,9 @@ class EmployeeController extends Controller
             flash()->error('Employee not found!');
             return redirect()->back();
         }
-        $page_title = $employee->first_name.' '.$employee->last_name.' - Edit';
-        return view('employee.edit')->with(compact('page_title', 'employee'));
+        $page_title = 'employee-edit';
+        $data = $employee;
+        return view('employee.edit')->with(compact('page_title', 'employee', 'data'));
     }
 
     /**
@@ -149,8 +153,8 @@ class EmployeeController extends Controller
             ]);
             $employee_shift_id = EmployeeShift::where('shift_id', $request->shift)->orderBy('created_at','desc')->first()->id;
             
-            if(!empty($request->days)){
-                if($this->addEmployeeShiftDay($request->days, $employee_shift_id)){
+            if(count($request->days)!=0){
+                if($this->addEmployeeShiftDay($employee_shift_id, $request->days)){
                     flash()->success('Shift successfully added');
                 }
             }
@@ -162,10 +166,11 @@ class EmployeeController extends Controller
         
         $employee_shift = EmployeeShift::findOrFail($shift);
         $employee = $employee_shift->employee;
-        $page_title = 'Edit shift - '.$employee->first_name.' '.$employee->last_name;
+        $page_title = 'employee-shift-edit';
+        $data = $employee_shift;
         $employee_shift_days = $employee_shift->employee_shift_days;
 
-        return view('employee.edit_shift')->with(compact('page_title', 'employee_shift', 'employee_shift_days'));
+        return view('employee.edit_shift')->with(compact('page_title', 'employee_shift', 'employee_shift_days', 'data'));
     }
 
     public function updateShift(Request $request, $shift){
@@ -176,13 +181,26 @@ class EmployeeController extends Controller
 
         if($employee_shift){ //if employee shift was updated successfully
             $employee_shift_days = $employee_shift->employee_shift_days; //get the days of employee shift
-            if($employee_shift_days->count() != 0){ //check if the employee shift has days
+            if($employee_shift_days->count() !== 0){ //check if the employee shift has days
                 $employee_shift->employee_shift_days()->delete(); //delete all the days
             }
-            $this->addEmployeeShiftDay($employee_shift->id, $request->days); //add the days to the employee shift
+            if(count($request->days) != 0){
+                //add the days to the employee shift
+                $this->addEmployeeShiftDay($employee_shift->id, $request->days); 
+            }
             flash()->success('Shift successfully updated');
         } else{
             flash()->error('Something went wrong');
+        }
+        return redirect()->to('employees/'.$employee_shift->employee->employee_id);
+    }
+
+    public function deleteShift($shift){
+        $shift = EmployeeShift::findOrFail($shift);
+        if($shift->delete()){
+            flash()->success('Shift successfully deleted.');
+        } else{
+            flash()->error('Shift not deleted.');
         }
         return redirect()->back();
     }

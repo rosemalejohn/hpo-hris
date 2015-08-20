@@ -17,13 +17,15 @@ class DtrController extends Controller
 {
     //
     public function index(){
-        $page_title = 'Employee Logs';
-        return view('dtr.all')->with(compact('page_title'));
+        $page_title = 'dtr';
+        $data = 'Daily Time Record';
+        return view('dtr.all')->with(compact('page_title', 'data'));
     }
 
     public function getImport(){
-        $page_title = 'Facetime import';
-        return view('dtr.import')->with(compact('page_title'));
+        $page_title = 'dtr-import';
+        $data = '';
+        return view('dtr.import')->with(compact('page_title', 'data'));
     }
 
     public function postImport(Request $request){

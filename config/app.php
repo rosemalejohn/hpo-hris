@@ -139,6 +139,7 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Laracasts\Flash\FlashServiceProvider::class,
         Jenssegers\Date\DateServiceProvider::class,
+        DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -196,5 +197,7 @@ return [
         'Flash'     => Laracasts\Flash\Flash::class,
         'Date'      => Jenssegers\Date\Date::class,
         'Excel'     => Maatwebsite\Excel\Facades\Excel::class,
+        'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
+        
     ],
 ];

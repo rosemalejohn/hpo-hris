@@ -110,19 +110,22 @@ class UserController extends Controller
     {
         $user = User::find($user);
         $user->delete();
+        flash()->success('You just deleted your account.');
         return redirect()->to('/auth/login');
     }
 
     public function settings(){
-        $page_title = '';
+        $page_title = 'settings';
         $user = auth()->user();
-        return view('user.settings')->with(compact('page_title', 'user'));
+        $data = $user;
+        return view('user.settings')->with(compact('page_title', 'user', 'data'));
     }
 
     public function profile(){
         $user = auth()->user();
-        $page_title = $user->name;
+        $page_title = 'profile';
+        $data = 'Profile';
 
-        return view('user.profile')->with(compact('page_title', 'user'));
+        return view('user.profile')->with(compact('page_title', 'user', 'data'));
     }
 }

@@ -11,8 +11,9 @@ class BaseController extends Controller
 {
 
     public function dashboard(){
-        $page_title = 'Dashboard';
-        return view('dashboard')->with(compact('page_title'));
+        $page_title = 'dashboard';
+        $data = 'Dashboard';
+        return view('dashboard')->with(compact('page_title', 'data'));
     }
 
 }

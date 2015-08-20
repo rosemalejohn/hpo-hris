@@ -18,8 +18,9 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $page_title = 'Departments';
-        return view('department.all')->with(compact('page_title'));
+        $page_title = 'departments';
+        $data = 'List of departments';
+        return view('department.all')->with(compact('page_title', 'data'));
     }
 
     /**
@@ -29,8 +30,9 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        $page_title = 'Add new Department';
-        return view('department.create')->with(compact('page_title'));
+        $page_title = 'department-create';
+        $data = 'Create new department';
+        return view('department.create')->with(compact('page_title', 'data'));
     }
 
     /**
@@ -64,8 +66,9 @@ class DepartmentController extends Controller
             flash()->error("There is no department like that in HPO");
             return redirect()->back();
         }else{
-            $page_title = 'Department / '.$department->name;
-            return view('department.show')->with(compact('page_title', 'department'));
+            $page_title = 'department';
+            $data = $department;
+            return view('department.show')->with(compact('page_title', 'department', 'data'));
         }
     }
 
@@ -82,8 +85,9 @@ class DepartmentController extends Controller
             flash()->error("Department not found");
             return redirect()->back();
         }
-        $page_title = 'Edit - '.$department->name;
-        return view('department.edit')->with(compact('page_title', 'department'));
+        $page_title = 'department-edit';
+        $data = $department;
+        return view('department.edit')->with(compact('page_title', 'department', 'data'));
     }
 
     /**

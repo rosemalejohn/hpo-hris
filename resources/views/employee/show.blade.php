@@ -17,8 +17,15 @@
         Shifts
         <div class="pull-right">
             <div class="btn-group">
+                <a href="/shifts/create">
+                    <button type="button" class="btn btn-danger btn-xs">
+                        <i class="fa fa-plus"></i> Add new shift
+                    </button>
+                </a>
+            </div>
+            <div class="btn-group">
                 <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#addShift">
-                    <i class="fa fa-plus"></i> Add shift
+                    <i class="fa fa-plus"></i> Add Employee shift
                 </button>
             </div>
         </div>
@@ -62,7 +69,7 @@
                             <a href="/employees/shift/{{ $employee_shift->pivot->id }}/edit">
                                 <button class="btn btn-xs btn-warning"><i class="fa fa-edit"></i></button>
                             </a>
-                            <a href="/employees/shift/{{ $employee_shift->pivot->id }}">
+                            <a href="/employees/shift/{{ $employee_shift->pivot->id }}/delete">
                                 <button class="btn btn-xs btn-danger"><i class="fa fa-remove"></i></button>
                             </a>
                         </td>

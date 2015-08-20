@@ -61,6 +61,8 @@ Route::group(['middleware' => 'auth'], function(){
 
     Route::put('/employees/shift/{shift}', 'EmployeeController@updateShift');
 
+    Route::get('/employees/shift/{shift}/delete', 'EmployeeController@deleteShift');
+
      //DepartmentController resource
 
     Route::resource('departments', 'DepartmentController');
