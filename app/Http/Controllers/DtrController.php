@@ -108,7 +108,7 @@ class DtrController extends Controller
                         $data = array_add($data, 'overbreak', $total_overbreaks->format('H:i:s'));
                         // insert the data array into the create method and save to the database
                         EmployeeDtr::create($data);
-                        break;
+                        return true;
                    }
                 }
             }
