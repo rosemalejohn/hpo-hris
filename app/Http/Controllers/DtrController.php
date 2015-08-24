@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use ErrorException;
+use Illuminate\Database\QueryException;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Excel;
@@ -30,16 +31,19 @@ class DtrController extends Controller
 
     public function postImport(Request $request){
         $validator = Validator::make($request->all(), [
-            'file' => 'required|mimes:xls,xlsx'  //Excel file validation not yet done for mimes
+            'file' => 'required|mimes:xlsx,xls'  //Excel file validation not yet done for mimes
         ]);
 
-        if($request->hasFile('file') && !$validator->fails() && $request->file('file')->isValid()){
+        if(!$validator->fails() && $request->file('file')->isValid()){
             $file = $request->file('file');
             $filename = $this->nameFile($file->getClientOriginalName());
-            $file->move(storage_path('files'), $filename);
-            
-            $this->setLogs($this->getData(storage_path('files'.'/'.$filename)));
-
+            $file->move(storage_path('app/imports'), $filename);
+            try{
+                $this->setLogs($this->getData(storage_path('app/imports/'.$filename)));
+            } catch(ErrorException $ex){
+                flash()->error('An error occured. Check the excel file and try again.');
+                return redirect()->back();
+            }
             flash()->success('Import was successful. Employee logs saved to database.');
             return redirect()->back();
         } else{
@@ -49,74 +53,94 @@ class DtrController extends Controller
     }
 
     public function store($user, $shifts){
-        //Declare variables
         $userID = $user['user'];
         $date = $user['date'];
         $attendances = $user['attendance'];
         $late = 0;
         $undertime = 0;
-        $overbreak = 0;
         $total_overbreaks = new DateTime('00:00:00');
 
-        foreach($shifts->first() as $shift){
-            // dd($shift);
+        foreach($shifts as $shift){
+            
+            if(($date >= $shift->pivot->date_from) && ($date <= $shift->pivot->date_to)){ //check if the date is between the date_from where the shift started and shift ended
+                
+                $start_time = $shift->shift_from; //get the shift start time
+                $end_time = $shift->shift_to; //get the shift end time
+                
+                if($shift->pivot->employee_shift_days->contains('day', strtolower(date('D', strtotime($date))))){
+                    $attendance_log_count = count($attendances);
+                    
+                    $start_of_duty = $attendances->shift();
+                    $end_of_duty = $attendances->pop();
+                    $remarks = null;
+                    $allowedBreaks = [];
+                    $break_out = array(); 
+                    $break_in = array();
 
-            if(($date >= $shift['date_from']) && ($date <= $shift['date_to'])){ //check if the date is between the date_from where the shift started and shift ended
+                    $data = ['employee_id' => $userID, 'start_of_duty' => $date.' '.$start_of_duty, 'end_of_duty' => $date.' '.$end_of_duty];
+                    $break_key = ['first_out', 'first_in', 'second_out', 'second_in', 'third_out', 'third_in'];
+                    $breaks = array();
 
-                $start_time = $shift['start_time']; //get the shift start time
-                $end_time = $shift['end_time']; //get the shift end time
-
-                foreach($shift['days'] as $day){ //loop through days in the shift
-                   if($day->day == strtolower(date('D', strtotime($date)))){ //check if the date day is equal to the shift day
-                        $data = [
-                            'employee_id' => $userID, //employee biometric id
-                            'start_of_duty' => $date.' '.$attendances->first(), //start of duty in one day
-                            'end_of_duty' => $date.' '.$attendances->last(), //end of duty
-
-                            //employee breaks in a day
-                            'first_out' => (empty($attendances[1]) || $this->isLast($attendances, 1) ? null : $date.' '.$attendances[1]),
-                            'first_in' => (empty($attendances[2]) || $this->isLast($attendances, 2) ? null : $date.' '.$attendances[2]),
-                            'second_out' => (empty($attendances[3]) || $this->isLast($attendances, 3) ? null : $date.' '.$attendances[3]),
-                            'second_in' => (empty($attendances[4]) || $this->isLast($attendances, 4) ? null : $date.' '.$attendances[4]),
-                            'third_out' => (empty($attendances[5]) || $this->isLast($attendances, 5) ? null : $date.' '.$attendances[5]),
-                            'third_in' => (empty($attendances[6]) || $this->isLast($attendances, 6) ? null : $date.' '.$attendances[6])
-                        ];
-
-                        if($start_time < $attendances->first()){ //check if the employee is late
-                            $late = computeTimeInterval($start_time, $attendances->first())->format("%H:%I:%S");
+                    foreach($attendances as $key => $attendance){
+                        try{
+                            $breaks = array_add($breaks, $break_key[$key], $attendance); 
+                        }catch(ErrorException $ex){
+                            
                         }
+                    }
 
-                        if($attendances->last() < $end_time){ //check if the employee has undertime
-                            $undertime = computeTimeInterval($attendances->last(), $end_time)->format("%H:%I:%S");
+                    if($start_time < $start_of_duty){ //check if the employee is late
+                        $data = array_add($data, 'late', computeTimeInterval($start_time, $start_of_duty)->format("%H:%I:%S"));
+                    }
+                    if($end_of_duty < $end_time){ //check if the employee has undertime
+                        $data = array_add($data, 'undertime', computeTimeInterval($end_of_duty, $end_time)->format("%H:%I:%S"));
+                    }
+
+                    $flag = true;
+                    foreach(array_flatten($breaks) as $key => $break){
+                        if($key % 2 == 0){
+                            $break_out = array_add($break_out, $key, $break);
+                        } else{
+                            $break_in = array_add($break_in, $key - 1, $break);
                         }
+                    }
 
-                        if($shift['working_hours'] == '08:00:00'){ //check if the employee_shift working hrs is 8 hrs
-                            //compute the overbreak
-                            //if the employee working hrs is 8hrs then the break is only 30minutes
-                            $total_overbreaks->add(computeBreaks($data['first_out'], $data['first_in'], '00:30:00'));
-                            $total_overbreaks->add(computeTimeInterval($data['second_out'], $data['second_in']));
-                            $total_overbreaks->add(computeTimeInterval($data['third_out'], $data['third_in']));
+                    if($shift->working_hours == '08:00:00'){
+                        $allowedBreaks = [0 => '00:30:00'];
+                    } elseif($shift->working_hours == '09:00:00'){
+                        $allowedBreaks = [0 => '00:15:00', 2 => '01:00:00', 4 => '00:30:00'];
+                    }
 
-                        } elseif($shift['working_hours'] == '09:00:00'){ //check if the employee_shift working hrs is 8 hrs
-                            $total_overbreaks->add(computeBreaks($data['first_out'], $data['first_in'], '00:15:00'));
-                            $total_overbreaks->add(computeBreaks($data['second_out'], $data['second_in'], '01:00:00'));
-                            $total_overbreaks->add(computeBreaks($data['third_out'], $data['third_in'], '00:15:00'));
+                    if($attendance_log_count % 2 == 0){
+                        foreach($break_out as $key => $out){
+                            try{
+                                $total_overbreaks->add(computeBreaks($out, $break_in[$key], $allowedBreaks[$key]));
+                            }catch(ErrorException $ex){
+                                $total_overbreaks->add(computeTimeInterval($out, $break_in[$key]));
+                            }
                         }
-                        //add the late, undertime and overbreak into the data array
-                        $data = array_add($data, 'late', $late);
-                        $data = array_add($data, 'undertime', $undertime);
-                        $data = array_add($data, 'overbreak', $total_overbreaks->format('H:i:s'));
-                        // insert the data array into the create method and save to the database
+                    } else{
+                        $remarks = $remarks.'Odd number of logs';
+                        $data = array_add($data, 'remarks', $remarks);
+                    }
+
+                    $data = array_add($data, 'overbreak', $total_overbreaks->format('H:i:s'));
+                    $data = array_add($data, 'shift_id', $shift->id);
+                    // insert the data array into the create method and save to the database
+                    foreach($breaks as $value => $break){
+                        $data = array_add($data, $value, $date.' '.$break);
+                    }
+
+                    try{
                         EmployeeDtr::create($data);
-                        return true;
-                   }
+                    }catch(QueryException $ex){
+                        return false;
+                    }
+                    return true;
                 }
             }
         }
-    }
-
-    protected function isLast($data, $index){
-        return (count($data)-1) == $index;
+        
     }
 
     protected function getData($filepath){
@@ -143,7 +167,6 @@ class DtrController extends Controller
                         return $attendance;
                     })
                 ]);
-
                 $collection->push($datas);
             });
         });
@@ -169,75 +192,30 @@ class DtrController extends Controller
                 if(empty($employee)){
                     break;
                 }else{
-                    if($employee->shifts->count() == 0){ //check if the employee has available shifts
-                        break;
-                    } else{
-                        if((count($attendances) % 2) == 0){ //check if attendance count is even
-                            $this->store($user, $this->getShift($employee));
-                        }
+                    if(!$employee->shifts->isEmpty()){ //check if the employee has available shifts
+                        $this->store($user, $employee->shifts);
                     }
                 }
             }
         }
     }
 
-    protected function getShift($employee){ //collect all the data required to compute the employee logs
-        $shift = collect([
-            'shifts' => value(function() use($employee){
-                $shifts = collect();
-                foreach($employee->employee_shifts()->orderBy('date_from', 'desc')->get() as $employee_shift){
-                    $shifts->push([
-                        'description' => $employee_shift->shift->description,
-                        'start_time' => $employee_shift->shift->shift_from,
-                        'end_time' => $employee_shift->shift->shift_to,
-                        'break' => $employee_shift->shift->break,
-                        'working_hours' => $employee_shift->shift->working_hours,
-                        'date_from' => $employee_shift->date_from,
-                        'date_to' => $employee_shift->date_to,
-                        'days' => $employee_shift->employee_shift_days
-                    ]);
-                }
-                return $shifts;
-            })
-        ]);
-        return $shift;
-    }
-
     public function exportToExcel(){
-        $path = storage_path('files/DTRTemplates/dtrsummary.xlsx'); //Path of the excel template to be loaded
+        $path = storage_path('app/DTRTemplates/DTRSummary.xlsx'); //Path of the excel template to be loaded
 
         Excel::load($path, function($reader){ //load the excel file
             $raw_sheet = $reader->sheet('raw'); //select the raw sheet of the excel file
-            
-            $rawSheetIndex = 1;
-
-            $staffname = null;
-
-            foreach(EmployeeDtr::all() as $employee_dtr){ //get the employee logs within the provided days
-                if($staffname != strtoupper($employee_dtr->employee->last_name).', '.$employee_dtr->employee->first_name.' '.$employee_dtr->employee->middle_name){
-                    $rawSheetIndex = $rawSheetIndex + 2;
-                }
-                //assign the data to the variables
-                $staffname = strtoupper($employee_dtr->employee->last_name).', '.$employee_dtr->employee->first_name.' '.$employee_dtr->employee->middle_name;
-                $date = date('Y-m-d', strtotime($employee_dtr->start_of_duty));
-                $login = date('H:i:s', strtotime($employee_dtr->start_of_duty));
-                $logout = date('H:i:s', strtotime($employee_dtr->end_of_duty));
-                $late = $employee_dtr->late;
-                $undertime = $employee_dtr->undertime;
-
-                //add a new row and put all the gathered datas
-                $row = $raw_sheet->appendRow($rawSheetIndex, [
-                    $staffname, $date, $login, $logout, '', '', $late, '', $undertime
-                ]);
-                ++$rawSheetIndex; //increment the index to know what row are we
-            }
-
-            $summarySheetIndex = 3;
             $summary_sheet = $reader->sheet('summary'); //select the summary sheet of the excel file
+            $rawSheetIndex = 1;
+            $summarySheetIndex = 3;
 
-            foreach(Employee::with('employee_dtrs')->orderBy('last_name')->get() as $employee){
+            $employees = Employee::has('employee_dtrs')->with('employee_dtrs', 'shifts')->orderBy('last_name')->get();
+
+            foreach($employees as $employee){ //get the employee logs within the provided days
+                $rawSheetIndex = $rawSheetIndex + 2;
                 $staffcode = $employee->employee_id;
-                $staffname = strtoupper($employee->last_name).', '.$employee->first_name.' '.$employee->middle_name;
+                $staffname = strtoupper($employee->last_name).', '.$employee->first_name;
+
                 $computations = value(function() use($employee){
                     $late = new DateTime('00:00:00');
                     $undertime = new DateTime('00:00:00');
@@ -253,29 +231,46 @@ class DtrController extends Controller
 
                     //return an array with employee late, undertime, overbreak and hrs_worked value
                     return [
-                        'late' => toHour(date_diff($late, new DateTime('00:00:00'))),
-                        'undertime' => toHour(date_diff($undertime, new DateTime('00:00:00'))),
-                        'overbreak' => toHour(date_diff($overbreak, new DateTime('00:00:00'))),
-                        'hrs_worked' => toHour(date_diff($hrs_worked, new DateTime('00:00:00')))
+                        'late' => toMinutes(date_diff($late, new DateTime('00:00:00'))),
+                        'undertime' => toMinutes(date_diff($undertime, new DateTime('00:00:00'))),
+                        'overbreak' => toMinutes(date_diff($overbreak, new DateTime('00:00:00'))),
+                        'hrs_worked' => toHours(date_diff($hrs_worked, new DateTime('00:00:00')))
                     ];
                 });
 
                 //add a new row and put all the gathered datas
                 $row = $summary_sheet->appendRow($summarySheetIndex, [
-                    $staffcode, $staffname, $computations['late'], $computations['undertime'], '', $computations['hrs_worked']
+                    $staffcode, $staffname, $computations['late'], $computations['undertime'],$computations['overbreak'] , '', $computations['hrs_worked']
                 ]);
-                ++$summarySheetIndex; //increment the index to know what row are we
+                ++$summarySheetIndex;
+
+                foreach($employee->employee_dtrs as $employee_dtr){
+                    //assign the data to the variables
+                    $date = date('Y-m-d', strtotime($employee_dtr->start_of_duty));
+                    $login = date('H:i:s', strtotime($employee_dtr->start_of_duty));
+                    $logout = date('H:i:s', strtotime($employee_dtr->end_of_duty));
+                    $late = $employee_dtr->late;
+                    $undertime = $employee_dtr->undertime;
+
+                    $shift_from = $employee_dtr->shift->shift_from;
+                    $shift_to = $employee_dtr->shift->shift_to;
+                    
+                    //add a new row and put all the gathered datas
+                    $row = $raw_sheet->appendRow($rawSheetIndex, [
+                        $staffname, $date, $login, $logout, $shift_from, $shift_to, $late, stringToMinutes($late), $undertime, stringToMinutes($undertime), null, null, null, $employee_dtr->remarks
+                    ]);
+                    $staffname = null;
+                    ++$rawSheetIndex; //increment the index to know what row are we
+                }
             }
         })->download('xlsx'); //download the excel file
     }
 
-    public function deleteAll(){
+    public function deleteAll(){ //Clear and delete all the Employee DTR Logs. Delete the entire model
         if(EmployeeDtr::count() == 0){
             flash()->success('DTR Logs already empty!');
         } else{
-            foreach(EmployeeDtr::all() as $employee_dtr){
-                $employee_dtr->delete();
-            }
+            EmployeeDtr::with('id')->delete();
             flash()->success('DTR Logs all cleared!');
         }
         return redirect()->back();

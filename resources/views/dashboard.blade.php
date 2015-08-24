@@ -76,7 +76,7 @@
                         <i class="fa fa-bullhorn fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge">{{ App\Employee::has('shifts')->count() }}</div>
+                        <div class="huge">{{ App\Employee::has('shifts.employee_shift_days')->count() }}</div>
                         <div>Employee w/ Shifts</div>
                     </div>
                 </div>

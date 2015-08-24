@@ -20,6 +20,13 @@
         Employee Daily Time Record
         <div class="pull-right">
             <div class="btn-group">
+                <a href="/dtr/import">
+                    <button type="button" class="btn btn-success btn-xs">
+                        <i class="fa fa-download"></i> Import excel file
+                    </button>
+                </a>
+            </div>
+            <div class="btn-group">
                 <a href="/dtr/export">
                     <button type="button" class="btn btn-primary btn-xs">
                         <i class="fa fa-file"></i> Export DTR Report
@@ -43,6 +50,7 @@
                         <th>Undertime</th>
                         <th>Late</th>
                         <th>Total Overbreak</th>
+                        <th>Remarks</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,6 +65,7 @@
                         <td>{{ date('H:i:s',strtotime($dtr->undertime)) }}</td>
                         <td>{{ date('H:i:s',strtotime($dtr->late)) }}</td>
                         <td>{{ date('H:i:s',strtotime($dtr->overbreak)) }}</td>
+                        <td>{{ $dtr->remarks }}</td>
                     </tr>
                     @endforeach
                 </tbody>

@@ -32,7 +32,7 @@
                     </div>
                     <div class="form-group">
                         <label>Break</label>
-                        <input type="text" class="form-control" id="break" name="break" placeholder="End time"/>
+                        <input type="text" class="form-control" name="break" placeholder="hh:mm"/>
                     </div>
                     <hr>
                     <button type="submit" class="btn btn-primary"><i class="fa fa-clock-o"></i> Add shift</button>
@@ -56,15 +56,12 @@ $(function () {
     $('#startTime').datetimepicker({
         format: 'HH:mm'
     });
+    
     $('#endTime').datetimepicker({
         format: 'HH:mm'
     });
 
     $('#workingHours').datetimepicker({
-        format: 'HH:mm'
-    });
-
-    $('#break').datetimepicker({
         format: 'HH:mm'
     });
 });

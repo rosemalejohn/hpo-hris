@@ -39,32 +39,30 @@
 
     <div id="wrapper">
 
+        @if(auth()->check())
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             @include('layouts.navigation')
         </nav>
+        @endif
 
         <!-- Page Content -->
         <div id="page-wrapper">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12">
-                        @unless(empty($page_title))
-                        <h2 class="page-header">{{ $page_title }}</h2>
-                        @else
-                        <br>
-                        @endunless
+            <div class="row">
+                <div class="col-lg-12">
+                    @unless(empty($page_title))
+                    <h2 class="page-header">{{ $page_title }}</h2>
+                    @else
+                    <br>
+                    @endunless
 
-                        {!! Breadcrumbs::render($page_title, $data) !!}
+                    {!! (isset($page_title) && isset($data) ? Breadcrumbs::render($page_title, $data) : null )  !!}
 
-                        @include('flash::message')
-                        @yield('content')
-                    </div>
-                    <!-- /.col-lg-12 -->
+                    @include('flash::message')
+                    @yield('content')
                 </div>
-                <!-- /.row -->
+                <!-- /.col-lg-12 -->
             </div>
-            <!-- /.container-fluid -->
         </div>
         <!-- /#page-wrapper -->
 

@@ -79,10 +79,4 @@ Route::group(['middleware' => 'auth'], function(){
 
     });
 
-    Route::get('sample', function(){
-
-        dd(toHour(new DateInterval('P2Y4DT6H8M')));
-
-    });
-
 });

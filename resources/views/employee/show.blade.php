@@ -48,6 +48,7 @@
                         <th>Sat</th>
                         <th>Sun</th> -->
                         <th>Effective</th>
+                        <th>Created at</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -65,6 +66,7 @@
                             @endforelse
                         </td>
                         <td>{{ date('M d Y', strtotime($employee_shift->pivot->date_from)).' to '.date('M d Y', strtotime($employee_shift->pivot->date_to)) }}</td>
+                        <td>{{ date('M d Y', strtotime($employee_shift->created_at)) }}</td>
                         <td>
                             <a href="/employees/shift/{{ $employee_shift->pivot->id }}/edit">
                                 <button class="btn btn-xs btn-warning"><i class="fa fa-edit"></i></button>
