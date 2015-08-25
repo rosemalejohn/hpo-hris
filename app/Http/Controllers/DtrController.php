@@ -16,6 +16,9 @@ use Validator;
 
 class DtrController extends Controller
 {
+    protected $date_from = null;
+
+    protected $date_to = null;
     //
     public function index(){
         $page_title = 'dtr';
@@ -31,11 +34,16 @@ class DtrController extends Controller
 
     public function postImport(Request $request){
         $validator = Validator::make($request->all(), [
-            'file' => 'required|mimes:xlsx,xls'  //Excel file validation not yet done for mimes
+            'file' => 'required|mimes:xlsx,xls',  //Excel file validation not yet done for mimes
+            'date_from' => 'required',
+            'date_to' => 'required'
         ]);
 
         if(!$validator->fails() && $request->file('file')->isValid()){
             $file = $request->file('file');
+            $this->date_from = $request->date_from;
+            $this->date_to = $request->date_to;
+
             $filename = $this->nameFile($file->getClientOriginalName());
             $file->move(storage_path('app/imports'), $filename);
             try{
@@ -63,72 +71,83 @@ class DtrController extends Controller
         foreach($shifts as $shift){
             
             if(($date >= $shift->pivot->date_from) && ($date <= $shift->pivot->date_to)){ //check if the date is between the date_from where the shift started and shift ended
-                
+
                 $start_time = $shift->shift_from; //get the shift start time
                 $end_time = $shift->shift_to; //get the shift end time
                 
                 if($shift->pivot->employee_shift_days->contains('day', strtolower(date('D', strtotime($date))))){
                     $attendance_log_count = count($attendances);
-                    
-                    $start_of_duty = $attendances->shift();
-                    $end_of_duty = $attendances->pop();
                     $remarks = null;
                     $allowedBreaks = [];
-                    $break_out = array(); 
-                    $break_in = array();
+                    $break_out = []; 
+                    $break_in = [];
 
+                    if($attendances == null){
+                        $start_of_duty = '00:00:00';
+                        $end_of_duty = '00:00:00';
+                    } else{
+                        $start_of_duty = $attendances->shift();
+                        $end_of_duty = $attendances->pop();
+                    }
+                    
                     $data = ['employee_id' => $userID, 'start_of_duty' => $date.' '.$start_of_duty, 'end_of_duty' => $date.' '.$end_of_duty];
                     $break_key = ['first_out', 'first_in', 'second_out', 'second_in', 'third_out', 'third_in'];
                     $breaks = array();
 
-                    foreach($attendances as $key => $attendance){
-                        try{
-                            $breaks = array_add($breaks, $break_key[$key], $attendance); 
-                        }catch(ErrorException $ex){
-                            
-                        }
-                    }
+                    $data = array_add($data, 'shift_id', $shift->id);
 
-                    if($start_time < $start_of_duty){ //check if the employee is late
-                        $data = array_add($data, 'late', computeTimeInterval($start_time, $start_of_duty)->format("%H:%I:%S"));
-                    }
-                    if($end_of_duty < $end_time){ //check if the employee has undertime
-                        $data = array_add($data, 'undertime', computeTimeInterval($end_of_duty, $end_time)->format("%H:%I:%S"));
-                    }
-
-                    $flag = true;
-                    foreach(array_flatten($breaks) as $key => $break){
-                        if($key % 2 == 0){
-                            $break_out = array_add($break_out, $key, $break);
-                        } else{
-                            $break_in = array_add($break_in, $key - 1, $break);
-                        }
-                    }
-
-                    if($shift->working_hours == '08:00:00'){
-                        $allowedBreaks = [0 => '00:30:00'];
-                    } elseif($shift->working_hours == '09:00:00'){
-                        $allowedBreaks = [0 => '00:15:00', 2 => '01:00:00', 4 => '00:30:00'];
-                    }
-
-                    if($attendance_log_count % 2 == 0){
-                        foreach($break_out as $key => $out){
+                    if($attendances != null){
+                        foreach($attendances as $key => $attendance){
                             try{
-                                $total_overbreaks->add(computeBreaks($out, $break_in[$key], $allowedBreaks[$key]));
+                                $breaks = array_add($breaks, $break_key[$key], $attendance); 
                             }catch(ErrorException $ex){
-                                $total_overbreaks->add(computeTimeInterval($out, $break_in[$key]));
+                                
                             }
                         }
-                    } else{
-                        $remarks = $remarks.'Odd number of logs';
-                        $data = array_add($data, 'remarks', $remarks);
-                    }
 
-                    $data = array_add($data, 'overbreak', $total_overbreaks->format('H:i:s'));
-                    $data = array_add($data, 'shift_id', $shift->id);
-                    // insert the data array into the create method and save to the database
-                    foreach($breaks as $value => $break){
-                        $data = array_add($data, $value, $date.' '.$break);
+                        if($start_time < $start_of_duty){ //check if the employee is late
+                            $data = array_add($data, 'late', computeTimeInterval($start_time, $start_of_duty)->format("%H:%I:%S"));
+                        }
+                        if($end_of_duty < $end_time){ //check if the employee has undertime
+                            $data = array_add($data, 'undertime', computeTimeInterval($end_of_duty, $end_time)->format("%H:%I:%S"));
+                        }
+
+                        foreach(array_flatten($breaks) as $key => $break){
+                            if($key % 2 == 0){
+                                $break_out = array_add($break_out, $key, $break);
+                            } else{
+                                $break_in = array_add($break_in, $key - 1, $break);
+                            }
+                        }
+
+                        if($shift->working_hours == '08:00:00'){
+                            $allowedBreaks = [0 => '00:30:00'];
+                        } elseif($shift->working_hours == '09:00:00'){
+                            $allowedBreaks = [0 => '00:15:00', 2 => '01:00:00', 4 => '00:30:00'];
+                        }
+
+                        if($attendance_log_count % 2 == 0){
+                            foreach($break_out as $key => $out){
+                                try{
+                                    $total_overbreaks->add(computeBreaks($out, $break_in[$key], $allowedBreaks[$key]));
+                                }catch(ErrorException $ex){
+                                    $total_overbreaks->add(computeTimeInterval($out, $break_in[$key]));
+                                }
+                            }
+                        } else{
+                            $remarks = $remarks.'ODDLogs';
+                            $data = array_add($data, 'remarks', $remarks);
+                        }
+
+                        $data = array_add($data, 'overbreak', $total_overbreaks->format('H:i:s'));
+                        
+                        // insert the data array into the create method and save to the database
+                        foreach($breaks as $value => $break){
+                            $data = array_add($data, $value, $date.' '.$break);
+                        }
+                    } else{
+                        $remarks = $remarks.' ABSENT';
+                        $data = array_add($data, 'remarks', $remarks);
                     }
 
                     try{
@@ -185,18 +204,37 @@ class DtrController extends Controller
         foreach($collection as $employees){
             $userID = $employees->first()['user'];
             $employee = Employee::where('employee_id', $userID)->first();
-            foreach($employees as $user){
-                $date = $user['date'];
-                $attendances = $user['attendance'];
+            $currentDate = $this->date_from;
+            $datesArray = [];
+
+            $index = 0;
+            while($index < count($employees)){
+                $user = $employees[$index];
 
                 if(empty($employee)){
                     break;
-                }else{
+                } else{
                     if(!$employee->shifts->isEmpty()){ //check if the employee has available shifts
-                        $this->store($user, $employee->shifts);
+                        if($currentDate != $user['date']){
+                            dump($currentDate.' != '.$user['date']);
+                            $newUser['user'] = $userID;
+                            $newUser['date'] = $currentDate;
+                            $newUser['attendance'] = null;
+                            $this->store($newUser, $employee->shifts);
+
+                            $currentDate = incrementDateByOneDay($currentDate);
+                        } elseif($currentDate == $user['date']){
+                            dump($currentDate.' == '.$user['date']);
+                            $this->store($user, $employee->shifts);
+                            ++$index;
+                            $currentDate = incrementDateByOneDay($currentDate);
+                        }
+                    } else{
+                        break;
                     }
                 }
             }
+
         }
     }
 

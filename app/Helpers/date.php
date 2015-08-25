@@ -49,3 +49,9 @@ function computeToMinutes($days, $hours, $minutes){
     $total = (($days * 24) * 60) + ($hours * 60) + $minutes;
     return $total;
 }
+
+function incrementDateByOneDay($date){
+    $date = new DateTime($date);
+    $date->add(new DateInterval('P1D'));
+    return $date->format("Y-m-d");
+}
