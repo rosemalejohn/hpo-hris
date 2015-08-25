@@ -25,7 +25,7 @@ class DtrController extends Controller
 
     public function getImport(){
         $page_title = 'dtr-import';
-        $data = '';
+        $data = 'Import DTR';
         return view('dtr.import')->with(compact('page_title', 'data'));
     }
 

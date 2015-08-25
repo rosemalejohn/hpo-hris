@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>HPO Human Resource Information System</title>
+    <title>{{ (is_object($data) ? 'HPO Human Resource Information System' : $data) }}</title>
 
     <link rel="icon" href="/img/logo.png"/>
     <!-- Bootstrap Core CSS -->
@@ -30,7 +30,11 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
+    <style type="text/css">
+        body{
+            padding-top: 50px;
+        }
+    </style>
     @yield('stylesheet')
 
 </head>
@@ -41,7 +45,7 @@
 
         @if(auth()->check())
         <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <nav class="navbar navbar-default navbar-fixed-top" role="navigation" style="margin-bottom: 0">
             @include('layouts.navigation')
         </nav>
         @endif
@@ -50,8 +54,8 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    @unless(empty($page_title))
-                    <h2 class="page-header">{{ $page_title }}</h2>
+                    @unless(empty($data) || is_object($data))
+                    <h2 class="page-header">{{ $data }}</h2>
                     @else
                     <br>
                     @endunless
