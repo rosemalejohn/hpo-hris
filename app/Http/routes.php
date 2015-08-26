@@ -13,69 +13,79 @@
 
 Route::group(['middleware' => 'guest'], function(){
 
-    Route::get('auth/login', 'Auth\AuthController@getLogin');
+    get('auth/login', 'Auth\AuthController@getLogin');
 
-    Route::post('auth/login', 'Auth\AuthController@postLogin');
+    post('auth/login', 'Auth\AuthController@postLogin');
 
-    Route::get('auth/register', 'Auth\AuthController@getRegister');
+    get('auth/register', 'Auth\AuthController@getRegister');
 
-    Route::post('auth/register', 'Auth\AuthController@postRegister');
+    post('auth/register', 'Auth\AuthController@postRegister');
     
 });
 
 Route::group(['middleware' => 'auth'], function(){
 
-    Route::get('auth/logout', 'Auth\AuthController@getLogout');
+    get('auth/logout', 'Auth\AuthController@getLogout');
 
-    Route::get('/', 'BaseController@dashboard');
+    get('/', 'BaseController@dashboard');
 
     //User resource
 
-    Route::get('/user/settings', 'UserController@settings');
+    Route::group(['prefix' => 'user'], function(){
 
-    Route::put('/user/{user}', 'UserController@update');
+        get('settings', 'UserController@settings');
 
-    Route::get('/user/my-account', 'UserController@profile');
+        put('{user}', 'UserController@update');
 
-    Route::delete('/user/{user}', 'UserController@destroy');
+        get('my-account', 'UserController@profile');
 
-    //Daily Time Record Resource
+        delete('{user}', 'UserController@destroy');
 
-    Route::get('/dtr/import', 'DtrController@getImport');
+    });
 
-    Route::get('/dtr', 'DtrController@index');
+    Route::group(['prefix' => 'dtr'], function(){
 
-    Route::post('/dtr', 'DtrController@postImport');
+        get('import', 'DtrController@getImport');
 
-    Route::get('/dtr/export', 'DtrController@exportToExcel');
+        get('/', 'DtrController@index');
 
-    Route::delete('/dtr/delete-all', 'DtrController@deleteAll');
+        post('/', 'DtrController@postImport');
+
+        get('export', 'DtrController@exportToExcel');
+
+        delete('delete-all', 'DtrController@deleteAll');  
+
+    });
+
+    Route::group(['prefix' => 'employees'], function(){
+
+        post('add-shift/{id}', 'EmployeeController@addShift');
+
+        get('shift/{shift}/edit', 'EmployeeController@editShift');
+
+        put('shift/{shift}', 'EmployeeController@updateShift');
+
+        get('shift/{shift}/delete', 'EmployeeController@deleteShift');
+
+    });
 
     //EmployeeController resource
 
-    Route::resource('employees', 'EmployeeController');
-
-    Route::post('/employees/add-shift/{id}', 'EmployeeController@addShift');
-
-    Route::get('/employees/shift/{shift}/edit', 'EmployeeController@editShift');
-
-    Route::put('/employees/shift/{shift}', 'EmployeeController@updateShift');
-
-    Route::get('/employees/shift/{shift}/delete', 'EmployeeController@deleteShift');
+    resource('employees', 'EmployeeController');
 
      //DepartmentController resource
 
-    Route::resource('departments', 'DepartmentController');
+    resource('departments', 'DepartmentController');
 
      //ShiftController resource
 
-    Route::resource('shifts', 'ShiftController');
+    resource('shifts', 'ShiftController');
 
-    Route::get('/import-employees', 'EmployeeController@importEmployees');
+    get('/import-employees', 'EmployeeController@importEmployees');
 
     Route::group(['prefix' => 'api'], function(){
 
-        Route::get('/employees/view-shift', 'EmployeeController@viewShift');
+        get('/employees/view-shift', 'EmployeeController@viewShift');
 
     });
 
