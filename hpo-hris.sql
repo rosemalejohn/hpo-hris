@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 25, 2015 at 04:48 AM
+-- Generation Time: Aug 26, 2015 at 07:54 AM
 -- Server version: 5.6.20
 -- PHP Version: 5.5.15
 
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `departments` (
   `description` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
 
 --
 -- Dumping data for table `departments`
@@ -48,7 +48,8 @@ INSERT INTO `departments` (`id`, `department_code`, `name`, `description`, `crea
 (6, 'ENGAGEIQ', 'Engage IQ', 'Sample ', '2015-08-15 07:14:27', '2015-08-14 23:14:27'),
 (7, 'Creative', 'Creative', '', '2015-08-14 23:11:01', '2015-08-14 23:11:01'),
 (8, 'PMO', 'PMO', '', '2015-08-14 23:13:05', '2015-08-14 23:13:05'),
-(9, 'IM', 'IM', '', '2015-08-14 23:15:54', '2015-08-14 23:15:54');
+(9, 'IM', 'IM', '', '2015-08-14 23:15:54', '2015-08-14 23:15:54'),
+(10, 'KSI', 'Kiniteque', '', '2015-08-25 18:31:53', '2015-08-25 18:31:53');
 
 -- --------------------------------------------------------
 
@@ -58,7 +59,7 @@ INSERT INTO `departments` (`id`, `department_code`, `name`, `description`, `crea
 
 CREATE TABLE IF NOT EXISTS `employees` (
 `id` int(10) unsigned NOT NULL,
-  `employee_id` int(11) unsigned NOT NULL,
+  `employee_id` varchar(11) NOT NULL,
   `first_name` varchar(45) NOT NULL,
   `middle_name` varchar(45) DEFAULT NULL,
   `last_name` varchar(45) NOT NULL,
@@ -66,76 +67,91 @@ CREATE TABLE IF NOT EXISTS `employees` (
   `department_id` int(10) unsigned NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=77 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=92 ;
 
 --
 -- Dumping data for table `employees`
 --
 
 INSERT INTO `employees` (`id`, `employee_id`, `first_name`, `middle_name`, `last_name`, `status`, `department_id`, `created_at`, `updated_at`) VALUES
-(1, 802005, 'Leonardo Jr.', 'Alcantara', 'Galos', '1', 3, '2015-08-15 07:09:13', '2015-08-14 23:09:13'),
-(2, 805067, 'Romeo Jr.', 'Ibañez', 'Mangaya-ay', '1', 1, '2015-08-14 17:56:56', '2015-08-14 17:56:56'),
-(3, 810079, 'Ali ', 'Calderon', 'Mofan ', '1', 3, '2015-08-15 07:08:50', '2015-08-14 23:08:50'),
-(4, 410001, 'Juan Paulo', 'Santos ', 'Saravia', '1', 4, '2015-08-15 07:08:25', '2015-08-14 23:08:25'),
-(5, 506001, 'Gene Voltaire', 'Acuesta', 'Dequito', '1', 1, '2015-08-14 17:56:56', '2015-08-14 17:56:56'),
-(6, 702003, 'Ares', 'Lacap', 'Cabahug', '1', 7, '2015-08-15 07:11:35', '2015-08-14 23:11:35'),
-(7, 706009, 'Roque Jay', 'Lampios', 'Maneja', '1', 7, '2015-08-15 07:11:23', '2015-08-14 23:11:23'),
-(8, 710026, 'Enrico Rafael', 'De Jesus', 'Macaraig', '1', 7, '2015-08-15 07:12:40', '2015-08-14 23:12:40'),
-(9, 801002, 'Rea May', 'Apita', 'Fuentes', '1', 9, '2015-08-15 07:16:26', '2015-08-14 23:16:26'),
-(10, 801001, 'Daniel', 'Intong', 'Revil', '1', 7, '2015-08-15 07:11:12', '2015-08-14 23:11:12'),
-(11, 806048, 'Dennis', 'Semilla', 'Lucero', '1', 2, '2015-08-15 07:09:29', '2015-08-14 23:09:29'),
-(12, 811086, 'Queency', 'Panisal', 'Alfante', '1', 9, '2015-08-15 07:16:37', '2015-08-14 23:16:37'),
-(13, 904061, 'Elaine Ingrid', 'Neri', 'Manlangit', '1', 2, '2015-08-15 07:09:58', '2015-08-14 23:09:58'),
-(14, 911131, 'Aaron Paul', 'Tito', 'Duhaylungsod', '1', 9, '2015-08-15 07:18:19', '2015-08-14 23:18:19'),
-(15, 1006041, 'April Rose ', 'Relampagos', 'Alforque', '1', 2, '2015-08-15 07:09:43', '2015-08-14 23:09:43'),
-(16, 1010062, 'Rian Ree', 'Patron', 'Barrientos', '1', 1, '2015-08-14 17:56:56', '2015-08-14 17:56:56'),
-(17, 1101010, 'Jose Bernard', 'Pond', 'Sevilla', '1', 9, '2015-08-15 07:17:20', '2015-08-14 23:17:20'),
-(18, 1104022, 'Dann Robert', 'Tan', 'Yu', '1', 6, '2015-08-15 07:14:17', '2015-08-14 23:14:17'),
-(19, 1108042, 'John Cesar', 'Enriquez', 'Manlangit', '1', 1, '2015-08-14 17:56:57', '2015-08-14 17:56:57'),
-(20, 1109044, 'Anna Liza', 'Doro-on', 'Masangkay', '1', 8, '2015-08-15 07:13:32', '2015-08-14 23:13:32'),
-(21, 1103018, 'Montgomery', 'Cabillan', 'Magbanua', '1', 6, '2015-08-15 07:14:52', '2015-08-14 23:14:52'),
-(22, 1203008, 'Jhecyl Mae', 'Arias', 'Cuevas', '1', 9, '2015-08-15 07:17:52', '2015-08-14 23:17:52'),
-(23, 1203014, 'Craig John', 'Castañeda', 'Neniel', '1', 9, '2015-08-15 07:16:54', '2015-08-14 23:16:54'),
-(24, 1203020, 'Carlo Franco', 'Bayani', 'Lozano', '1', 5, '2015-08-15 07:07:35', '2015-08-14 23:07:35'),
-(25, 1203026, 'Jessa Mae', 'Calamba', 'Deloy', '1', 6, '2015-08-15 07:15:37', '2015-08-14 23:15:37'),
-(26, 1203029, 'Ma. Louiselle', 'Digamon', 'Jose', '1', 9, '2015-08-15 07:16:10', '2015-08-14 23:16:10'),
-(27, 1203035, 'Brylle', 'Duco', 'Seraspe', '1', 1, '2015-08-14 17:56:57', '2015-08-14 17:56:57'),
-(28, 1203036, 'Mark', 'Billones', 'Tacatani', '1', 8, '2015-08-15 07:13:56', '2015-08-14 23:13:56'),
-(29, 1203042, 'Jayson', 'Miparanum', 'Aso', '1', 9, '2015-08-15 07:16:46', '2015-08-14 23:16:46'),
-(30, 1203049, 'Ariel', 'Cacanog', 'Magbanua', '1', 1, '2015-08-14 17:56:57', '2015-08-14 17:56:57'),
-(31, 1203050, 'Reu Salvy', 'Sagmit', 'Delima', '1', 9, '2015-08-15 07:18:07', '2015-08-14 23:18:07'),
-(32, 1203056, 'Michael Angelo', 'Giducos', 'Leones', '1', 2, '2015-08-15 07:10:29', '2015-08-14 23:10:29'),
-(33, 1203064, 'Jake', 'Velasco', 'Duldulao', '1', 1, '2015-08-14 17:56:57', '2015-08-14 17:56:57'),
-(34, 1203069, 'Reynand', 'Dulay', 'Collado', '1', 9, '2015-08-15 07:18:34', '2015-08-14 23:18:34'),
-(35, 1203072, 'Ivy Frances', 'Sarsalejo', 'Labitan', '1', 9, '2015-08-15 07:17:09', '2015-08-14 23:17:09'),
-(36, 1203080, 'Donna Mae', 'Quitong', 'Tabuno', '1', 3, '2015-08-15 07:08:59', '2015-08-14 23:08:59'),
-(37, 1203082, 'Olive', 'Nazareno', 'Sumampong', '1', 2, '2015-08-15 07:10:12', '2015-08-14 23:10:12'),
-(38, 1203085, 'Daniel', 'Rubiato', 'Laurel', '1', 1, '2015-08-14 17:56:57', '2015-08-14 17:56:57'),
-(39, 1203089, 'Chiara', 'Bangoy', 'Patrimonio', '1', 8, '2015-08-15 07:13:17', '2015-08-14 23:13:17'),
-(40, 1203090, 'Melvin Rey', 'Antiquin', 'Basco', '1', 7, '2015-08-15 07:11:51', '2015-08-14 23:11:51'),
-(41, 1203091, 'Dexter Ken', 'Nerosa', 'Candia', '1', 1, '2015-08-14 17:56:57', '2015-08-14 17:56:57'),
-(42, 1203094, 'Rika Joahnah', 'Fiel', 'Sison', '1', 8, '2015-08-15 07:14:06', '2015-08-14 23:14:06'),
-(43, 1203107, 'Jayvee', 'Rizon', 'Sumande', '1', 1, '2015-08-14 17:56:58', '2015-08-14 17:56:58'),
-(44, 1203110, 'Johneil', 'Celestial', 'Quijano', '1', 1, '2015-08-14 17:56:58', '2015-08-14 17:56:58'),
-(45, 1203120, 'Julius Ryan', 'Arboleda', 'Paches', '1', 1, '2015-08-14 17:56:58', '2015-08-14 17:56:58'),
-(46, 1203126, 'Ma. Luisa Andrea', 'Quillo', 'Coloso', '1', 6, '2015-08-15 07:15:23', '2015-08-14 23:15:23'),
-(47, 140502, 'Nepthaly', 'Caro', 'Talavera', '1', 2, '2015-08-19 04:51:13', '2015-08-18 20:51:13'),
-(48, 140702, 'Hazel Love', 'Coloma', 'Rosales', '1', 8, '2015-08-15 07:13:43', '2015-08-14 23:13:43'),
-(49, 140902, 'Arriz', 'Divinagracia', 'San Juan', '1', 7, '2015-08-15 07:12:15', '2015-08-14 23:12:15'),
-(50, 140903, 'Edward John', 'Paglinawan', 'Diola', '1', 7, '2015-08-15 07:12:02', '2015-08-14 23:12:02'),
-(51, 140904, 'Gerard Albert', 'Pimentel', 'Cañada', '1', 6, '2015-08-15 07:15:07', '2015-08-14 23:15:07'),
-(52, 140905, 'Patrick Angelo', 'Galve', 'Cameguing', '1', 1, '2015-08-14 17:56:58', '2015-08-14 17:56:58'),
-(66, 141002, 'Karla', NULL, 'Librero', '1', 1, '2015-08-16 19:39:48', '2015-08-16 19:39:48'),
-(67, 141103, 'Dave Francis', 'Mansilita', 'Cancio', '1', 9, '2015-08-17 04:54:33', '2015-08-16 20:54:33'),
-(68, 150102, 'Michael Angelo', 'Omero', 'Tarongoy', '1', 1, '2015-08-16 19:39:48', '2015-08-16 19:39:48'),
-(69, 150103, 'Edward Jonathan ', 'Opinion', 'Potot', '1', 8, '2015-08-17 04:55:19', '2015-08-16 20:55:19'),
-(70, 150401, 'Marwil', 'Yder', 'Burton', '1', 6, '2015-08-17 04:55:51', '2015-08-16 20:55:51'),
-(71, 150403, 'Norgen', 'Balo', 'Tapel', '1', 9, '2015-08-17 04:56:18', '2015-08-16 20:56:18'),
-(72, 150501, 'Javin Jet', 'Agustin', 'Tevar', '1', 4, '2015-08-17 04:56:42', '2015-08-16 20:56:42'),
-(73, 150502, 'Juan Basilio', 'Teves', 'Espinoza', '1', 9, '2015-08-17 04:57:05', '2015-08-16 20:57:05'),
-(74, 150503, 'Xander John', 'Mina', 'Dacyon', '1', 1, '2015-08-16 19:39:48', '2015-08-16 19:39:48'),
-(75, 150506, 'John Jason', 'Marquez', 'Baladiang', '1', 1, '2015-08-16 19:39:48', '2015-08-16 19:39:48'),
-(76, 150801, 'Vincent Jake', NULL, 'Calag', '1', 1, '2015-08-16 19:39:48', '2015-08-16 19:39:48');
+(1, '802005', 'Leonardo Jr.', 'Alcantara', 'Galos', '1', 3, '2015-08-15 07:09:13', '2015-08-14 23:09:13'),
+(2, '805067', 'Romeo Jr.', 'Ibañez', 'Mangaya-ay', '1', 1, '2015-08-14 17:56:56', '2015-08-14 17:56:56'),
+(3, '810079', 'Ali ', 'Calderon', 'Mofan ', '1', 3, '2015-08-15 07:08:50', '2015-08-14 23:08:50'),
+(4, '410001', 'Juan Paulo', 'Santos ', 'Saravia', '1', 4, '2015-08-15 07:08:25', '2015-08-14 23:08:25'),
+(5, '506001', 'Gene Voltaire', 'Acuesta', 'Dequito', '1', 1, '2015-08-14 17:56:56', '2015-08-14 17:56:56'),
+(6, '702003', 'Ares', 'Lacap', 'Cabahug', '1', 7, '2015-08-15 07:11:35', '2015-08-14 23:11:35'),
+(7, '706009', 'Roque Jay', 'Lampios', 'Maneja', '1', 7, '2015-08-15 07:11:23', '2015-08-14 23:11:23'),
+(8, '710026', 'Enrico Rafael', 'De Jesus', 'Macaraig', '1', 7, '2015-08-15 07:12:40', '2015-08-14 23:12:40'),
+(9, '801002', 'Rea May', 'Apita', 'Fuentes', '1', 9, '2015-08-15 07:16:26', '2015-08-14 23:16:26'),
+(10, '801001', 'Daniel', 'Intong', 'Revil', '1', 7, '2015-08-15 07:11:12', '2015-08-14 23:11:12'),
+(11, '806048', 'Dennis', 'Semilla', 'Lucero', '1', 2, '2015-08-15 07:09:29', '2015-08-14 23:09:29'),
+(12, '811086', 'Queency', 'Panisal', 'Alfante', '1', 9, '2015-08-15 07:16:37', '2015-08-14 23:16:37'),
+(13, '904061', 'Elaine Ingrid', 'Neri', 'Manlangit', '1', 2, '2015-08-15 07:09:58', '2015-08-14 23:09:58'),
+(14, '911131', 'Aaron Paul', 'Tito', 'Duhaylungsod', '1', 9, '2015-08-15 07:18:19', '2015-08-14 23:18:19'),
+(15, '1006041', 'April Rose ', 'Relampagos', 'Alforque', '1', 2, '2015-08-15 07:09:43', '2015-08-14 23:09:43'),
+(16, '1010062', 'Rian Ree', 'Patron', 'Barrientos', '1', 1, '2015-08-14 17:56:56', '2015-08-14 17:56:56'),
+(17, '1101010', 'Jose Bernard', 'Pond', 'Sevilla', '1', 9, '2015-08-15 07:17:20', '2015-08-14 23:17:20'),
+(18, '1104022', 'Dann Robert', 'Tan', 'Yu', '1', 6, '2015-08-15 07:14:17', '2015-08-14 23:14:17'),
+(19, '1108042', 'John Cesar', 'Enriquez', 'Manlangit', '1', 1, '2015-08-14 17:56:57', '2015-08-14 17:56:57'),
+(20, '1109044', 'Anna Liza', 'Doro-on', 'Masangkay', '1', 8, '2015-08-15 07:13:32', '2015-08-14 23:13:32'),
+(21, '1103018', 'Montgomery', 'Cabillan', 'Magbanua', '1', 6, '2015-08-15 07:14:52', '2015-08-14 23:14:52'),
+(22, '1203008', 'Jhecyl Mae', 'Arias', 'Cuevas', '1', 9, '2015-08-15 07:17:52', '2015-08-14 23:17:52'),
+(23, '1203014', 'Craig John', 'Castañeda', 'Neniel', '1', 9, '2015-08-15 07:16:54', '2015-08-14 23:16:54'),
+(24, '1203020', 'Carlo Franco', 'Bayani', 'Lozano', '1', 5, '2015-08-15 07:07:35', '2015-08-14 23:07:35'),
+(25, '1203026', 'Jessa Mae', 'Calamba', 'Deloy', '1', 6, '2015-08-15 07:15:37', '2015-08-14 23:15:37'),
+(26, '1203029', 'Ma. Louiselle', 'Digamon', 'Jose', '1', 9, '2015-08-15 07:16:10', '2015-08-14 23:16:10'),
+(27, '1203035', 'Brylle', 'Duco', 'Seraspe', '1', 1, '2015-08-14 17:56:57', '2015-08-14 17:56:57'),
+(28, '1203036', 'Mark', 'Billones', 'Tacatani', '1', 8, '2015-08-15 07:13:56', '2015-08-14 23:13:56'),
+(29, '1203042', 'Jayson', 'Miparanum', 'Aso', '1', 9, '2015-08-15 07:16:46', '2015-08-14 23:16:46'),
+(30, '1203049', 'Ariel', 'Cacanog', 'Magbanua', '1', 1, '2015-08-14 17:56:57', '2015-08-14 17:56:57'),
+(31, '1203050', 'Reu Salvy', 'Sagmit', 'Delima', '1', 9, '2015-08-15 07:18:07', '2015-08-14 23:18:07'),
+(32, '1203056', 'Michael Angelo', 'Giducos', 'Leones', '1', 2, '2015-08-15 07:10:29', '2015-08-14 23:10:29'),
+(33, '1203064', 'Jake', 'Velasco', 'Duldulao', '1', 1, '2015-08-14 17:56:57', '2015-08-14 17:56:57'),
+(34, '1203069', 'Reynand', 'Dulay', 'Collado', '1', 9, '2015-08-15 07:18:34', '2015-08-14 23:18:34'),
+(35, '1203072', 'Ivy Frances', 'Sarsalejo', 'Labitan', '1', 9, '2015-08-15 07:17:09', '2015-08-14 23:17:09'),
+(36, '1203080', 'Donna Mae', 'Quitong', 'Tabuno', '1', 3, '2015-08-15 07:08:59', '2015-08-14 23:08:59'),
+(37, '1203082', 'Olive', 'Nazareno', 'Sumampong', '1', 2, '2015-08-15 07:10:12', '2015-08-14 23:10:12'),
+(38, '1203085', 'Daniel', 'Rubiato', 'Laurel', '1', 1, '2015-08-14 17:56:57', '2015-08-14 17:56:57'),
+(39, '1203089', 'Chiara', 'Bangoy', 'Patrimonio', '1', 8, '2015-08-15 07:13:17', '2015-08-14 23:13:17'),
+(40, '1203090', 'Melvin Rey', 'Antiquin', 'Basco', '1', 7, '2015-08-15 07:11:51', '2015-08-14 23:11:51'),
+(41, '1203091', 'Dexter Ken', 'Nerosa', 'Candia', '1', 1, '2015-08-14 17:56:57', '2015-08-14 17:56:57'),
+(42, '1203094', 'Rika Joahnah', 'Fiel', 'Sison', '1', 8, '2015-08-15 07:14:06', '2015-08-14 23:14:06'),
+(43, '1203107', 'Jayvee', 'Rizon', 'Sumande', '1', 1, '2015-08-14 17:56:58', '2015-08-14 17:56:58'),
+(44, '1203110', 'Johneil', 'Celestial', 'Quijano', '1', 1, '2015-08-14 17:56:58', '2015-08-14 17:56:58'),
+(45, '1203120', 'Julius Ryan', 'Arboleda', 'Paches', '1', 1, '2015-08-14 17:56:58', '2015-08-14 17:56:58'),
+(46, '1203126', 'Ma. Luisa Andrea', 'Quillo', 'Coloso', '1', 6, '2015-08-15 07:15:23', '2015-08-14 23:15:23'),
+(47, '140502', 'Nepthaly', 'Caro', 'Talavera', '1', 2, '2015-08-19 04:51:13', '2015-08-18 20:51:13'),
+(48, '140702', 'Hazel Love', 'Coloma', 'Rosales', '1', 8, '2015-08-15 07:13:43', '2015-08-14 23:13:43'),
+(49, '140902', 'Arriz', 'Divinagracia', 'San Juan', '1', 7, '2015-08-15 07:12:15', '2015-08-14 23:12:15'),
+(50, '140903', 'Edward John', 'Paglinawan', 'Diola', '1', 7, '2015-08-15 07:12:02', '2015-08-14 23:12:02'),
+(51, '140904', 'Gerard Albert', 'Pimentel', 'Cañada', '1', 6, '2015-08-15 07:15:07', '2015-08-14 23:15:07'),
+(52, '140905', 'Patrick Angelo', 'Galve', 'Cameguing', '1', 1, '2015-08-14 17:56:58', '2015-08-14 17:56:58'),
+(66, '141002', 'Karla', NULL, 'Librero', '1', 1, '2015-08-16 19:39:48', '2015-08-16 19:39:48'),
+(67, '141103', 'Dave Francis', 'Mansilita', 'Cancio', '1', 9, '2015-08-17 04:54:33', '2015-08-16 20:54:33'),
+(68, '150102', 'Michael Angelo', 'Omero', 'Tarongoy', '1', 1, '2015-08-16 19:39:48', '2015-08-16 19:39:48'),
+(69, '150103', 'Edward Jonathan ', 'Opinion', 'Potot', '1', 8, '2015-08-17 04:55:19', '2015-08-16 20:55:19'),
+(70, '150401', 'Marwil', 'Yder', 'Burton', '1', 6, '2015-08-17 04:55:51', '2015-08-16 20:55:51'),
+(71, '150403', 'Norgen', 'Balo', 'Tapel', '1', 9, '2015-08-17 04:56:18', '2015-08-16 20:56:18'),
+(72, '150501', 'Javin Jet', 'Agustin', 'Tevar', '1', 4, '2015-08-17 04:56:42', '2015-08-16 20:56:42'),
+(73, '150502', 'Juan Basilio', 'Teves', 'Espinoza', '1', 9, '2015-08-17 04:57:05', '2015-08-16 20:57:05'),
+(74, '150503', 'Xander John', 'Mina', 'Dacyon', '1', 1, '2015-08-16 19:39:48', '2015-08-16 19:39:48'),
+(75, '150506', 'John Jason', 'Marquez', 'Baladiang', '1', 1, '2015-08-16 19:39:48', '2015-08-16 19:39:48'),
+(76, '150801', 'Vincent Jake', NULL, 'Calag', '1', 1, '2015-08-16 19:39:48', '2015-08-16 19:39:48'),
+(77, '150702', 'Rehmard', 'R.', 'Butad', '1', 10, '2015-08-26 03:19:41', '2015-08-25 19:19:41'),
+(78, '150703', 'Arbill', 'L', 'Aque', '1', 10, '2015-08-26 03:20:37', '2015-08-25 19:20:37'),
+(79, '150704', 'Kathyren', 'B.', 'Olario', '1', 10, '2015-08-26 03:21:05', '2015-08-25 19:21:05'),
+(80, '150705', 'Joval', '', 'Yu', '1', 10, '2015-08-26 05:44:15', '2015-08-25 21:44:15'),
+(81, '150706', 'Bon Jovie', '', 'Cueva', '1', 10, '2015-08-26 03:21:13', '2015-08-25 19:21:13'),
+(82, '150707', 'Madison ', '', 'Amispero', '1', 10, '2015-08-26 03:21:19', '2015-08-25 19:21:19'),
+(83, '150708', 'Lendon', 'B', 'Sales', '1', 10, '2015-08-26 03:21:24', '2015-08-25 19:21:24'),
+(84, '150709', 'Drex Maurice', 'M', 'Reyes', '1', 10, '2015-08-26 03:21:31', '2015-08-25 19:21:31'),
+(85, '150710', 'Bienvenido', '', 'Omosura', '1', 10, '2015-08-26 03:21:37', '2015-08-25 19:21:37'),
+(86, '150711', 'Anjo', 'A', 'Antoque', '1', 10, '2015-08-26 03:21:45', '2015-08-25 19:21:45'),
+(87, '150712', 'Taryan Gail', 'A', 'Bantugan ', '1', 10, '2015-08-26 03:21:49', '2015-08-25 19:21:49'),
+(88, '150714', 'Charles Gil', 'P', 'Daitol', '1', 10, '2015-08-26 05:24:14', '2015-08-25 21:24:14'),
+(89, '150715', 'Noel', '', 'Dacara', '1', 10, '2015-08-26 05:24:34', '2015-08-25 21:24:34'),
+(90, '150713', 'Moises Carlo', 'M', 'Echavez', '1', 10, '2015-08-26 05:41:12', '2015-08-25 21:41:12'),
+(91, '150701', 'Alfonso', '', 'Torres', '1', 10, '2015-08-25 21:39:09', '2015-08-25 21:39:09');
 
 -- --------------------------------------------------------
 
@@ -145,7 +161,7 @@ INSERT INTO `employees` (`id`, `employee_id`, `first_name`, `middle_name`, `last
 
 CREATE TABLE IF NOT EXISTS `employee_dtr` (
 `id` int(10) unsigned NOT NULL,
-  `employee_id` int(10) unsigned NOT NULL,
+  `employee_id` varchar(11) NOT NULL,
   `start_of_duty` datetime DEFAULT NULL,
   `first_out` datetime DEFAULT NULL,
   `first_in` datetime DEFAULT NULL,
@@ -159,7 +175,7 @@ CREATE TABLE IF NOT EXISTS `employee_dtr` (
   `overbreak` time NOT NULL DEFAULT '00:00:00',
   `remarks` varchar(25) DEFAULT NULL,
   `shift_id` int(10) unsigned NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5294 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9604 ;
 
 -- --------------------------------------------------------
 
@@ -175,7 +191,7 @@ CREATE TABLE IF NOT EXISTS `employee_shifts` (
   `date_to` date DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=101 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=117 ;
 
 --
 -- Dumping data for table `employee_shifts`
@@ -261,7 +277,22 @@ INSERT INTO `employee_shifts` (`id`, `employee_id`, `shift_id`, `date_from`, `da
 (97, 39, 32, '2015-08-12', '2015-08-12', '2015-08-20 07:22:37', '0000-00-00 00:00:00'),
 (98, 39, 12, '2015-08-13', '2015-08-31', '2015-08-20 07:23:39', '0000-00-00 00:00:00'),
 (99, 74, 8, '2015-08-05', '2015-08-08', '2015-08-20 07:28:49', '0000-00-00 00:00:00'),
-(100, 74, 19, '2015-08-10', '2015-09-01', '2015-08-20 07:29:24', '0000-00-00 00:00:00');
+(100, 74, 19, '2015-08-10', '2015-09-01', '2015-08-20 07:29:24', '0000-00-00 00:00:00'),
+(101, 77, 10, '2015-07-01', '2015-12-31', '2015-08-26 02:53:59', '0000-00-00 00:00:00'),
+(102, 79, 10, '2015-07-01', '2015-12-31', '2015-08-26 03:04:11', '0000-00-00 00:00:00'),
+(103, 81, 10, '2015-07-01', '2015-12-31', '2015-08-26 03:15:21', '2015-08-25 19:15:21'),
+(104, 82, 10, '2015-07-01', '2015-12-31', '2015-08-26 03:04:58', '2015-08-25 19:04:58'),
+(105, 83, 10, '2015-07-01', '2015-12-31', '2015-08-26 03:05:20', '0000-00-00 00:00:00'),
+(106, 84, 10, '2015-07-01', '2015-12-31', '2015-08-26 03:05:37', '0000-00-00 00:00:00'),
+(107, 85, 10, '2015-07-01', '2015-12-31', '2015-08-26 03:05:56', '0000-00-00 00:00:00'),
+(108, 86, 10, '2015-07-01', '2015-12-31', '2015-08-26 03:06:14', '0000-00-00 00:00:00'),
+(109, 87, 10, '2015-07-01', '2015-12-31', '2015-08-26 03:06:31', '0000-00-00 00:00:00'),
+(111, 78, 10, '2015-07-01', '2015-12-31', '2015-08-26 03:08:16', '0000-00-00 00:00:00'),
+(112, 88, 10, '2015-07-01', '2015-12-31', '2015-08-26 05:21:39', '0000-00-00 00:00:00'),
+(113, 89, 10, '2015-07-01', '2015-12-31', '2015-08-26 05:22:03', '0000-00-00 00:00:00'),
+(114, 90, 10, '2015-07-01', '2015-12-31', '2015-08-26 05:22:18', '0000-00-00 00:00:00'),
+(115, 91, 10, '2015-07-01', '2015-12-31', '2015-08-26 05:39:30', '0000-00-00 00:00:00'),
+(116, 80, 10, '2015-07-01', '2015-12-31', '2015-08-26 05:44:44', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -273,7 +304,7 @@ CREATE TABLE IF NOT EXISTS `employee_shift_days` (
 `id` int(10) unsigned NOT NULL,
   `employee_shift_id` int(10) unsigned NOT NULL,
   `day` enum('mon','tue','wed','thu','fri','sat','sun') NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=636 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=726 ;
 
 --
 -- Dumping data for table `employee_shift_days`
@@ -654,7 +685,82 @@ INSERT INTO `employee_shift_days` (`id`, `employee_shift_id`, `day`) VALUES
 (632, 55, 'tue'),
 (633, 55, 'wed'),
 (634, 55, 'thu'),
-(635, 55, 'fri');
+(635, 55, 'fri'),
+(636, 101, 'mon'),
+(637, 101, 'tue'),
+(638, 101, 'wed'),
+(639, 101, 'thu'),
+(640, 101, 'fri'),
+(641, 102, 'mon'),
+(642, 102, 'tue'),
+(643, 102, 'wed'),
+(644, 102, 'thu'),
+(645, 102, 'fri'),
+(656, 104, 'mon'),
+(657, 104, 'tue'),
+(658, 104, 'wed'),
+(659, 104, 'thu'),
+(660, 104, 'fri'),
+(661, 105, 'mon'),
+(662, 105, 'tue'),
+(663, 105, 'wed'),
+(664, 105, 'thu'),
+(665, 105, 'fri'),
+(666, 106, 'mon'),
+(667, 106, 'tue'),
+(668, 106, 'wed'),
+(669, 106, 'thu'),
+(670, 106, 'fri'),
+(671, 107, 'mon'),
+(672, 107, 'tue'),
+(673, 107, 'wed'),
+(674, 107, 'thu'),
+(675, 107, 'fri'),
+(676, 108, 'mon'),
+(677, 108, 'tue'),
+(678, 108, 'wed'),
+(679, 108, 'thu'),
+(680, 108, 'fri'),
+(681, 109, 'mon'),
+(682, 109, 'tue'),
+(683, 109, 'wed'),
+(684, 109, 'thu'),
+(685, 109, 'fri'),
+(691, 111, 'mon'),
+(692, 111, 'tue'),
+(693, 111, 'wed'),
+(694, 111, 'thu'),
+(695, 111, 'fri'),
+(696, 103, 'mon'),
+(697, 103, 'tue'),
+(698, 103, 'wed'),
+(699, 103, 'thu'),
+(700, 103, 'fri'),
+(701, 112, 'mon'),
+(702, 112, 'tue'),
+(703, 112, 'wed'),
+(704, 112, 'thu'),
+(705, 112, 'fri'),
+(706, 113, 'mon'),
+(707, 113, 'tue'),
+(708, 113, 'wed'),
+(709, 113, 'thu'),
+(710, 113, 'fri'),
+(711, 114, 'mon'),
+(712, 114, 'tue'),
+(713, 114, 'wed'),
+(714, 114, 'thu'),
+(715, 114, 'fri'),
+(716, 115, 'mon'),
+(717, 115, 'tue'),
+(718, 115, 'wed'),
+(719, 115, 'thu'),
+(720, 115, 'fri'),
+(721, 116, 'mon'),
+(722, 116, 'tue'),
+(723, 116, 'wed'),
+(724, 116, 'thu'),
+(725, 116, 'fri');
 
 -- --------------------------------------------------------
 
@@ -762,7 +868,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `username`, `password`, `user_type`, `remember_token`, `created_at`, `updated_at`) VALUES
-(7, 'Rosemale-John II C. Villacorta', 'rosemalejohn@gmail.com', 'rosemalejohn', '$2y$10$FuqYG4eDr6kTW00RwvWVJ.EHPPkVrOO273CQ7mRROIRYSBVZ9NrPG', 'admin', '4YNgiOFZUIoioffK0PbvuOfdyJvav3NjOEj2imihKzI3eiJukgNRHPKX7wQY', '2015-08-14 23:34:32', '2015-08-24 18:47:56'),
+(7, 'Rosemale-John II C. Villacorta', 'rosemalejohn@gmail.com', 'rosemalejohn', '$2y$10$FuqYG4eDr6kTW00RwvWVJ.EHPPkVrOO273CQ7mRROIRYSBVZ9NrPG', 'admin', 'gfwhNEWZ8V2F15cAN31inLbJOLYrtiQBd3JOaU3gVnFiGaghAOMGSnkTJnKs', '2015-08-14 23:34:32', '2015-08-25 18:46:32'),
 (8, 'Nepthaly Talavera', 'nepthaly.talavera@hpoutsourcinginc.com', 'ntalavera', '$2y$10$SLQ2sCBXWHB6MKzhsHMBxOj5glIkOrSMjCRPAM1EbR9.jLfXmDe1m', 'admin', NULL, '2015-08-17 17:56:03', '2015-08-17 17:56:03');
 
 --
@@ -825,27 +931,27 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `employees`
 --
 ALTER TABLE `employees`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=77;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=92;
 --
 -- AUTO_INCREMENT for table `employee_dtr`
 --
 ALTER TABLE `employee_dtr`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5294;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9604;
 --
 -- AUTO_INCREMENT for table `employee_shifts`
 --
 ALTER TABLE `employee_shifts`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=101;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=117;
 --
 -- AUTO_INCREMENT for table `employee_shift_days`
 --
 ALTER TABLE `employee_shift_days`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=636;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=726;
 --
 -- AUTO_INCREMENT for table `shifts`
 --
@@ -870,8 +976,8 @@ ADD CONSTRAINT `employees_ibfk_1` FOREIGN KEY (`department_id`) REFERENCES `depa
 -- Constraints for table `employee_dtr`
 --
 ALTER TABLE `employee_dtr`
-ADD CONSTRAINT `employee_dtr_ibfk_1` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`employee_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-ADD CONSTRAINT `employee_dtr_ibfk_2` FOREIGN KEY (`shift_id`) REFERENCES `shifts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ADD CONSTRAINT `employee_dtr_ibfk_2` FOREIGN KEY (`shift_id`) REFERENCES `shifts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+ADD CONSTRAINT `employee_dtr_ibfk_3` FOREIGN KEY (`employee_id`) REFERENCES `employees` (`employee_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `employee_shifts`

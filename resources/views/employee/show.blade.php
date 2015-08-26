@@ -17,6 +17,13 @@
         Shifts
         <div class="pull-right">
             <div class="btn-group">
+                <a href="/employees/{{ $employee->employee_id }}/edit">
+                    <button type="button" class="btn btn-success btn-xs">
+                        <i class="fa fa-edit"></i> Update employee
+                    </button>
+                </a>
+            </div>
+            <div class="btn-group">
                 <a href="/shifts/create">
                     <button type="button" class="btn btn-danger btn-xs">
                         <i class="fa fa-plus"></i> Add new shift

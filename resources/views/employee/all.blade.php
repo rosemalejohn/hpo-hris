@@ -14,9 +14,9 @@
         HPO List of Employees
         <div class="pull-right">
             <div class="btn-group">
-                <a href="/import-employees">
+                <a href="/employees/create">
                     <button type="button" class="btn btn-primary btn-xs">
-                        <i class="fa fa-plus"></i> Import from excel
+                        <i class="fa fa-plus"></i> Add new employee
                     </button>
                 </a>
             </div>
@@ -39,7 +39,7 @@
                     <tr class="odd gradeX">
                         <td><a href="/employees/{{ $employee->employee_id }}">{{ $employee->employee_id }}</a></td>
                         <td>{{ $employee->first_name.' '.$employee->middle_name.' '.$employee->last_name }}</td>
-                        <td>{{ $employee->department->name }}</td>
+                        <td><a href="/departments/{{ $employee->department->department_code }}">{{ $employee->department->name }}</a></td>
                         <td>
                             <a href="/employees/{{ $employee->employee_id }}/edit">
                                 <button class="btn btn-xs btn-warning"><i class="fa fa-edit"></i> Update</button>

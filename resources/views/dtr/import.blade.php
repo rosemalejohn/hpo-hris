@@ -20,11 +20,11 @@
                     </div>
                     <div class="form-group">
                         <label>Date from</label>
-                        <input type="text" class="form-control" id="dateFrom" name="date_from" placeholder="Inclusive dates"/>
+                        <input type="text" class="form-control" id="dateFrom" name="date_from" placeholder="Inclusive dates" value="{{ old('date_from') }}"/>
                     </div>
                     <div class="form-group">
                         <label>Date to</label>
-                        <input type="text" class="form-control" id="dateTo" name="date_to" placeholder="Inclusive dates"/>
+                        <input type="text" class="form-control" id="dateTo" name="date_to" placeholder="Inclusive dates" value="{{ old('date_to') }}"/>
                     </div>
                     <hr>
                     <button type="submit" id="loadingButton" data-loading-text="Importing..." class="btn btn-primary"><i class="fa fa-upload"></i> Upload</button>

@@ -44,10 +44,13 @@ class EmployeeController extends Controller
      * @param  Request  $request
      * @return Response
      */
+
     public function store(Request $request)
     {
+        // dd($request->all());
         if($this->validator($request->all())->fails()){
             flash()->error("Ooppss! You've got an error. Check the fields below.");
+            return redirect()->back()->withInput();
         } else{
             Employee::create($request->all());
             flash()->success("Employee successfully added!");
@@ -212,8 +215,7 @@ class EmployeeController extends Controller
     protected function validator($data){
         return Validator::make($data, [
             'employee_id' => 'required',
-            'first_name' => 'required|min:6|max:45',
-            'middle_name' => 'required|min:6|max:45',
+            'first_name' => 'required',
             'department_id' => 'required'
         ]);
     }
