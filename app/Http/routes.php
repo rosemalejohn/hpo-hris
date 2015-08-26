@@ -11,15 +11,15 @@
 |
 */
 
-Route::group(['middleware' => 'guest'], function(){
+Route::group(['middleware' => 'guest', 'prefix' => 'auth'], function(){
 
-    get('auth/login', 'Auth\AuthController@getLogin');
+    get('login', 'Auth\AuthController@getLogin');
 
-    post('auth/login', 'Auth\AuthController@postLogin');
+    post('login', 'Auth\AuthController@postLogin');
 
-    get('auth/register', 'Auth\AuthController@getRegister');
+    get('register', 'Auth\AuthController@getRegister');
 
-    post('auth/register', 'Auth\AuthController@postRegister');
+    post('register', 'Auth\AuthController@postRegister');
     
 });
 
