@@ -20,4 +20,8 @@ class EmployeeDtr extends Model
     public function shift(){
     	return $this->belongsTo(Shift::class);
     }
+
+    public function isAbsent(){
+        return $this->remarks == 'ABSENT';
+    }
 }

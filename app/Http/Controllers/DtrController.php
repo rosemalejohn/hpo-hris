@@ -146,8 +146,7 @@ class DtrController extends Controller
                             $data = array_add($data, $value, $date.' '.$break);
                         }
                     } else{
-                        $remarks = $remarks.' ABSENT';
-                        $data = array_add($data, 'remarks', $remarks);
+                        $data = array_add($data, 'remarks', 'ABSENT');
                     }
 
                     try{
@@ -216,7 +215,6 @@ class DtrController extends Controller
                 } else{
                     if(!$employee->shifts->isEmpty()){ //check if the employee has available shifts
                         if($currentDate != $user['date']){
-                            dump($currentDate.' != '.$user['date']);
                             $newUser['user'] = $userID;
                             $newUser['date'] = $currentDate;
                             $newUser['attendance'] = null;
@@ -224,7 +222,6 @@ class DtrController extends Controller
 
                             $currentDate = incrementDateByOneDay($currentDate);
                         } elseif($currentDate == $user['date']){
-                            dump($currentDate.' == '.$user['date']);
                             $this->store($user, $employee->shifts);
                             ++$index;
                             $currentDate = incrementDateByOneDay($currentDate);
@@ -234,7 +231,6 @@ class DtrController extends Controller
                     }
                 }
             }
-
         }
     }
 
@@ -283,6 +279,7 @@ class DtrController extends Controller
                 ++$summarySheetIndex;
 
                 foreach($employee->employee_dtrs as $employee_dtr){
+                    // dd($employee_dtr);
                     //assign the data to the variables
                     $date = date('Y-m-d', strtotime($employee_dtr->start_of_duty));
                     $login = date('H:i:s', strtotime($employee_dtr->start_of_duty));
@@ -294,6 +291,10 @@ class DtrController extends Controller
                     $shift_to = $employee_dtr->shift->shift_to;
                     
                     //add a new row and put all the gathered datas
+                    if($employee_dtr->remarks == 'ABSENT'){
+                        $login = 'ABSENT';
+                        $logout = 'ABSENT';
+                    }
                     $row = $raw_sheet->appendRow($rawSheetIndex, [
                         $staffname, $date, $login, $logout, $shift_from, $shift_to, $late, stringToMinutes($late), $undertime, stringToMinutes($undertime), null, null, null, $employee_dtr->remarks
                     ]);
