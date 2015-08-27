@@ -327,7 +327,7 @@ class DtrController extends Controller
                         $lateToMinutes = 480;
                     }
                     $row = $raw_sheet->appendRow($rawSheetIndex, [
-                        $staffname, $date, $login, $logout, $shift_from, $shift_to, $late, $lateToMinutes, $undertime, $undertimeToMinutes, null, null, null, $employee_dtr->remarks
+                        $staffname, $date, $login, $logout, $employee_dtr->remarks, $shift_from, $shift_to, $late, $lateToMinutes, $undertime, $undertimeToMinutes
                     ]);
                     $staffname = null;
                     ++$rawSheetIndex; //increment the index to know what row are we
