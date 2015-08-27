@@ -17,4 +17,8 @@ class Department extends Model
         return $this->hasMany('App\Employee');
     }
 
+    public function isKiniteque(){
+    	return $this->department_code === 'KSI';
+    }
+
 }

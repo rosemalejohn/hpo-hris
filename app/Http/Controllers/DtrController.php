@@ -106,7 +106,14 @@ class DtrController extends Controller
                         }
 
                         if($start_time < $start_of_duty){ //check if the employee is late
-                            $data = array_add($data, 'late', computeTimeInterval($start_time, $start_of_duty)->format("%H:%I:%S"));
+                            $employee = Employee::where('employee_id', $userID)->first();
+                            $late = computeTimeInterval($start_time, $start_of_duty)->format("%H:%I:%S");
+                            if ($employee->department->isKiniteque()) {
+                                if($late < '00:16:00'){
+                                    $late = "00:00:00";
+                                }
+                            }
+                            $data = array_add($data, 'late', $late);
                         }
                         if($end_of_duty < $end_time){ //check if the employee has undertime
                             $data = array_add($data, 'undertime', computeTimeInterval($end_of_duty, $end_time)->format("%H:%I:%S"));
@@ -207,30 +214,36 @@ class DtrController extends Controller
             $datesArray = [];
 
             $index = 0;
-            while($index < count($employees)){
-                $user = $employees[$index];
-
-                if(empty($employee)){
-                    break;
-                } else{
-                    if(!$employee->shifts->isEmpty()){ //check if the employee has available shifts
-                        if($currentDate != $user['date']){
-                            $newUser['user'] = $userID;
-                            $newUser['date'] = $currentDate;
-                            $newUser['attendance'] = null;
-                            $this->store($newUser, $employee->shifts);
-
-                            $currentDate = incrementDateByOneDay($currentDate);
-                        } elseif($currentDate == $user['date']){
-                            $this->store($user, $employee->shifts);
-                            ++$index;
-                            $currentDate = incrementDateByOneDay($currentDate);
-                        }
-                    } else{
+            do {
+                try {
+                    $user = $employees[$index];
+                    if (empty($employee)) {
                         break;
+                    } else {
+                        if (!$employee->shifts->isEmpty()) {
+                            if ($currentDate != $user['date']) {
+                                $newUser['user'] = $userID;
+                                $newUser['date'] = $currentDate;
+                                $newUser['attendance'] = null;
+                                $this->store($newUser, $employee->shifts);
+                                $currentDate = incrementDateByOneDay($currentDate);
+                            } elseif($currentDate == $user['date']) {
+                                $this->store($user, $employee->shifts);
+                                ++$index;
+                                $currentDate = incrementDateByOneDay($currentDate);
+                            }
+                        } else {
+                            break;
+                        }
                     }
+                } catch(ErrorException $ex) {
+                    $newUser['user'] = $userID;
+                    $newUser['date'] = $currentDate;
+                    $newUser['attendance'] = null;
+                    $this->store($newUser, $employee->shifts);
+                    $currentDate = incrementDateByOneDay($currentDate);
                 }
-            }
+            } while ($currentDate <= $this->date_to);
         }
     }
 
@@ -286,17 +299,22 @@ class DtrController extends Controller
                     $logout = date('H:i:s', strtotime($employee_dtr->end_of_duty));
                     $late = $employee_dtr->late;
                     $undertime = $employee_dtr->undertime;
+                    $lateToMinutes = stringToMinutes($late);
 
                     $shift_from = $employee_dtr->shift->shift_from;
                     $shift_to = $employee_dtr->shift->shift_to;
                     
+                    if($lateToMinutes > 200){
+                        $lateToMinutes = 240;
+                    }
                     //add a new row and put all the gathered datas
                     if($employee_dtr->remarks == 'ABSENT'){
                         $login = 'ABSENT';
                         $logout = 'ABSENT';
+                        $lateToMinutes = 480;
                     }
                     $row = $raw_sheet->appendRow($rawSheetIndex, [
-                        $staffname, $date, $login, $logout, $shift_from, $shift_to, $late, stringToMinutes($late), $undertime, stringToMinutes($undertime), null, null, null, $employee_dtr->remarks
+                        $staffname, $date, $login, $logout, $shift_from, $shift_to, $late, $lateToMinutes, $undertime, stringToMinutes($undertime), null, null, null, $employee_dtr->remarks
                     ]);
                     $staffname = null;
                     ++$rawSheetIndex; //increment the index to know what row are we
