@@ -37,7 +37,6 @@ trait RegistersUsers
         }
         $user = $this->create($request->all());
         Auth::login($user);
-        flash()->success("Welcome ".$user->username."! You just created your account. Thank you for using the system.");
         return redirect($this->redirectPath());
     }
 }
