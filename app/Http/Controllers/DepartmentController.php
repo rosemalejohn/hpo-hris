@@ -43,10 +43,10 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        if($this->validator($request->all())->fails()){
+        if ($this->validator($request->all())->fails()) {
             flash()->error('There is something wrong with the inputs.');
             return redirect()->back();
-        } else{
+        } else {
             Department::create($request->all());
             flash()->success("Department successfully added!");
             return redirect()->back();
@@ -62,10 +62,10 @@ class DepartmentController extends Controller
     public function show($id)
     {
         $department = Department::where('department_code', $id)->first();
-        if(empty($department)){
+        if (empty($department)) {
             flash()->error("There is no department like that in HPO");
             return redirect()->back();
-        }else{
+        } else {
             $page_title = 'department';
             $data = $department;
             return view('department.show')->with(compact('page_title', 'department', 'data'));
@@ -81,7 +81,7 @@ class DepartmentController extends Controller
     public function edit($id)
     {
         $department = Department::where('department_code', $id)->first();
-        if(empty($department)){
+        if (empty($department)) {
             flash()->error("Department not found");
             return redirect()->back();
         }
@@ -104,7 +104,7 @@ class DepartmentController extends Controller
         $department->name = $request->input('name');
         $department->description = $request->input('description');
 
-        if($department->save()){
+        if ($department->save()) {
             flash()->success($request->name.' has been successfully updated!');
             return redirect()->to('/departments');
         }
@@ -124,7 +124,8 @@ class DepartmentController extends Controller
         //
     }
 
-    protected function validator($data){
+    protected function validator($data)
+    {
         return Validator::make($data, [
                 'department_code' => 'required',
                 'name' => 'required',

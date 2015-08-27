@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 26, 2015 at 07:54 AM
+-- Generation Time: Aug 27, 2015 at 04:38 AM
 -- Server version: 5.6.20
 -- PHP Version: 5.5.15
 
@@ -175,7 +175,7 @@ CREATE TABLE IF NOT EXISTS `employee_dtr` (
   `overbreak` time NOT NULL DEFAULT '00:00:00',
   `remarks` varchar(25) DEFAULT NULL,
   `shift_id` int(10) unsigned NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9604 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=28494 ;
 
 -- --------------------------------------------------------
 
@@ -221,7 +221,7 @@ INSERT INTO `employee_shifts` (`id`, `employee_id`, `shift_id`, `date_from`, `da
 (21, 28, 14, '2015-07-01', '2015-12-31', '2015-08-17 01:43:51', '2015-08-16 17:43:51'),
 (22, 29, 4, '2015-07-01', '2015-12-31', '2015-08-17 01:43:51', '2015-08-16 17:43:51'),
 (23, 30, 8, '2015-07-01', '2015-12-31', '2015-08-17 01:43:51', '2015-08-16 17:43:51'),
-(24, 31, 4, '2015-07-01', '2015-08-06', '2015-08-20 05:53:41', '2015-08-19 21:53:41'),
+(24, 31, 4, '2015-07-01', '2015-12-31', '2015-08-27 01:28:06', '2015-08-26 17:28:06'),
 (25, 32, 9, '2015-07-01', '2015-12-31', '2015-08-17 01:43:52', '2015-08-16 17:43:51'),
 (26, 33, 4, '2015-07-01', '2015-12-31', '2015-08-17 01:43:52', '2015-08-16 17:43:52'),
 (27, 34, 4, '2015-07-01', '2015-12-31', '2015-08-17 01:43:52', '2015-08-16 17:43:52'),
@@ -263,9 +263,7 @@ INSERT INTO `employee_shifts` (`id`, `employee_id`, `shift_id`, `date_from`, `da
 (74, 66, 26, '2015-07-01', '2015-12-31', '2015-08-20 02:20:03', '0000-00-00 00:00:00'),
 (75, 66, 27, '2015-07-01', '2015-12-31', '2015-08-20 02:24:53', '0000-00-00 00:00:00'),
 (85, 67, 8, '2015-08-04', '2015-08-28', '2015-08-20 05:52:54', '0000-00-00 00:00:00'),
-(86, 31, 8, '2015-08-07', '2015-12-07', '2015-08-20 06:04:42', '2015-08-19 22:04:42'),
 (87, 51, 11, '2015-08-11', '2015-12-31', '2015-08-20 06:00:35', '0000-00-00 00:00:00'),
-(88, 31, 4, '2015-08-08', '2015-12-31', '2015-08-20 06:05:25', '0000-00-00 00:00:00'),
 (89, 66, 19, '2015-08-07', '2015-08-07', '2015-08-20 06:21:49', '0000-00-00 00:00:00'),
 (90, 35, 19, '2015-08-14', '2015-08-14', '2015-08-20 06:24:22', '0000-00-00 00:00:00'),
 (91, 30, 29, '2015-08-08', '2015-08-08', '2015-08-20 06:38:24', '0000-00-00 00:00:00'),
@@ -304,7 +302,7 @@ CREATE TABLE IF NOT EXISTS `employee_shift_days` (
 `id` int(10) unsigned NOT NULL,
   `employee_shift_id` int(10) unsigned NOT NULL,
   `day` enum('mon','tue','wed','thu','fri','sat','sun') NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=726 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=753 ;
 
 --
 -- Dumping data for table `employee_shift_days`
@@ -403,11 +401,6 @@ INSERT INTO `employee_shift_days` (`id`, `employee_shift_id`, `day`) VALUES
 (345, 27, 'wed'),
 (346, 27, 'thu'),
 (347, 27, 'fri'),
-(348, 15, 'mon'),
-(349, 15, 'tue'),
-(350, 15, 'wed'),
-(351, 15, 'thu'),
-(352, 15, 'fri'),
 (353, 46, 'mon'),
 (354, 46, 'tue'),
 (355, 46, 'wed'),
@@ -418,11 +411,6 @@ INSERT INTO `employee_shift_days` (`id`, `employee_shift_id`, `day`) VALUES
 (360, 85, 'wed'),
 (361, 85, 'thu'),
 (362, 85, 'fri'),
-(363, 24, 'mon'),
-(364, 24, 'tue'),
-(365, 24, 'wed'),
-(366, 24, 'thu'),
-(367, 24, 'fri'),
 (373, 18, 'mon'),
 (374, 18, 'tue'),
 (375, 18, 'wed'),
@@ -433,11 +421,6 @@ INSERT INTO `employee_shift_days` (`id`, `employee_shift_id`, `day`) VALUES
 (380, 4, 'wed'),
 (381, 4, 'thu'),
 (382, 4, 'fri'),
-(383, 56, 'mon'),
-(384, 56, 'tue'),
-(385, 56, 'wed'),
-(386, 56, 'thu'),
-(387, 56, 'fri'),
 (388, 26, 'mon'),
 (389, 26, 'tue'),
 (390, 26, 'wed'),
@@ -458,26 +441,11 @@ INSERT INTO `employee_shift_days` (`id`, `employee_shift_id`, `day`) VALUES
 (405, 1, 'wed'),
 (406, 1, 'thu'),
 (407, 1, 'fri'),
-(408, 43, 'mon'),
-(409, 43, 'tue'),
-(410, 43, 'wed'),
-(411, 43, 'thu'),
-(412, 43, 'fri'),
 (413, 87, 'mon'),
 (414, 87, 'tue'),
 (415, 87, 'wed'),
 (416, 87, 'thu'),
 (417, 87, 'fri'),
-(418, 86, 'mon'),
-(419, 86, 'tue'),
-(420, 86, 'wed'),
-(421, 86, 'thu'),
-(422, 86, 'fri'),
-(423, 88, 'mon'),
-(424, 88, 'tue'),
-(425, 88, 'wed'),
-(426, 88, 'thu'),
-(427, 88, 'fri'),
 (428, 50, 'mon'),
 (429, 50, 'tue'),
 (430, 50, 'wed'),
@@ -571,11 +539,6 @@ INSERT INTO `employee_shift_days` (`id`, `employee_shift_id`, `day`) VALUES
 (518, 95, 'wed'),
 (519, 95, 'thu'),
 (520, 95, 'fri'),
-(521, 49, 'mon'),
-(522, 49, 'tue'),
-(523, 49, 'wed'),
-(524, 49, 'thu'),
-(525, 49, 'fri'),
 (526, 13, 'mon'),
 (527, 13, 'tue'),
 (528, 13, 'wed'),
@@ -760,7 +723,34 @@ INSERT INTO `employee_shift_days` (`id`, `employee_shift_id`, `day`) VALUES
 (722, 116, 'tue'),
 (723, 116, 'wed'),
 (724, 116, 'thu'),
-(725, 116, 'fri');
+(725, 116, 'fri'),
+(726, 43, 'mon'),
+(727, 43, 'tue'),
+(728, 43, 'wed'),
+(729, 43, 'thu'),
+(730, 43, 'fri'),
+(731, 43, 'sat'),
+(732, 49, 'mon'),
+(733, 49, 'tue'),
+(734, 49, 'wed'),
+(735, 49, 'thu'),
+(736, 49, 'fri'),
+(737, 49, 'sat'),
+(738, 15, 'mon'),
+(739, 15, 'tue'),
+(740, 15, 'wed'),
+(741, 15, 'thu'),
+(742, 15, 'fri'),
+(743, 24, 'mon'),
+(744, 24, 'tue'),
+(745, 24, 'wed'),
+(746, 24, 'thu'),
+(747, 24, 'fri'),
+(748, 56, 'mon'),
+(749, 56, 'tue'),
+(750, 56, 'wed'),
+(751, 56, 'thu'),
+(752, 56, 'fri');
 
 -- --------------------------------------------------------
 
@@ -868,7 +858,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `username`, `password`, `user_type`, `remember_token`, `created_at`, `updated_at`) VALUES
-(7, 'Rosemale-John II C. Villacorta', 'rosemalejohn@gmail.com', 'rosemalejohn', '$2y$10$FuqYG4eDr6kTW00RwvWVJ.EHPPkVrOO273CQ7mRROIRYSBVZ9NrPG', 'admin', 'gfwhNEWZ8V2F15cAN31inLbJOLYrtiQBd3JOaU3gVnFiGaghAOMGSnkTJnKs', '2015-08-14 23:34:32', '2015-08-25 18:46:32'),
+(7, 'Rosemale-John II C. Villacorta', 'rosemalejohn@gmail.com', 'rosemalejohn', '$2y$10$FuqYG4eDr6kTW00RwvWVJ.EHPPkVrOO273CQ7mRROIRYSBVZ9NrPG', 'admin', 'cmIrnRtEN5Bu7AjOWYnkI2FIoCF90u3HydBUXLVgWNt6EyIuCY4ErdiyjMPb', '2015-08-14 23:34:32', '2015-08-25 23:42:36'),
 (8, 'Nepthaly Talavera', 'nepthaly.talavera@hpoutsourcinginc.com', 'ntalavera', '$2y$10$SLQ2sCBXWHB6MKzhsHMBxOj5glIkOrSMjCRPAM1EbR9.jLfXmDe1m', 'admin', NULL, '2015-08-17 17:56:03', '2015-08-17 17:56:03');
 
 --
@@ -941,7 +931,7 @@ MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=92;
 -- AUTO_INCREMENT for table `employee_dtr`
 --
 ALTER TABLE `employee_dtr`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9604;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=28494;
 --
 -- AUTO_INCREMENT for table `employee_shifts`
 --
@@ -951,7 +941,7 @@ MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=117;
 -- AUTO_INCREMENT for table `employee_shift_days`
 --
 ALTER TABLE `employee_shift_days`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=726;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=753;
 --
 -- AUTO_INCREMENT for table `shifts`
 --

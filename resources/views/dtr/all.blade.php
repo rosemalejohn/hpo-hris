@@ -28,7 +28,7 @@
             </div>
             <div class="btn-group">
                 <a href="/dtr/export">
-                    <button type="button" class="btn btn-primary btn-xs">
+                    <button type="button" id="loadingButton" data-loading-text="Downloading..." class="btn btn-primary btn-xs">
                         <i class="fa fa-file"></i> Export DTR Report
                     </button>
                 </a>
