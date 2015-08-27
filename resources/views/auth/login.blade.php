@@ -8,12 +8,21 @@
                 <h3 class="panel-title">Please Sign In</h3>
             </div>
             <div class="panel-body">
-                @include('flash::message')
+                @if (count($errors) > 0)
+                    <div class="alert alert-danger">
+                        <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <form role="form" action="/auth/login" method="POST">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <fieldset>
                         <div class="form-group">
-                            <label>Username</label>
+                            <label>Email address</label>
                             <input class="form-control" placeholder="Email address" name="email" type="email" value="{{ old('email') }}" autofocus>
                         </div>
                         <div class="form-group">

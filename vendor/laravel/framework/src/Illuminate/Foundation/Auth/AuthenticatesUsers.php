@@ -60,7 +60,6 @@ trait AuthenticatesUsers
             $this->incrementLoginAttempts($request);
         }
 
-        flash()->success('Welcome, '.auth()->user()->username.'! Thanks for logging in.');
         return redirect($this->loginPath())
             ->withInput($request->only($this->loginUsername(), 'remember'))
             ->withErrors([
