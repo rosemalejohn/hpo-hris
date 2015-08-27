@@ -3,7 +3,10 @@
 
 function computeTimeInterval($out, $in)
 {
-    $interval = date_diff(new DateTime($in), new DateTime($out));
+    $out = new DateTime(date('H:i', strtotime($out)));
+    $in = new DateTime(date('H:i', strtotime($in)));
+
+    $interval = date_diff($in, $out);
     return $interval;
 }
 
@@ -36,8 +39,9 @@ function toMinutes($interval)
     $days = (int)$interval->format("%d");
     $hours = (int)$interval->format("%h");
     $minutes = (int)$interval->format("%i");
+    $seconds = (int)$interval->format("%s");
 
-    return round(computeToMinutes($days, $hours, $minutes), 2);
+    return computeToMinutes($days, $hours, $minutes, $seconds);
 }
 
 function stringToMinutes($datetime)
@@ -45,14 +49,15 @@ function stringToMinutes($datetime)
     $days = date('D', strtotime($datetime));
     $hours = date('H', strtotime($datetime));
     $minutes = date('i', strtotime($datetime));
+    $seconds = date('s', strtotime($datetime));
     
-    return (int)computeToMinutes($days, $hours, $minutes); 
+    return round(computeToMinutes($days, $hours, $minutes, $seconds), 0); 
 }
 
 //
-function computeToMinutes($days, $hours, $minutes)
+function computeToMinutes($days, $hours, $minutes, $seconds = 0)
 {
-    $total = (($days * 24) * 60) + ($hours * 60) + $minutes;
+    $total = (($days * 24) * 60) + ($hours * 60) + $minutes + ($seconds / 60);
     return $total;
 }
 

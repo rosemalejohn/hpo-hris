@@ -27,7 +27,7 @@
                         <input type="text" class="form-control" id="dateTo" name="date_to" placeholder="Inclusive dates" value="{{ old('date_to') }}"/>
                     </div>
                     <hr>
-                    <button type="submit" id="loadingButton" data-loading-text="Importing..." class="btn btn-primary"><i class="fa fa-upload"></i> Upload</button>
+                    <button type="submit" id="loadingButton" data-loading-text="Importing... This might take a while. Please be patient." class="btn btn-primary"><i class="fa fa-upload"></i> Upload</button>
                     <button type="reset" class="btn btn-default">Reset</button>
                 </form>
             </div>

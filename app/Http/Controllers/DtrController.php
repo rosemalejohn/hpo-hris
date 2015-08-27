@@ -51,7 +51,7 @@ class DtrController extends Controller
             $file->move(storage_path('app/imports'), $filename);
             try {
                 $this->setLogs($this->getData(storage_path('app/imports/'.$filename)));
-            } catch(ErrorException $ex) {
+            } catch (ErrorException $ex) {
                 flash()->error('An error occured. Check the excel file and try again.');
                 return redirect()->back();
             }
@@ -96,7 +96,7 @@ class DtrController extends Controller
                     
                     $data = ['employee_id' => $userID, 'start_of_duty' => $date.' '.$start_of_duty, 'end_of_duty' => $date.' '.$end_of_duty];
                     $break_key = ['first_out', 'first_in', 'second_out', 'second_in', 'third_out', 'third_in'];
-                    $breaks = array();
+                    $breaks = [];
 
                     $data = array_add($data, 'shift_id', $shift->id);
 
