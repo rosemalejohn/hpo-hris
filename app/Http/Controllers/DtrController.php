@@ -137,17 +137,21 @@ class DtrController extends Controller
                             $allowedBreaks = [0 => '00:15:00', 2 => '01:00:00', 4 => '00:30:00'];
                         }
 
-                        if ($attendance_log_count % 2 == 0) {
-                            foreach($break_out as $key => $out){
-                                try{
-                                    $total_overbreaks->add(computeBreaks($out, $break_in[$key], $allowedBreaks[$key]));
-                                }catch(ErrorException $ex){
-                                    $total_overbreaks->add(computeTimeInterval($out, $break_in[$key]));
-                                }
-                            }
+                        if ($shift->shift_to < $shift->shift_from) {
+                            $data = array_add($data, 'remarks', 'Graveyard shift');
                         } else {
-                            $remarks = $remarks.'ODDLogs';
-                            $data = array_add($data, 'remarks', $remarks);
+                            if ($attendance_log_count % 2 == 0) {
+                                foreach($break_out as $key => $out){
+                                    try{
+                                        $total_overbreaks->add(computeBreaks($out, $break_in[$key], $allowedBreaks[$key]));
+                                    }catch(ErrorException $ex){
+                                        $total_overbreaks->add(computeTimeInterval($out, $break_in[$key]));
+                                    }
+                                }
+                            } else {
+                                $remarks = $remarks.' ODDLogs';
+                                $data = array_add($data, 'remarks', $remarks);
+                            }
                         }
 
                         $data = array_add($data, 'overbreak', $total_overbreaks->format('H:i:s'));
@@ -202,7 +206,6 @@ class DtrController extends Controller
         });
 
         $collection = $collection->groupBy('user')->values()->all();
-
         return $collection;
     }
 
@@ -327,7 +330,7 @@ class DtrController extends Controller
                         $lateToMinutes = 480;
                     }
                     $row = $raw_sheet->appendRow($rawSheetIndex, [
-                        $staffname, $date, $login, $logout, $employee_dtr->remarks, $shift_from, $shift_to, $late, $lateToMinutes, $undertime, $undertimeToMinutes
+                        $staffname, $date, $login, $logout, $shift_from, $shift_to, $late, $lateToMinutes, $undertime, $undertimeToMinutes, null, $employee_dtr->remarks
                     ]);
                     $staffname = null;
                     ++$rawSheetIndex; //increment the index to know what row are we
