@@ -34,21 +34,21 @@ class DtrController extends Controller
         return view('dtr.import')->with(compact('page_title', 'data'));
     }
 
-    public function postImport(Request $request)
+    public function postImport(Request $request) //Import the excel file
     {
         $validator = Validator::make($request->all(), [
-            'file' => 'required|mimes:xlsx,xls',  //Excel file validation not yet done for mimes
+            'file' => 'required|mimes:xlsx,xls',
             'date_from' => 'required',
             'date_to' => 'required'
-        ]);
+        ]); //validates the excel file extension
 
-        if (!$validator->fails() && $request->file('file')->isValid()) {
-            $file = $request->file('file');
-            $this->date_from = $request->date_from;
+        if (!$validator->fails() && $request->file('file')->isValid()) { //if validation is OK
+            $file = $request->file('file'); //get the requested file
+            $this->date_from = $request->date_from; 
             $this->date_to = $request->date_to;
 
-            $filename = $this->nameFile($file->getClientOriginalName());
-            $file->move(storage_path('app/imports'), $filename);
+            $filename = $this->nameFile($file->getClientOriginalName()); //name the file
+            $file->move(storage_path('app/imports'), $filename); //move the imported file to the storage path
             try {
                 $this->setLogs($this->getData(storage_path('app/imports/'.$filename)));
             } catch (ErrorException $ex) {
@@ -63,10 +63,10 @@ class DtrController extends Controller
         }
     }
 
-    public function store($user, $shifts)
+    public function store($user, $shifts) //store the logs into the database
     {
-        $userID = $user['user'];
-        $date = $user['date'];
+        $userID = $user['user']; //biometric ID
+        $date = $user['date']; //attendance date
         $attendances = $user['attendance'];
         $late = 0;
         $undertime = 0;
@@ -209,13 +209,13 @@ class DtrController extends Controller
         return $collection;
     }
 
-    protected function nameFile($filename)
+    protected function nameFile($filename) //naming the file method
     {
         $newFileName = strtolower(date('Y-m-d-H-i-s')).$filename;
         return $newFileName;
     }
 
-    protected function setLogs($collection)
+    protected function setLogs($collection) //set the logs
     {
         foreach ($collection as $employees) {
             $userID = $employees->first()['user'];
@@ -224,7 +224,7 @@ class DtrController extends Controller
             $datesArray = [];
 
             $index = 0;
-            do {
+            do { //detecting absenses
                 try {
                     $user = $employees[$index];
                     if (empty($employee)) {
@@ -257,7 +257,7 @@ class DtrController extends Controller
         }
     }
 
-    public function exportToExcel()
+    public function exportToExcel() //write to excel and export the file for download
     {
         $path = storage_path('app/DTRTemplates/DTRSummary.xlsx'); //Path of the excel template to be loaded
 
