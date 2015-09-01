@@ -1,4 +1,4 @@
-## Hubport Outsourcing Philippines, Inc.
+## Hubport Outsourcing Philippines, Inc. Human Resource Information System
 
 Website link: (http://hpo-hris.hol.es/)
 
@@ -6,7 +6,7 @@ Website link: (http://hpo-hris.hol.es/)
 
 - Daily Time Record
 
-## Tools used:
+## Tools used
 
 - Laravel 5.1 PHP Framework (http://laravel.com/docs/5.1)
 - SB Admin 2 Bootstrap 3 Template (http://startbootstrap.com/template-overviews/sb-admin-2/)
