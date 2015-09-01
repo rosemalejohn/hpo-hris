@@ -16,3 +16,6 @@ Tools used:
 System requirements:
 - PHP >= 5.5.9
 
+Hostinger account
+- www.hpo-hris.hol.es
+- password: VXiSQy6mJ1u/f65&=P
