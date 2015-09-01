@@ -110,6 +110,13 @@ class ShiftController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $shift = Shift::find($id);
+        if ($shift) {
+            $shift->delete();
+            flash()->success("Shift ".$shift->description." successfully deleted!");
+        } else {
+            flash()->error("Something went wrong!");
+        }
+        return redirect()->back();
     }
 }

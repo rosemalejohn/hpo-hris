@@ -24,6 +24,7 @@
                         <th>End of duty</th>
                         <th>Working hours</th>
                         <th>Total break</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -34,6 +35,12 @@
                         <td>{{ $shift->shift_to }}</td>
                         <td>{{ $shift->working_hours }}</td>
                         <td>{{ $shift->break }}</td>
+                        <td>
+                            <button class="btn btn-warning btn-xs"><i class="fa fa-edit"></i></button>
+                            <a href="/shifts/{{ $shift->id }}/delete">
+                                <button class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></button>
+                            </a>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>

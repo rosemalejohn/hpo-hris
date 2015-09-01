@@ -10,6 +10,9 @@
         Import Excel File
     </div>
     <div class="panel-body">
+        <div class="alert alert-info">
+            <i class="fa fa-info fa-lg"></i> <strong> Remarks: </strong> If there are changes in employee shifts, you need to clear the DTR logs and import the excel file again for accurate results.
+        </div>
         <div class="row">
             <div class="col-lg-6">
                 <form role="form" action="/dtr" method="POST" enctype="multipart/form-data">

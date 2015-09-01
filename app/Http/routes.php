@@ -81,6 +81,8 @@ Route::group(['middleware' => 'auth'], function(){
 
     resource('shifts', 'ShiftController');
 
+    get('shifts/{id}/delete', 'ShiftController@destroy');
+
     get('/import-employees', 'EmployeeController@importEmployees');
 
     Route::group(['prefix' => 'api'], function(){
