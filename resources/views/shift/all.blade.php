@@ -3,7 +3,6 @@
 @section('stylesheet')
 <!-- DataTables CSS -->
 <link href="/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
-
 <!-- DataTables Responsive CSS -->
 <link href="/bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
 @stop
@@ -36,10 +35,10 @@
                         <td>{{ $shift->working_hours }}</td>
                         <td>{{ $shift->break }}</td>
                         <td>
-                            <button class="btn btn-warning btn-xs"><i class="fa fa-edit"></i></button>
-                            <a href="/shifts/{{ $shift->id }}/delete">
-                                <button class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></button>
+                            <a href="/shifts/{{ $shift->id }}/edit">
+                                <button class="btn btn-warning btn-xs"><i class="fa fa-edit"></i></button>
                             </a>
+                            <button onclick="deleteShift({{ $shift->id }})" class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></button>
                         </td>
                     </tr>
                     @endforeach
@@ -56,9 +55,24 @@
 <!-- DataTables JavaScript -->
 <script src="/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
 <script src="/bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript" src="/bower_components/bootbox.js/bootbox.js"></script>
 <script type="text/javascript">
 $('#employees-table').DataTable({
     responsive: true
 });
+
+function deleteShift(id) {
+    bootbox.confirm("You are about to delete a shift. All employees with this shift will be remove too. Do you want to continue?", function(result){
+        if (result) {
+            $.get('/shifts/'+id+'/delete', function(data){
+                bootbox.alert(data, function(){
+                    document.location.reload();
+                });
+            }); 
+        } else {
+            console.log("Something went wrong baby!");
+        }
+    });
+}
 </script>
 @stop

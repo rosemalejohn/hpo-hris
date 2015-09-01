@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>{{ (is_object($data) ? 'HPO Human Resource Information System' : $data) }}</title>
+    <title>HPO Human Resource</title>
 
     <link rel="icon" href="/img/logo.png"/>
     <!-- Bootstrap Core CSS -->

@@ -87,7 +87,9 @@ class ShiftController extends Controller
      */
     public function edit($id)
     {
-        //
+        $shift = Shift::find($id);
+        $data = $shift;
+        return view('shift.edit')->with(compact('shift', 'data'));
     }
 
     /**
@@ -99,7 +101,14 @@ class ShiftController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $shift = Shift::find($id);
+        if ($shift->update($request->all())) {
+            flash()->success($shift->description.' has been successfully updated.');
+            return redirect()->to('shifts/'.$id);
+        } else {
+            flash()->error($shift->description.' was not saved.');
+            return redirect()->back();
+        }
     }
 
     /**
@@ -110,13 +119,14 @@ class ShiftController extends Controller
      */
     public function destroy($id)
     {
+        // return response('Successfully deleted', 200, []);
         $shift = Shift::find($id);
         if ($shift) {
             $shift->delete();
-            flash()->success("Shift ".$shift->description." successfully deleted!");
+            return response('Successfully deleted', 200, []);
         } else {
-            flash()->error("Something went wrong!");
+            return response('Something went wrong!', 500, []);
         }
-        return redirect()->back();
+        
     }
 }
