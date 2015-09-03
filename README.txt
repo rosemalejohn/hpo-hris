@@ -19,3 +19,6 @@ System requirements:
 Hostinger account
 - www.hpo-hris.hol.es
 - password: VXiSQy6mJ1u/f65&=P
+
+Github account
+- https://github.com/rosemalejohn/hpo-hris
