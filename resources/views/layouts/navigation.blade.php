@@ -112,6 +112,18 @@
                 </ul>
                 <!-- /.nav-second-level -->
             </li>
+            <li class="">
+                <a href="#"><i class="fa fa-calendar fa-fw"></i> Holidays<span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level">
+                    <li>
+                        <a class="" href="/holidays">View all listed holidays</a>
+                    </li>
+                    <li>
+                        <a class="" href="/holidays/create">Add holidays</a>
+                    </li>
+                </ul>
+                <!-- /.nav-second-level -->
+            </li>
         </ul>
     </div>
     <!-- /.sidebar-collapse -->

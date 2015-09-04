@@ -105,3 +105,16 @@ Breadcrumbs::register('settings', function($breadcrumbs, $user)
 	$breadcrumbs->parent('profile');
 	$breadcrumbs->push('Settings', '/user/my-account');
 });
+
+// Holidays
+
+Breadcrumbs::register('holidays', function($breadcrumbs)
+{
+	$breadcrumbs->push('List of holidays', '/holidays');
+});
+
+Breadcrumbs::register('create-holidays', function($breadcrumbs)
+{
+	$breadcrumbs->parent('holidays');
+	$breadcrumbs->push('Add new holiday', '/holidays/create');
+});

@@ -12,6 +12,7 @@ use Date;
 use DateTime;
 use App\Employee;
 use App\EmployeeDtr;
+use App\Holiday;
 use Validator;
 
 class DtrController extends Controller
@@ -19,6 +20,8 @@ class DtrController extends Controller
     protected $date_from = null;
 
     protected $date_to = null;
+
+    protected $holidays;
     //
     public function index()
     {
@@ -55,6 +58,7 @@ class DtrController extends Controller
                 flash()->error('An error occured. Check the excel file and try again.');
                 return redirect()->back();
             }
+            // $this->setLogs($this->getData(storage_path('app/imports/'.$filename)));
             flash()->success('Import was successful. Employee logs saved to database.');
             return redirect()->back();
         } else {
@@ -99,6 +103,10 @@ class DtrController extends Controller
                     $breaks = [];
 
                     $data = array_add($data, 'shift_id', $shift->id);
+
+                    if ($this->holidays->contains('start', $date) || $this->holidays->contains('end', $date)) {
+                        $data = array_add($data, 'remarks', 'HOLIDAY');
+                    }
 
                     if ($attendances != null) {
                         foreach ($attendances as $key => $attendance) {
@@ -163,7 +171,7 @@ class DtrController extends Controller
                     } else {
                         $data = array_add($data, 'remarks', 'ABSENT');
                     }
-
+                    
                     try {
                         EmployeeDtr::create($data);
                     } catch(QueryException $ex) {
@@ -217,6 +225,10 @@ class DtrController extends Controller
 
     protected function setLogs($collection) //set the logs
     {
+        $this->holidays = Holiday::whereBetween('start', [$this->date_from, $this->date_to])
+            ->orWhereBetween('end', [$this->date_from, $this->date_to])
+            ->get();
+        // dd($this->holidays->contains('start', '2015-08-30') || $this->holidays->contains('end', '2015-08-30'));
         foreach ($collection as $employees) {
             $userID = $employees->first()['user'];
             $employee = Employee::where('employee_id', $userID)->first();

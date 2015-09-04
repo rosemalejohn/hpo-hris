@@ -81,6 +81,10 @@ Route::group(['middleware' => 'auth'], function(){
 
     resource('shifts', 'ShiftController');
 
+    // Holidays resource
+
+    resource('holidays', 'HolidayController');
+
     get('shifts/{id}/delete', 'ShiftController@destroy');
 
     get('/import-employees', 'EmployeeController@importEmployees');
@@ -88,6 +92,12 @@ Route::group(['middleware' => 'auth'], function(){
     Route::group(['prefix' => 'api'], function(){
 
         get('/employees/view-shift', 'EmployeeController@viewShift');
+
+        get('/holidays', 'HolidayController@getHolidays');
+
+        get('/holidays/{id}/edit', 'HolidayController@edit');
+
+        get('/holidays/{id}/delete', 'HolidayController@destroy');
 
     });
 

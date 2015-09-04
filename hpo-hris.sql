@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 01, 2015 at 08:33 AM
+-- Generation Time: Sep 04, 2015 at 07:48 AM
 -- Server version: 5.6.20
 -- PHP Version: 5.5.15
 
@@ -175,7 +175,7 @@ CREATE TABLE IF NOT EXISTS `employee_dtr` (
   `overbreak` time NOT NULL DEFAULT '00:00:00',
   `remarks` varchar(25) DEFAULT NULL,
   `shift_id` int(10) unsigned NOT NULL
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=51961 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=56619 ;
 
 -- --------------------------------------------------------
 
@@ -755,6 +755,32 @@ INSERT INTO `employee_shift_days` (`id`, `employee_shift_id`, `day`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `holidays`
+--
+
+CREATE TABLE IF NOT EXISTS `holidays` (
+`id` int(10) unsigned NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `start` date NOT NULL,
+  `end` date NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
+
+--
+-- Dumping data for table `holidays`
+--
+
+INSERT INTO `holidays` (`id`, `title`, `description`, `start`, `end`, `created_at`, `updated_at`) VALUES
+(2, 'Christmas', 'Birth of Jesus', '2015-12-25', '2015-12-25', '2015-09-03 19:24:27', '2015-09-03 19:24:27'),
+(4, 'Kadayawan Celebration', '', '2015-08-17', '2015-08-17', '2015-09-03 20:52:29', '2015-09-03 20:52:29'),
+(5, 'Ninoy Aquino Day', '', '2015-08-14', '2015-08-14', '2015-09-03 20:52:56', '2015-09-03 20:52:56'),
+(10, 'National Heroes Day', '', '2015-08-30', '2015-08-31', '2015-09-04 05:41:28', '2015-09-03 21:41:28');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `migrations`
 --
 
@@ -798,7 +824,7 @@ CREATE TABLE IF NOT EXISTS `shifts` (
   `break` time NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=45 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=34 ;
 
 --
 -- Dumping data for table `shifts`
@@ -851,15 +877,16 @@ CREATE TABLE IF NOT EXISTS `users` (
   `remember_token` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=10 ;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `username`, `password`, `user_type`, `remember_token`, `created_at`, `updated_at`) VALUES
-(7, 'Rosemale-John II C. Villacorta', 'rosemalejohn@gmail.com', 'rosemalejohn', '$2y$10$FuqYG4eDr6kTW00RwvWVJ.EHPPkVrOO273CQ7mRROIRYSBVZ9NrPG', 'admin', 'hxepyaNudY6jVs6hdxsrvaDSHUUg2E6UogWtzJl1n4ZiqmKSbcwc2AbFiiat', '2015-08-14 23:34:32', '2015-08-28 00:24:46'),
-(8, 'Nepthaly Talavera', 'nepthaly.talavera@hpoutsourcinginc.com', 'ntalavera', '$2y$10$SLQ2sCBXWHB6MKzhsHMBxOj5glIkOrSMjCRPAM1EbR9.jLfXmDe1m', 'admin', 'VjrbqgYUHby3XuORwrnoLALxSvb3fPE6GAAoBJpOKEPSoI9RoDjoifTenNSi', '2015-08-17 17:56:03', '2015-08-26 21:39:08');
+(7, 'Rosemale-John II C. Villacorta', 'rosemalejohn@gmail.com', 'rosemalejohn', '$2y$10$FuqYG4eDr6kTW00RwvWVJ.EHPPkVrOO273CQ7mRROIRYSBVZ9NrPG', 'admin', '9DwRwN6u6erm8zVfwkenJaht9ckJASFQgmz42wCdl4fPbghikA1AcuqR9de5', '2015-08-14 23:34:32', '2015-08-31 23:43:30'),
+(8, 'Nepthaly Talavera', 'nepthaly.talavera@hpoutsourcinginc.com', 'ntalavera', '$2y$10$SLQ2sCBXWHB6MKzhsHMBxOj5glIkOrSMjCRPAM1EbR9.jLfXmDe1m', 'admin', 'VjrbqgYUHby3XuORwrnoLALxSvb3fPE6GAAoBJpOKEPSoI9RoDjoifTenNSi', '2015-08-17 17:56:03', '2015-08-26 21:39:08'),
+(9, 'Sample Sample', 'sample@sample.com', 'sample', '$2y$10$nmHbCUwLgb06leGKjHD3juN8QJPLlVRodcurDwQlPGnb/LkA71MxS', 'admin', 'I1blMsgJzksPEhlhVAVMh6Oix177tQucecxNqL1b4r6rKyj7Jm25ISn873ib', '2015-08-31 23:44:05', '2015-08-31 23:54:56');
 
 --
 -- Indexes for dumped tables
@@ -894,6 +921,12 @@ ALTER TABLE `employee_shifts`
 --
 ALTER TABLE `employee_shift_days`
  ADD PRIMARY KEY (`id`), ADD KEY `employee_shift_id` (`employee_shift_id`);
+
+--
+-- Indexes for table `holidays`
+--
+ALTER TABLE `holidays`
+ ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `password_resets`
@@ -931,7 +964,7 @@ MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=92;
 -- AUTO_INCREMENT for table `employee_dtr`
 --
 ALTER TABLE `employee_dtr`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=51961;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=56619;
 --
 -- AUTO_INCREMENT for table `employee_shifts`
 --
@@ -943,15 +976,20 @@ MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=140;
 ALTER TABLE `employee_shift_days`
 MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=835;
 --
+-- AUTO_INCREMENT for table `holidays`
+--
+ALTER TABLE `holidays`
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=11;
+--
 -- AUTO_INCREMENT for table `shifts`
 --
 ALTER TABLE `shifts`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=45;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=34;
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
 --
 -- Constraints for dumped tables
 --
