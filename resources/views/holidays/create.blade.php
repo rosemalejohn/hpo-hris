@@ -12,23 +12,23 @@
 	<div class="panel-body">
 		<div class="row">
             <div class="col-lg-6">
-                <form role="form" action="/holidays" method="POST" enctype="multipart/form-data">
+                <form role="form" action="/holidays" method="POST">
                     {!! csrf_field() !!}
                     <div class="form-group">
                         <label>Title</label>
-                        <input class="form-control" name="title" placeholder="ex. Christmas day">
+                        <input class="form-control" name="title" placeholder="ex. Christmas day" value="{{ old('title') }}">
                     </div>
                     <div class="form-group">
                         <label>Description</label>
-                        <textarea class="form-control" name="description" placeholder="ex. Birth of Jesus Christ"></textarea>
+                        <textarea class="form-control" name="description" placeholder="ex. Birth of Jesus Christ">{{ old('description') }}</textarea>
                     </div>
                     <div class="form-group">
                         <label>Date from</label>
-                        <input type="text" class="form-control" id="startTime" name="start" placeholder="Date from"/>
+                        <input type="text" class="form-control" id="startTime" name="start" placeholder="Date from" value="{{ old('start') }}"/>
                     </div>
                     <div class="form-group">
                         <label>Date to</label>
-                        <input type="text" class="form-control" id="endTime" name="end" placeholder="Date to"/>
+                        <input type="text" class="form-control" id="endTime" name="end" placeholder="Date to" value="{{ old('end') }}"/>
                     </div>
                     <hr>
                     <button type="submit" class="btn btn-primary"><i class="fa fa-calendar"></i> Add holiday</button>

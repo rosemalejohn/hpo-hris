@@ -19,7 +19,8 @@ class HolidayController extends Controller
     public function index()
     {
         $page_title = 'holidays';
-        return view('holidays.all')->with(compact('page_title'));
+        $data = 'List of Listed Holidays';
+        return view('holidays.all')->with(compact('page_title', 'data'));
     }
 
     /**
@@ -30,7 +31,8 @@ class HolidayController extends Controller
     public function create()
     {
         $page_title = 'create-holidays';
-        return view('holidays.create')->with(compact('page_title'));
+        $data = 'Add New Holiday';
+        return view('holidays.create')->with(compact('page_title', 'data'));
     }
 
     /**
@@ -43,7 +45,7 @@ class HolidayController extends Controller
     {
         if ($this->validator($request->all())->fails()) {
             flash()->error("Please fill the missing fields.");
-            return redirect()->back();
+            return redirect()->back()->withInput();
         }
 
         $holiday = Holiday::create($request->all());

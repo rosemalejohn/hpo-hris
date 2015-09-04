@@ -110,7 +110,7 @@ Breadcrumbs::register('settings', function($breadcrumbs, $user)
 
 Breadcrumbs::register('holidays', function($breadcrumbs)
 {
-	$breadcrumbs->push('List of holidays', '/holidays');
+	$breadcrumbs->push('Holidays', '/holidays');
 });
 
 Breadcrumbs::register('create-holidays', function($breadcrumbs)

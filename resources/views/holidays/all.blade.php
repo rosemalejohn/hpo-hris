@@ -24,13 +24,16 @@
 <script type="text/javascript" src="/bower_components/bootbox.js/bootbox.js"></script>
 <script>
 	$('#calendar').fullCalendar({
+		editable: true,
+		eventLimit: true,
         eventSources: [{
         	url: '/api/holidays',
         	type: 'GET'
         }],
         eventClick: function (holiday) {
             editHoliday(holiday);
-        }
+        },
+        allDay: true
     });
 
 	function editHoliday(holiday) 
