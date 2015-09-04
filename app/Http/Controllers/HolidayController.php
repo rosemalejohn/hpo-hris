@@ -118,9 +118,7 @@ class HolidayController extends Controller
         $holiday = Holiday::find($id);
         if ($holiday) {
             $holiday->delete();
-            return true;
-        } else{
-            return false;
+            flash()->success("Holiday successfully deleted.");
         }
     }
 

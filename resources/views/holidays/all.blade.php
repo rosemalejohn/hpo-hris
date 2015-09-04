@@ -32,8 +32,7 @@
         }],
         eventClick: function (holiday) {
             editHoliday(holiday);
-        },
-        allDay: true
+        }
     });
 
 	function editHoliday(holiday) 
@@ -49,8 +48,7 @@
 	function deleteHoliday(holidayID)
 	{
 		$.get('api/holidays/'+holidayID+'/delete', function(data){
-			bootbox.alert("Holiday successfully deleted!");
-			location.reload();
+			window.location.reload();
 		});
 	}
 </script>
