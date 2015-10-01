@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 01, 2015 at 08:59 AM
+-- Generation Time: Oct 01, 2015 at 11:09 AM
 -- Server version: 5.6.21
 -- PHP Version: 5.6.3
 
@@ -153,7 +153,7 @@ INSERT INTO `employees` (`id`, `employee_id`, `first_name`, `middle_name`, `last
 (90, '150713', 'Moises Carlo', 'M', 'Echavez', '1', 10, '2015-08-26 05:41:12', '2015-08-25 21:41:12'),
 (91, '150701', 'Alfonso', '', 'Torres', '1', 10, '2015-08-25 21:39:09', '2015-08-25 21:39:09'),
 (92, '150902', 'Kenny', 'Geronemo', 'Amper', '1', 1, '2015-09-30 21:45:44', '2015-09-30 21:45:44'),
-(93, '150901', 'Lex Marion', '', 'Bataller', '1', 1, '2015-09-30 22:24:26', '2015-09-30 22:24:26');
+(93, '150929', 'Lex Marion', '', 'Bataller', '1', 1, '2015-10-01 08:28:36', '2015-10-01 00:28:36');
 
 -- --------------------------------------------------------
 
@@ -177,7 +177,7 @@ CREATE TABLE IF NOT EXISTS `employee_dtr` (
   `overbreak` time NOT NULL DEFAULT '00:00:00',
   `remarks` varchar(25) DEFAULT NULL,
   `shift_id` int(10) unsigned NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4834 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7159 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -911,7 +911,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `username`, `password`, `user_type`, `remember_token`, `created_at`, `updated_at`) VALUES
 (7, 'Rosemale-John II C. Villacorta', 'rosemalejohn@gmail.com', 'rosemalejohn', '$2y$10$FuqYG4eDr6kTW00RwvWVJ.EHPPkVrOO273CQ7mRROIRYSBVZ9NrPG', 'admin', '9DwRwN6u6erm8zVfwkenJaht9ckJASFQgmz42wCdl4fPbghikA1AcuqR9de5', '2015-08-14 23:34:32', '2015-08-31 23:43:30'),
-(8, 'Nepthaly Talavera', 'nepthaly.talavera@hpoutsourcinginc.com', 'ntalavera', '$2y$10$SLQ2sCBXWHB6MKzhsHMBxOj5glIkOrSMjCRPAM1EbR9.jLfXmDe1m', 'admin', 'qgB6vtbxAiepyNlI21cn61LzHnqmASbBrGfsn8V3QlnLD06bLzonQosf5wcV', '2015-08-17 17:56:03', '2015-09-30 19:29:23'),
+(8, 'Nepthaly Talavera', 'nepthaly.talavera@hpoutsourcinginc.com', 'ntalavera', '$2y$10$SLQ2sCBXWHB6MKzhsHMBxOj5glIkOrSMjCRPAM1EbR9.jLfXmDe1m', 'admin', 'ziEQDZUtf9pZ4IGQwDhWADNm6HI4DF2Lwuf8KahOlBf3ZN7HPoQw5BBlE1oM', '2015-08-17 17:56:03', '2015-09-30 23:03:48'),
 (9, 'Sample Sample', 'sample@sample.com', 'sample', '$2y$10$nmHbCUwLgb06leGKjHD3juN8QJPLlVRodcurDwQlPGnb/LkA71MxS', 'admin', 'I1blMsgJzksPEhlhVAVMh6Oix177tQucecxNqL1b4r6rKyj7Jm25ISn873ib', '2015-08-31 23:44:05', '2015-08-31 23:54:56'),
 (10, 'Jayson Alanano', 'jayzer0098@gmail.com', 'jayson0098', '$2y$10$M/peHSj7xAIMpcryOG03VOgXPmhNGpGLwQGmbcLwKTr57xOt.vgWu', 'admin', 'KZDy8HMh9dOxHZcJfW1jZWkAfTesrIa1nk7VQgfjY862z3CTjdmSf6eDcFWV', '2015-09-30 19:08:31', '2015-09-30 20:33:23');
 
@@ -991,7 +991,7 @@ MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=94;
 -- AUTO_INCREMENT for table `employee_dtr`
 --
 ALTER TABLE `employee_dtr`
-MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4834;
+MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7159;
 --
 -- AUTO_INCREMENT for table `employee_shifts`
 --
