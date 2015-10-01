@@ -177,6 +177,7 @@ class EmployeeController extends Controller
     public function updateShift(Request $request, $shift)
     {
         $employee_shift = EmployeeShift::findOrFail($shift); //get employee shift by ID
+        $employee_shift->shift_id = $request->shift_id;
         $employee_shift->date_from = $request->date_from;
         $employee_shift->date_to = $request->date_to;
         $employee_shift->save(); //update employee shift
