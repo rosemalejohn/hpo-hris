@@ -34,4 +34,8 @@ class Employee extends Model
         return parent::newPivot($parent, $attributes, $table, $exists);
     }
 
+    public function isStatus($status) {
+        return $this->status == $status;
+    }
+
 }

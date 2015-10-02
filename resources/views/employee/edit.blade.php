@@ -37,6 +37,14 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select class="form-control" name="status">
+                            <option value="active" {{ ($employee->isStatus('active') ? 'selected' : '') }}>Active</option>
+                            <option value="resigned" {{ ($employee->isStatus('resigned') ? 'selected' : '') }}>Resigned</option>
+                            <option value="trainee" {{ ($employee->isStatus('trainee') ? 'selected' : '') }}>Trainee</option>
+                        </select>
+                    </div>
                     <hr>
                     <button type="submit" id="loadingButton" data-loading-text="Updating employee..." class="btn btn-primary"><i class="fa fa-edit"></i> Update employee</button>
                     <button type="reset" class="btn btn-default">Reset</button>

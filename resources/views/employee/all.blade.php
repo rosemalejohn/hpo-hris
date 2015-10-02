@@ -31,6 +31,7 @@
                         <th>Biometric ID</th>
                         <th>Name</th>
                         <th>Department</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -40,6 +41,7 @@
                         <td><a href="/employees/{{ $employee->employee_id }}">{{ $employee->employee_id }}</a></td>
                         <td>{{ $employee->first_name.' '.$employee->middle_name.' '.$employee->last_name }}</td>
                         <td><a href="/departments/{{ $employee->department->department_code }}">{{ $employee->department->name }}</a></td>
+                        <td><label class="label label-{{ $employee->status }}">{{ strtoupper($employee->status) }}</label></td>
                         <td>
                             <a href="/employees/{{ $employee->employee_id }}/edit">
                                 <button class="btn btn-xs btn-warning"><i class="fa fa-edit"></i> Update</button>

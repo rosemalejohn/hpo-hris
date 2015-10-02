@@ -117,6 +117,7 @@ class EmployeeController extends Controller
         $employee->middle_name = $request->input('middle_name');
         $employee->last_name = $request->input('last_name');
         $employee->department_id = $request->input('department_id');
+        $employee->status = $request->input('status');
 
         if ($employee->save()) {
             flash()->success('Employee successfully updated!');

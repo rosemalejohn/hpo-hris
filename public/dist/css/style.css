@@ -352,3 +352,15 @@ table.dataTable thead .sorting:after {
 .panel-yellow a:hover {
     color: #df8a13;
 }
+
+.label-resigned {
+  background-color: #d9534f;
+}
+
+.label-trainee {
+  background-color: #337ab7;
+}
+
+.label-active {
+  background-color: #5cb85c;
+}
