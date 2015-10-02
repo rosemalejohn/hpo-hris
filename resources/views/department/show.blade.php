@@ -30,6 +30,7 @@
                     <tr>
                         <th>Biometric ID</th>
                         <th>Name</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,6 +38,7 @@
                     <tr class="odd gradeX">
                         <td><a href="/employees/{{ $employee->employee_id }}">{{ $employee->employee_id }}</a></td>
                         <td>{{ $employee->first_name.' '.$employee->middle_name.' '.$employee->last_name }}</td>
+                        <td><label class="label label-{{ $employee->status }}">{{ strtoupper($employee->status) }}</label></td>
                     </tr>
                     @endforeach
                 </tbody>
